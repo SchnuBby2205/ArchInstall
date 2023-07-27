@@ -204,11 +204,11 @@ mirrors() {
 	myPrint "green" "OK"
 	printf "]\n"
 	
-	printf "Updating pacman..."
+	#printf "Updating pacman..."
 	bash -c "pacman -Syyy"
-	printf "\t\t["
-	myPrint "green" "OK"
-	printf "]\n"	
+	#printf "\t\t["
+	#myPrint "green" "OK"
+	#printf "]\n"	
 }
 
 baseInstall() {
@@ -246,19 +246,19 @@ baseInstall() {
 	myPrint "green" "************************************\n"
 	myPrint "green" "* Starting base installation       *\n"
 	myPrint "green" "************************************\n"	
-	printf "\nRunning pacstrap...\t\t\t"
+	#printf "\nRunning pacstrap...\t\t\t"
 	bash -c "pacstrap -K /mnt base linux linux-firmware sudo ${PROZ}"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	#printf "["
+	#myPrint "green" "OK"
+	#printf "]"
 }
 
 makeFstab() {
-	printf "\nCreating Fstab...\t\t\t"
+	#printf "\nCreating Fstab...\t\t\t"
 	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	#printf "["
+	#myPrint "green" "OK"
+	#printf "]"
 }
 
 myChroot() {
