@@ -186,13 +186,13 @@ myMount() {
 	bash -c "mount ${ROOTPART} ${ROOTMOUNT}"
 	printf "\t\t["
 	myPrint "green" "OK"
-	printf "]\n
+	printf "]\n"
 
 	printf "Mounting EFI parition (${EFIMOUNT})..."
 	bash -c "mount --mkdir ${EFIPART} ${EFIMOUNT}"
 	printf "\t\t["
 	myPrint "green" "OK"
-	printf "]\n
+	printf "]\n"
 
 	printf "Enabling swapfile (${SWAPPART})..."
 	bash -c "swapon ${SWAPPART}"	
