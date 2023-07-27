@@ -262,11 +262,11 @@ makeFstab() {
 }
 
 myChroot1() {
-	printf "\nEntering chroot on ${ROOTMOUNT}...\t\t"
+	#printf "\nEntering chroot on ${ROOTMOUNT}...\t\t"
 	bash -c "arch-chroot ${ROOTMOUNT}"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	#printf "["
+	#myPrint "green" "OK"
+	#printf "]"
 }
 
 myChroot2() {
@@ -283,12 +283,12 @@ myChroot2() {
 	then
 		LOCALE="de_DE.UTF-8"
 	fi
-	printf "\nSetting locale.gen ${LOCALE}...\t"
+	#printf "\nSetting locale.gen ${LOCALE}...\t"
 	bash -c "sed -e '/${LOCALE}/s/^#*//' -i /etc/locale.gen"
 	bash -c "locale-gen"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	#printf "["
+	#myPrint "green" "OK"
+	#printf "]"
 
 	printf "\nSetting locale.conf ${LOCALE}...\t"
 	bash -c "echo \"LANG=${LOCALE}\" >> /etc/locale.conf"
@@ -322,37 +322,38 @@ myChroot2() {
 	myPrint "green" "OK"
 	printf "]"
 
-	printf "\nCreating initramfs...\t"
+	#printf "\nCreating initramfs...\t"
 	bash -c "mkinitcpio -P"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	#printf "["
+	#myPrint "green" "OK"
+	#printf "]"
 	
+	myPrint "yellow" "\n\nEnter your root password:\n\n"
 	bash -c "passwd"
 		
-	printf "\nInstalling base programs...\t"
+	#printf "\nInstalling base programs...\t"
 	bash -c "pacman -S grub efibootmgr os-prober ntfs-3g networkmanager dialog mtools dosfstools base-devel linux-headers git pulseaudio --noconfirm --needed"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	#printf "["
+	#myPrint "green" "OK"
+	#printf "]"
 
-	printf "\nConfiguring GRUB...\t"
+	#printf "\nConfiguring GRUB...\t"
 	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	#printf "["
+	#myPrint "green" "OK"
+	#printf "]"
 
-	printf "\nWriting GRUB config...\t"
+	#printf "\nWriting GRUB config...\t"
 	bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	#printf "["
+	#myPrint "green" "OK"
+	#printf "]"
 
-	printf "\nEnabling networkmanager...\t"
+	#printf "\nEnabling networkmanager...\t"
 	bash -c "systemctl enable NetworkManager"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	#printf "["
+	#myPrint "green" "OK"
+	#printf "]"
 	
 	myPrint "yellow" "\n\nEnter your normal username (default = schnubby): "
 	read USER
@@ -361,17 +362,17 @@ myChroot2() {
 		USER="schnubby"
 	fi
 	
-	printf "\nCreating new user...\t"
+	#printf "\nCreating new user...\t"
 	bash -c "useradd -mG wheel ${USER}"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	#printf "["
+	#myPrint "green" "OK"
+	#printf "]"
 
 	printf "\nSetting password for new user...\t"
 	bash -c "passwd ${USER}"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	#printf "["
+	#myPrint "green" "OK"
+	#printf "]"
 	
 	printf "\nSetting sudo for new user...\t"
 	bash -c "sed -e '/%wheel ALL=(ALL) ALL/s/^#*//' -i /etc/sudoers"
@@ -379,11 +380,12 @@ myChroot2() {
 	myPrint "green" "OK"
 	printf "]"
 	
-	bash -c "exit"
-	bash -c "umount -R /mnt"
+	#bash -c "exit"
+	#bash -c "umount -R /mnt"
 
-	myPrint "green" "\n\n*************************************************************\n"
-	myPrint "green" "* Installation is done - System will reboot now!            *\n"
-	myPrint "green" "*************************************************************\n"
+	printf "\n\n"
+	myPrint "green" "**************************\n"
+	myPrint "green" "* Installation is done !     *\n"
+	myPrint "green" "******************************\n"
 
 }	
