@@ -9,6 +9,9 @@ myPrint "green" "************************************\n"
 myPrint "green" "* Welcome to SchnuBby Arch Install *\n"
 myPrint "green" "************************************\n"
 
+# Keyboard Layout
+keyboardLayout
+
 # Important Notes
 myPrint "red" "\nIMPORTANT\n"
 printf "\t- You need to make your Partition Table manually\n"
@@ -38,9 +41,6 @@ else
 	myPrint "green" "OK"
 	printf "]\n\n"
 fi
-
-# Keyboard Layout
-keyboardLayout
 
 # Timezone
 timezone
