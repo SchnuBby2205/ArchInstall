@@ -262,8 +262,8 @@ makeFstab() {
 }
 
 myChroot() {
-	printf "\nEntering chroot on ${ROOTPART}...\t\t"
-	bash -c "arch-chroot ${ROOTPART}"
+	printf "\nEntering chroot on ${ROOTMOUNT}...\t\t"
+	bash -c "arch-chroot ${ROOTMOUNT}"
 	printf "["
 	myPrint "green" "OK"
 	printf "]"
