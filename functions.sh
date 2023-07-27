@@ -102,7 +102,7 @@ checkEFI() {
 }
 
 keyboardLayout() {
-	myPrint "yellow" "Enter your Keyboard Layout (default = de-latin1): "
+	myPrint "yellow" "\nEnter your Keyboard Layout (default = de-latin1): "
 	read KEYBOARDLAYOUT
 	if [ "${KEYBOARDLAYOUT}" == "" ]
 	then
@@ -182,10 +182,10 @@ myMount() {
 	printf "ROOT mountpount =\t"
 	myPrint "green" "${ROOTMOUNT}\n\n"
 	
-	printf "Mounting EFI parition (${EFIMOUNT})...\n"
-	bash -c "mount --mkdir ${EFIPART} ${EFIMOUNT}"
 	printf "Mounting ROOT parition (${ROOTMOUNT})...\n"
 	bash -c "mount ${ROOTPART} ${ROOTMOUNT}"
+	printf "Mounting EFI parition (${EFIMOUNT})...\n"
+	bash -c "mount --mkdir ${EFIPART} ${EFIMOUNT}"
 	printf "Enabling swapfile (${SWAPPART})...\n"
 	bash -c "swapon ${SWAPPART}"	
 }
@@ -202,7 +202,7 @@ mirrors() {
 	bash -c "reflector -c ${COUNTRY} -a 6 --save /etc/pacman.d/mirrorlist"
 	printf "\t\t["
 	myPrint "green" "OK"
-	printf "]\n"
+	printf "]\n\n"
 	
 	#printf "Updating pacman..."
 	bash -c "pacman -Syyy"
@@ -320,7 +320,7 @@ myChroot2() {
 	bash -c "echo \"127.0.1.1\t${HOSTNAME}.localdomain\t${HOSTNAME}\" >> /etc/hosts"
 	printf "["
 	myPrint "green" "OK"
-	printf "]"
+	printf "]\n\n"
 
 	#printf "\nCreating initramfs...\t"
 	bash -c "mkinitcpio -P"
@@ -328,7 +328,7 @@ myChroot2() {
 	#myPrint "green" "OK"
 	#printf "]"
 	
-	myPrint "yellow" "\n\nEnter your root password:\n\n"
+	myPrint "yellow" "\n\nEnter your NEW root password:\n\n"
 	bash -c "passwd"
 		
 	#printf "\nInstalling base programs...\t"
