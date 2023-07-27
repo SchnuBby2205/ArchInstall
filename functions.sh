@@ -296,7 +296,8 @@ myChroot1() {
 }
 
 myChroot2() {
-	KEYBOARDLAYOUT="de-latin1"
+	keyboardLayout	
+	
 	printf "\nSetting timezone ${TIMEZONE}...\t"
 	bash -c "ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime"
 	bash -c "hwclock --systohc"
