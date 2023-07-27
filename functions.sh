@@ -261,13 +261,15 @@ makeFstab() {
 	#printf "]"
 }
 
-myChroot() {
+myChroot1() {
 	printf "\nEntering chroot on ${ROOTMOUNT}...\t\t"
 	bash -c "arch-chroot ${ROOTMOUNT}"
 	printf "["
 	myPrint "green" "OK"
 	printf "]"
-	
+}
+
+myChroot2() {
 	printf "\nSetting timezone ${TIMEZONE}...\t"
 	bash -c "ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime"
 	bash -c "hwclock --systohc"
