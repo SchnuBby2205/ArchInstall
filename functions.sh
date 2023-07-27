@@ -323,6 +323,8 @@ myChroot2() {
 	printf "["
 	myPrint "green" "OK"
 	printf "]\n\n"
+	printf "${KEYBOARDLAYOUT}"
+	pause 5
 
 	myPrint "yellow" "Enter your hostname (default = arch): "
 	read HOSTNAME
@@ -397,7 +399,7 @@ myChroot2() {
 	#printf "]"
 	
 	printf "\nSetting sudo for new user...\t"
-	bash -c "sed -e '/%wheel ALL=(ALL) ALL/s/^#*//' -i /etc/sudoers"
+	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
 	printf "["
 	myPrint "green" "OK"
 	printf "]"
