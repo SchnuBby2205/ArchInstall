@@ -416,4 +416,4 @@ myChroot2() {
 	printf "\t- Type \"reboot\"\n"
 	printf "\t- After reboot login with the new user\n"
 	printf "\t- Type ArchInstall/postinstall.sh\n\n"
-}	pacman -S git
+}	
