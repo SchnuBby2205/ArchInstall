@@ -282,7 +282,7 @@ myChroot1() {
 	printf "\t- Type pacman -S git\n"
 	printf "\t- Type git clone https://github.com/SchnuBby2205/ArchInstall.git\n"
 	printf "\t- Type cd ArchInstall\n"
-	printf "\t- Type ./chrootinstall.sh\nn"
+	printf "\t- Type ./chrootinstall.sh\n\n"
 	
 	#printf "\nEntering chroot on ${ROOTMOUNT}...\t\t"
 	bash -c "arch-chroot ${ROOTMOUNT}"
@@ -299,7 +299,7 @@ myChroot2() {
 	myPrint "green" "OK"
 	printf "]\n"
 	
-	myPrint "yellow" "\nEnter your locale (default = de_DE.UTF-8): "
+	myPrint "yellow" "\nEnter your locale (default = de_DE.UTF-8):\n"
 	read LOCALE
 	if [ "${LOCALE}" == "" ]
 	then
@@ -319,7 +319,7 @@ myChroot2() {
 	printf "]"
 
 	printf "\nSetting keymap ${KEYBOARDLAYOUT}...\t\t"
-	bash -c "echo \"KEYMAP=${KEYBOARDLAYOUT}\" >> /etc/vconsole.conf"
+	bash -c "echo \"KEYMAP=de-latin1\" >> /etc/vconsole.conf"
 	printf "["
 	myPrint "green" "OK"
 	printf "]\n\n"
@@ -350,7 +350,7 @@ myChroot2() {
 	#myPrint "green" "OK"
 	#printf "]"
 	
-	myPrint "yellow" "\n\nEnter your NEW root password:\n"
+	myPrint "yellow" "\n\nEnter your NEW root password:\n\n"
 	bash -c "passwd"
 		
 	#printf "\nInstalling base programs...\t"
@@ -390,7 +390,7 @@ myChroot2() {
 	#myPrint "green" "OK"
 	#printf "]"
 
-	printf "\nSetting password for new user...\n"
+	#printf "\nSetting password for new user...\n"
 	bash -c "passwd ${USER}"
 	#printf "["
 	#myPrint "green" "OK"
@@ -402,8 +402,9 @@ myChroot2() {
 	myPrint "green" "OK"
 	printf "]"
 	
-	bash -c "cd .."
-	bash -c "mv ArchInstall /home/${USER}"
+	cd ..
+	bash -c "mv ArchInstall/ /home/${USER}"
+	bash -c chown "${USER}:${USER} /home/${USER}"
 
 	printf "\n\n"
 	myPrint "green" "******************************\n"
