@@ -184,10 +184,21 @@ myMount() {
 	
 	printf "Mounting ROOT parition (${ROOTMOUNT})...\n"
 	bash -c "mount ${ROOTPART} ${ROOTMOUNT}"
+	printf "\t\t["
+	myPrint "green" "OK"
+	printf "]\n\n"
+
 	printf "Mounting EFI parition (${EFIMOUNT})...\n"
 	bash -c "mount --mkdir ${EFIPART} ${EFIMOUNT}"
+	printf "\t\t["
+	myPrint "green" "OK"
+	printf "]\n\n"
+
 	printf "Enabling swapfile (${SWAPPART})...\n"
 	bash -c "swapon ${SWAPPART}"	
+	printf "\t\t["
+	myPrint "green" "OK"
+	printf "]\n\n"
 }
 
 mirrors() {
@@ -245,7 +256,7 @@ baseInstall() {
 
 	myPrint "green" "************************************\n"
 	myPrint "green" "* Starting base installation       *\n"
-	myPrint "green" "************************************\n"	
+	myPrint "green" "************************************\n\n"	
 	#printf "\nRunning pacstrap...\t\t\t"
 	bash -c "pacstrap -K /mnt base linux linux-firmware sudo ${PROZ}"
 	#printf "["
@@ -328,7 +339,7 @@ myChroot2() {
 	#myPrint "green" "OK"
 	#printf "]"
 	
-	myPrint "yellow" "\n\nEnter your NEW root password:\n\n"
+	myPrint "yellow" "\n\nEnter your NEW root password:\n"
 	bash -c "passwd"
 		
 	#printf "\nInstalling base programs...\t"
@@ -368,7 +379,7 @@ myChroot2() {
 	#myPrint "green" "OK"
 	#printf "]"
 
-	printf "\nSetting password for new user...\t"
+	printf "\nSetting password for new user...\n"
 	bash -c "passwd ${USER}"
 	#printf "["
 	#myPrint "green" "OK"
@@ -380,12 +391,14 @@ myChroot2() {
 	myPrint "green" "OK"
 	printf "]"
 	
-	#bash -c "exit"
-	#bash -c "umount -R /mnt"
 
 	printf "\n\n"
-	myPrint "green" "**************************\n"
+	myPrint "green" "******************************\n"
 	myPrint "green" "* Installation is done !     *\n"
 	myPrint "green" "******************************\n"
 
+	myPrint "red" "\nIMPORTANT\n"
+	printf "\t- type \"exit\" or press CTRL+D\n"
+	printf "\t- type \"umount -R ${ROOTMOUNT}"\n"
+	printf "\t- type \"reboot"\n\n"
 }	
