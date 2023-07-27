@@ -61,4 +61,4 @@ baseInstall
 makeFstab
 
 # chroot
-myChroot
+myChroot1
