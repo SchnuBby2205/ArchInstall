@@ -281,7 +281,8 @@ myChroot1() {
 	myPrint "red" "\nIMPORTANT\n"
 	printf "\t- Type pacman -S git\n"
 	printf "\t- Type git clone https://github.com/SchnuBby2205/ArchInstall.git\n"
-	printf "\t- Type ArchInstall/chrootinstall.sh\nn"
+	printf "\t- Type cd ArchInstall\n"
+	printf "\t- Type ./chrootinstall.sh\nn"
 	
 	#printf "\nEntering chroot on ${ROOTMOUNT}...\t\t"
 	bash -c "arch-chroot ${ROOTMOUNT}"
@@ -415,4 +416,4 @@ myChroot2() {
 	printf "\t- Type \"reboot\"\n"
 	printf "\t- After reboot login with the new user\n"
 	printf "\t- Type ArchInstall/postinstall.sh\n\n"
-}	
+}	pacman -S git
