@@ -324,7 +324,7 @@ myChroot2() {
 	myPrint "green" "OK"
 	printf "]\n\n"
 	printf "${KEYBOARDLAYOUT}"
-	pause 5
+	sleep 5
 
 	myPrint "yellow" "Enter your hostname (default = arch): "
 	read HOSTNAME
@@ -406,7 +406,7 @@ myChroot2() {
 	
 	cd ..
 	bash -c "mv ArchInstall/ /home/${USER}"
-	bash -c chown "${USER}:${USER} /home/${USER}"
+	bash -c "chown -R ${USER}:${USER} /home/${USER}/ArchInstall"
 
 	printf "\n\n"
 	myPrint "green" "******************************\n"
