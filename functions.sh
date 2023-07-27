@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO kopieren von github repo nach /mnt
+
 # Konstanten für Farben
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -285,6 +287,8 @@ myChroot1() {
 	printf "\t- Type ./chrootinstall.sh\n\n"
 	
 	#printf "\nEntering chroot on ${ROOTMOUNT}...\t\t"
+	cd ..
+	bash -c "mv ArchInstall/ ${ROOTMOUNT}"
 	bash -c "arch-chroot ${ROOTMOUNT}"
 	#printf "["
 	#myPrint "green" "OK"
@@ -292,6 +296,7 @@ myChroot1() {
 }
 
 myChroot2() {
+	KEYBOARDLAYOUT="de-latin1"
 	printf "\nSetting timezone ${TIMEZONE}...\t"
 	bash -c "ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime"
 	bash -c "hwclock --systohc"
@@ -319,12 +324,10 @@ myChroot2() {
 	printf "]"
 
 	printf "\nSetting keymap ${KEYBOARDLAYOUT}...\t\t"
-	bash -c "echo \"KEYMAP=de-latin1\" >> /etc/vconsole.conf"
+	bash -c "echo \"KEYMAP=${KEYBOARDLAYOUT}\" >> /etc/vconsole.conf"
 	printf "["
 	myPrint "green" "OK"
 	printf "]\n\n"
-	printf "${KEYBOARDLAYOUT}"
-	sleep 5
 
 	myPrint "yellow" "Enter your hostname (default = arch): "
 	read HOSTNAME
