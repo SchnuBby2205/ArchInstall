@@ -182,19 +182,19 @@ myMount() {
 	printf "ROOT mountpount =\t"
 	myPrint "green" "${ROOTMOUNT}\n\n"
 	
-	printf "Mounting ROOT parition (${ROOTMOUNT})...\n"
+	printf "Mounting ROOT parition (${ROOTMOUNT})..."
 	bash -c "mount ${ROOTPART} ${ROOTMOUNT}"
 	printf "\t\t["
 	myPrint "green" "OK"
-	printf "]\n\n"
+	printf "]\n
 
-	printf "Mounting EFI parition (${EFIMOUNT})...\n"
+	printf "Mounting EFI parition (${EFIMOUNT})..."
 	bash -c "mount --mkdir ${EFIPART} ${EFIMOUNT}"
 	printf "\t\t["
 	myPrint "green" "OK"
-	printf "]\n\n"
+	printf "]\n
 
-	printf "Enabling swapfile (${SWAPPART})...\n"
+	printf "Enabling swapfile (${SWAPPART})..."
 	bash -c "swapon ${SWAPPART}"	
 	printf "\t\t["
 	myPrint "green" "OK"
@@ -273,6 +273,16 @@ makeFstab() {
 }
 
 myChroot1() {
+	printf "\n\n"
+	myPrint "green" "*********************\n"
+	myPrint "green" "* Entering chroot   *\n"
+	myPrint "green" "*********************\n"
+
+	myPrint "red" "\nIMPORTANT\n"
+	printf "\t- Type pacman -S git\n"
+	printf "\t- Type git clone https://github.com/SchnuBby2205/ArchInstall.git\n"
+	printf "\t- Type ArchInstall/chrootinstall.sh\nn"
+	
 	#printf "\nEntering chroot on ${ROOTMOUNT}...\t\t"
 	bash -c "arch-chroot ${ROOTMOUNT}"
 	#printf "["
