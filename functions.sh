@@ -291,8 +291,6 @@ myChroot1() {
 	myPrint "green" "*********************\n"
 
 	myPrint "red" "\nIMPORTANT\n"
-	printf "\t- Type pacman -S git\n"
-	printf "\t- Type git clone https://github.com/SchnuBby2205/ArchInstall.git\n"
 	printf "\t- Type cd ArchInstall\n"
 	printf "\t- Type ./chrootinstall.sh\n\n"
 	
