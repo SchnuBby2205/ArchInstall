@@ -123,9 +123,19 @@ keyboardLayout() {
 	then
 		KEYBOARDLAYOUT="de-latin1"
 	fi
-	bash -c "loadkeys ${KEYBOARDLAYOUT} &>/dev/null"
 	printf "\n"
+	printRunning "Setting keyboard layout"
+	bash -c "loadkeys ${KEYBOARDLAYOUT} &>/dev/null"
+	printf "\r"
 	printOK "Setting keyboard layout\n"
+}
+keyboardLayout2() {
+	myPrint "yellow" "\nEnter your Keyboard Layout (default = de-latin1): "
+	read KEYBOARDLAYOUT
+	if [ "${KEYBOARDLAYOUT}" == "" ]
+	then
+		KEYBOARDLAYOUT="de-latin1"
+	fi
 }
 
 timezone() {
@@ -135,10 +145,20 @@ timezone() {
 	then
 		TIMEZONE="Europe/Berlin"
 	fi
+	printf "\n"
+	printRunning "Setting timezone (with ntp)"
 	bash -c "timedatectl set-timezone \"${TIMEZONE}\" &>/dev/null"
 	bash -c "timedatectl set-ntp true &>/dev/null"
-	printf "\n"
+	printf "\r"
 	printOK "Setting timezone (with ntp)\n\n"
+}
+timezone2() {
+	myPrint "yellow" "Enter your Timezone (default = Europe/Berlin): "
+	read TIMEZONE
+	if [ "${TIMEZONE}" == "" ]
+	then
+		TIMEZONE="Europe/Berlin"
+	fi
 }
 
 format() {
@@ -165,11 +185,19 @@ format() {
 	printf "SWAP partition =\t"
 	myPrint "green" "${SWAPPART}\n\n"	
 	
+	printRunning "Formating EFI parition (${EFIPART})..."
 	bash -c "mkfs.fat -F 32 ${EFIPART} &>/dev/null"
+	printf "\r"
 	printOK "Formating EFI parition (${EFIPART})...\n"
+	
+	printRunning "Formating ROOT parition (${ROOTPART})..."
 	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
+	printf "\r"
 	printOK "Formating ROOT parition (${ROOTPART})...\n"
+	
+	printRunning "Making swapfile (${SWAPPART})..."
 	bash -c "mkswap ${SWAPPART} &>/dev/null"
+	printf "\r"
 	printOK "Making swapfile (${SWAPPART})...\n"
 }
 
@@ -193,13 +221,19 @@ myMount() {
 	printf "ROOT mountpount =\t"
 	myPrint "green" "${ROOTMOUNT}\n\n"
 	
+	printRunning "Mounting ROOT parition (${ROOTMOUNT})..."
 	bash -c "mount ${ROOTPART} ${ROOTMOUNT} &>/dev/null"
+	printf "\r"
 	printOK "Mounting ROOT parition (${ROOTMOUNT})...\n"
 
+	printRunning "Mounting EFI parition (${EFIMOUNT})..."
 	bash -c "mount --mkdir ${EFIPART} ${EFIMOUNT} &>/dev/null"
+	printf "\r"
 	printOK "Mounting EFI parition (${EFIMOUNT})...\n"
 
+	printRunning "Enabling swapfile (${SWAPPART})..."
 	bash -c "swapon ${SWAPPART} &>/dev/null"	
+	printf "\r"
 	printOK "Enabling swapfile (${SWAPPART})...\n"
 }
 
@@ -267,8 +301,10 @@ baseInstall() {
 }
 
 makeFstab() {
-	bash -c "genfstab -U /mnt >> /mnt/etc/fstab &>/dev/null"
 	printf "\n"
+	printRunning "Creating fstab..."
+	bash -c "genfstab -U /mnt >> /mnt/etc/fstab &>/dev/null"
+	printf "\r"
 	printOK "Creating fstab...\n"
 
 	printf "\nEntering chroot on ${ROOTMOUNT} 5 seconds."
@@ -301,39 +337,38 @@ myChroot1() {
 }
 
 myChroot2() {
-	keyboardLayout	
+	keyboardLayout2
+	timezone2
 	
-	printf "\nSetting timezone ${TIMEZONE}...\t"
+	printRunning "Setting timezone ${TIMEZONE}..."
 	bash -c "ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime"
 	bash -c "hwclock --systohc"
-	printf "["
-	myPrint "green" "OK"
-	printf "]\n"
-	
-	myPrint "yellow" "\nEnter your locale (default = de_DE.UTF-8):\n"
+	printf "\r"
+	printOK "Setting timezone ${TIMEZONE}...\n"
+
+	myPrint "yellow" "\nEnter your locale (default = de_DE.UTF-8): "
 	read LOCALE
 	if [ "${LOCALE}" == "" ]
 	then
 		LOCALE="de_DE.UTF-8"
 	fi
-	#printf "\nSetting locale.gen ${LOCALE}...\t"
+	
+	printf "\n"
+	printRunning "Setting locale.gen ${LOCALE}..."
 	bash -c "sed -e '/${LOCALE}/s/^#*//' -i /etc/locale.gen"
 	bash -c "locale-gen"
-	#printf "["
-	#myPrint "green" "OK"
-	#printf "]"
+	printf "\r"
+	printOK "Setting locale.gen ${LOCALE}...\n"
 
-	printf "\nSetting locale.conf ${LOCALE}...\t"
+	printRunning "Setting locale.conf ${LOCALE}..."
 	bash -c "echo \"LANG=${LOCALE}\" >> /etc/locale.conf"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	printf "\r"
+	printOK "Setting locale.conf ${LOCALE}...\n"
 
-	printf "\nSetting keymap ${KEYBOARDLAYOUT}...\t\t"
+	printRunning "Setting keymap ${KEYBOARDLAYOUT}..."
 	bash -c "echo \"KEYMAP=${KEYBOARDLAYOUT}\" >> /etc/vconsole.conf"
-	printf "["
-	myPrint "green" "OK"
-	printf "]\n\n"
+	printf "\r"
+	printOK "Setting keymap ${KEYBOARDLAYOUT}...\n"
 
 	myPrint "yellow" "Enter your hostname (default = arch): "
 	read HOSTNAME
@@ -341,52 +376,45 @@ myChroot2() {
 	then
 		HOSTNAME="arch"
 	fi
-	printf "\nSetting hostname ${HOSTNAME}...\t\t"
+	printRunning "Setting hostname ${HOSTNAME}..."
 	bash -c "echo "${HOSTNAME}" >> /etc/hostname"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	printf "\r"
+	printOK "Setting hostname ${HOSTNAME}...\n"
 
-	printf "\nSetting hosts...\t\t\t"
+	printRunning "Setting hosts..."
 	bash -c "echo \"127.0.0.1\tlocalhost\n\" >> /etc/hosts"
 	bash -c "echo \"::1\tlocalhost\n\" >> /etc/hosts"
 	bash -c "echo \"127.0.1.1\t${HOSTNAME}.localdomain\t${HOSTNAME}\" >> /etc/hosts"
-	printf "["
-	myPrint "green" "OK"
-	printf "]\n\n"
+	printf "\r"
+	printOK "Setting hosts...\n"
 
-	#printf "\nCreating initramfs...\t"
+	printRunning "Creating initramfs..."
 	bash -c "mkinitcpio -P"
-	#printf "["
-	#myPrint "green" "OK"
-	#printf "]"
+	printf "\r"
+	printOK "Creating initramfs...\n"
 	
 	myPrint "yellow" "\n\nEnter your NEW root password:\n\n"
 	bash -c "passwd"
 		
-	#printf "\nInstalling base programs...\t"
+	printRunning "Installing base programs..."
 	bash -c "pacman -S grub efibootmgr os-prober ntfs-3g networkmanager dialog mtools dosfstools base-devel linux-headers git pulseaudio --noconfirm --needed"
-	#printf "["
-	#myPrint "green" "OK"
-	#printf "]"
+	printf "\r"
+	printOK "Installing base programs...\n"
 
-	#printf "\nConfiguring GRUB...\t"
+	printRunning "Configuring GRUB..."
 	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB"
-	#printf "["
-	#myPrint "green" "OK"
-	#printf "]"
+	printf "\r"
+	printOK "Configuring GRUB...\n"
 
-	#printf "\nWriting GRUB config...\t"
+	printRunning "Writing GRUB config..."
 	bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
-	#printf "["
-	#myPrint "green" "OK"
-	#printf "]"
+	printf "\r"
+	printOK "Writing GRUB config...\n"
 
-	#printf "\nEnabling networkmanager...\t"
+	printRunning "Enabling networkmanager..."
 	bash -c "systemctl enable NetworkManager"
-	#printf "["
-	#myPrint "green" "OK"
-	#printf "]"
+	printf "\r"
+	printOK "Enabling networkmanager...\n"
 	
 	myPrint "yellow" "\n\nEnter your normal username (default = schnubby): "
 	read USER
@@ -395,23 +423,20 @@ myChroot2() {
 		USER="schnubby"
 	fi
 	
-	#printf "\nCreating new user...\t"
+	printRunning "Creating new user..."
 	bash -c "useradd -mG wheel ${USER}"
-	#printf "["
-	#myPrint "green" "OK"
-	#printf "]"
+	printf "\r"
+	printOK "Creating new user...\n"
 
-	#printf "\nSetting password for new user...\n"
+	printRunning "Setting password for new user..."
 	bash -c "passwd ${USER}"
-	#printf "["
-	#myPrint "green" "OK"
-	#printf "]"
+	printf "\r"
+	printOK "Setting password for new user...\n"
 	
-	printf "\nSetting sudo for new user...\t"
+	printf "Setting sudo for new user..."
 	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
-	printf "["
-	myPrint "green" "OK"
-	printf "]"
+	printf "\r"
+	printf "Setting sudo for new user...\n"
 	
 	cd ..
 	bash -c "mv ArchInstall/ /home/${USER}"
