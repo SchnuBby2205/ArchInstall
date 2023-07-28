@@ -507,5 +507,25 @@ installPrograms() {
 	printOK "Installing additional programs...\n\n"
 
 	bash -c "curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish"
-	printOK "\n"
+	printf "\n"
+}
+
+installConfig() {
+	printRunning "Installing dotfiles..."
+	bash -c "git clone https://github.com/SchnuBby2205/DotFiles.git &>/dev/null"
+	cd DotFiles/
+	
+	mkdir ~/.config
+	mv ./alacritty ~/.config/
+	mv ./awesome ~/.config/
+	mv ./fish ~/.config/
+	mv ./omf ~/.config/
+	mv ./picom ~/.config/
+	mv ./polybar ~/.config/
+	mv ./rofi ~/.config/
+	
+	
+	
+	printf "\r"
+	printRunning "Installing dotfiles...\n"	
 }

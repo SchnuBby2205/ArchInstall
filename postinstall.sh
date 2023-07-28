@@ -14,3 +14,5 @@ installYAY
 installYAYPrograms
 
 installPrograms
+
+installConfig
