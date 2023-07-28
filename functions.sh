@@ -539,5 +539,5 @@ installConfig() {
 
 	
 	printf "\r"
-	printRunning "Installing dotfiles...\n"	
+	printOK "Installing dotfiles...\n"	
 }
