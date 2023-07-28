@@ -387,9 +387,9 @@ myChroot2() {
 	printOK "Setting hostname ${HOSTNAME}...\n"
 
 	printRunning "Setting hosts..."
-	bash -c "echo \"127.0.0.1\tlocalhost\n\" >> /etc/hosts"
-	bash -c "echo \"::1\tlocalhost\n\" >> /etc/hosts"
-	bash -c "echo \"127.0.1.1\t${HOSTNAME}.localdomain\t${HOSTNAME}\" >> /etc/hosts"
+	bash -c "echo \"127.0.0.1 localhost\" >> /etc/hosts"
+	bash -c "echo \"::1 localhost\" >> /etc/hosts"
+	bash -c "echo \"127.0.1.1 ${HOSTNAME}.localdomain ${HOSTNAME}\" >> /etc/hosts"
 	printf "\r"
 	printOK "Setting hosts...\n"
 
@@ -508,6 +508,8 @@ installPrograms() {
 
 	bash -c "curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish"
 	printf "\n"
+	bash -c "omf install slacker"
+	bash -c "omf theme slacker"
 }
 
 installConfig() {
@@ -536,8 +538,26 @@ installConfig() {
 	bash -c "sudo rm -rf ~/.config/rofi"
 	mv ./rofi ~/.config/
 	
+	printf "\r"
+	printOK "Installing dotfiles...\n\n"	
+
+	myPrint "yellow" "Enter your graphic manufactorer (default = xf86-video-amdgpu): "
+	read GRAPHIC
+	if [ "${GRAPHIC}" == "" ]
+	then
+		GRAPHIC="xf86-video-amdgpu"
+	fi	
+	printf "\n"
+
+	printRunning "Installing graphics driver ${GRAPHIC}..."
+	bash -c "sudo pacman -S ${GRAPHIC} --noconfirm --needed &>/dev/null"
+	printf "\r"
+	printOK "Installing graphics driver ${GRAPHIC}...\n"
+	
+	printRunning "Installing display server..."
+	bash -c "sudo pacman -S xorg xorg-init --noconfirm --needed &>/dev/null"
+	printf "\r"
+	printOK "Installing display server...\n"
 
 	
-	printf "\r"
-	printOK "Installing dotfiles...\n"	
 }
