@@ -358,8 +358,8 @@ myChroot2() {
 	
 	printf "\n"
 	printRunning "Setting locale.gen ${LOCALE}..."
-	bash -c "sed -e '/${LOCALE}/s/^#*//' -i /etc/locale.gen &>/dev/null"
-	bash -c "locale-gen"
+	bash -c "sed -e '/${LOCALE}/s/^#*//' -i /etc/locale.gen"
+	bash -c "locale-gen &>/dev/null"
 	printf "\r"
 	printOK "Setting locale.gen ${LOCALE}...\n"
 
@@ -396,9 +396,10 @@ myChroot2() {
 	printf "\r"
 	printOK "Creating initramfs...\n"
 	
-	myPrint "yellow" "\n\nEnter your NEW root password:\n\n"
+	myPrint "yellow" "\nEnter your NEW root password:\n\n"
 	bash -c "passwd"
 		
+	printf "\n"
 	printRunning "Installing base programs..."
 	bash -c "pacman -S grub efibootmgr os-prober ntfs-3g networkmanager dialog mtools dosfstools base-devel linux-headers git pulseaudio --noconfirm --needed &>/dev/null"
 	printf "\r"
@@ -415,7 +416,7 @@ myChroot2() {
 	printOK "Writing GRUB config...\n"
 
 	printRunning "Enabling networkmanager..."
-	bash -c "systemctl enable NetworkManager"
+	bash -c "systemctl enable NetworkManager &>/dev/null"
 	printf "\r"
 	printOK "Enabling networkmanager...\n"
 	
@@ -426,11 +427,7 @@ myChroot2() {
 		USER="schnubby"
 	fi
 	
-	printRunning "Creating new user..."
 	bash -c "useradd -mG wheel ${USER}"
-	printf "\r"
-	printOK "Creating new user...\n"
-
 	bash -c "passwd ${USER}"
 	
 	printf "Setting sudo for new user..."
