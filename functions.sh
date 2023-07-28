@@ -254,14 +254,30 @@ baseInstall() {
 	myPrint "green" "************************************\n"
 	myPrint "green" "* Starting base installation       *\n"
 	myPrint "green" "************************************\n\n"	
-	printRunning "\nRunning pacstrap..."
+	myPrint "red" "\nIMPORTANT\n"
+	printf "\t- This step will take a few minutes!\n\n"
+	printRunning "Running pacstrap..."
 	bash -c "pacstrap -K /mnt base linux linux-firmware sudo ${PROZ} &>/dev/null"
-	printOK "\rRunning pacstrap..."
+	printf "\r"
+	printOK "Running pacstrap..."
 }
 
 makeFstab() {
 	bash -c "genfstab -U /mnt >> /mnt/etc/fstab &>/dev/null"
-	printOK "\nCreating Fstab..."
+	printf "\n"
+	printOK "Creating Fstab..."
+
+	printf "\nEntering chroot on ${ROOTMOUNT} 5 seconds."
+	sleep 1 
+	printf "\rEntering chroot on ${ROOTMOUNT} 4 seconds."
+	sleep 1 
+	printf "\rEntering chroot on ${ROOTMOUNT} 3 seconds."
+	sleep 1 
+	printf "\rEntering chroot on ${ROOTMOUNT} 2 seconds."
+	sleep 1 
+	printf "\rEntering chroot on ${ROOTMOUNT} 1 seconds."
+	sleep 1 
+	clearScreen
 }
 
 myChroot1() {
