@@ -137,6 +137,7 @@ timezone() {
 	fi
 	bash -c "timedatectl set-timezone \"${TIMEZONE}\" &>/dev/null"
 	bash -c "timedatectl set-ntp true &>/dev/null"
+	printf "\n"
 	printOK "Setting timezone (with ntp)\n\n"
 }
 
