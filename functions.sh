@@ -61,6 +61,7 @@ partition() {
 
 	myPrint "red" "\n${DRIVE} will be partitioned with ${PARTTOOL} now!\n"
 	bash -c "${PARTTOOL} ${DRIVE}"
+	printf "\n"
 	printOK "Partitioning ${DRIVE} with ${PARTTOOL}\n"
 	printf "\nInstallation will start in 5 seconds."
 	sleep 1 
@@ -421,13 +422,13 @@ myChroot2() {
 	printf "\r"
 	printOK "Enabling networkmanager...\n"
 	
-	myPrint "yellow" "\nEnter your normal username (default = schnubby):\n"
+	myPrint "yellow" "\nEnter your normal username (default = schnubby): "
 	read USER
 	if [ "${USER}" == "" ]
 	then
 		USER="schnubby"
 	fi
-	
+	printf "\n"
 	bash -c "useradd -mG wheel ${USER}"
 	bash -c "passwd ${USER}"
 	
