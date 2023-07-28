@@ -508,8 +508,7 @@ installPrograms() {
 
 	bash -c "curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish"
 	printf "\n"
-	bash -c "omf install slacker"
-	bash -c "omf theme slacker"
+	omf install slacker
 }
 
 installConfig() {
@@ -565,6 +564,14 @@ installConfig() {
 	printf "\r"
 	printOK "Installing lightdm...\n"
 
+	printRunning "Installing greeter theme..."
+	bash -c "yay -Syu lightdm-webkit2-theme-glorious --noconfirm --needed &>/dev/null"
+	bash -c "sudo sed -i 's/^\(#?greeter\)-session\s*=\s*\(.*\)/greeter-session = lightdm-webkit2-greeter #\1/ #\2g' /etc/lightdm/lightdm.conf"
+	bash -c "sudo sed -i 's/^webkit_theme\s*=\s*\(.*\)/webkit_theme = glorious #\1/g' /etc/lightdm/lightdm-webkit2-greeter.conf"
+	bash -c "sudo sed -i 's/^debug_mode\s*=\s*\(.*\)/debug_mode = true #\1/g' /etc/lightdm/lightdm-webkit2-greeter.conf"
+	printf "\r"
+	printOK "Installing greeter theme...\n"
+
 	printRunning "Installing final configs..."
 	bash -c "sudo cp ./etc/X11/xorg.conf.d/00-keyboard.conf /etc/X11/xorg.conf.d/"
 	bash -c "sudo cp ./etc/X11/xorg.conf.d/50-mouse-acceleration.conf /etc/X11/xorg.conf.d/"
@@ -582,5 +589,5 @@ installConfig() {
 	bash -c "sudo cp ./.bashrc ~"
 	bash -c "sudo cp ./.xinitrc ~"
 	printf "\r"
-	printOK "Setting autostart...\n\n"
+	printOK "Setting autostart...\n"
 }
