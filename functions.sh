@@ -269,7 +269,7 @@ baseInstall() {
 makeFstab() {
 	bash -c "genfstab -U /mnt >> /mnt/etc/fstab &>/dev/null"
 	printf "\n"
-	printOK "Creating Fstab...\n"
+	printOK "Creating fstab...\n"
 
 	printf "\nEntering chroot on ${ROOTMOUNT} 5 seconds."
 	sleep 1 
@@ -296,11 +296,8 @@ myChroot1() {
 	
 	#printf "\nEntering chroot on ${ROOTMOUNT}...\t\t"
 	cd ..
-	mv "ArchInstall/" "${ROOTMOUNT}"
+	mv "ArchInstall" "${ROOTMOUNT}"
 	bash -c "arch-chroot ${ROOTMOUNT}"
-	#printf "["
-	#myPrint "green" "OK"
-	#printf "]"
 }
 
 myChroot2() {
