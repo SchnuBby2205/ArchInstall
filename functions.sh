@@ -468,10 +468,10 @@ myChroot2() {
 }	
 
 installYAY() {
-	printRunning "Installing YAY..."
 	bash -c "git clone https://aur.archlinux.org/yay.git &>/dev/null"
 	cd yay/
 	bash -c "makepkg --noconfirm --needed -si &>/dev/null"
+	printRunning "Installing YAY..."
 	cd ..
 	printf "\r"
 	printOK "Installing YAY...\n"
@@ -500,8 +500,8 @@ installYAYPrograms() {
 }
 
 installPrograms() {
-	bash -c "sudo pacman -S alacritty awesome fish polybar rofi --noconfirm --needed &>/dev/null"
 	printRunning "Installing additional programs..."
+	bash -c "sudo pacman -S alacritty awesome fish polybar rofi --noconfirm --needed &>/dev/null"
 	printf "\r"
 	printOK "Installing pulseaudio-control...\n"
 
