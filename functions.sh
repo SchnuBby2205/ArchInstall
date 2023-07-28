@@ -138,7 +138,7 @@ timezone() {
 	fi
 	bash -c "timedatectl set-timezone \"${TIMEZONE}\" &>/dev/null"
 	bash -c "timedatectl set-ntp true &>/dev/null"
-	printOK "\nSetting timezone (with ntp)\n\n"
+	printOK "Setting timezone (with ntp)\n\n"
 }
 
 format() {
@@ -212,7 +212,7 @@ mirrors() {
 		COUNTRY="Germany"
 	fi
 	bash -c "reflector -c ${COUNTRY} -a 6 --save /etc/pacman.d/mirrorlist &>/dev/null"
-	printOK "\nSorting mirrors...\n\n"
+	printOK "Sorting mirrors...\n"
 	
 	bash -c "pacman -Syyy &>/dev/null"
 	printOK "Updating pacman...\n"
