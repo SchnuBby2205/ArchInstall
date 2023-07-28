@@ -559,5 +559,28 @@ installConfig() {
 	printf "\r"
 	printOK "Installing display server...\n"
 
-	
+	printRunning "Installing lightdm..."
+	bash -c "sudo pacman -S lightdm lightdm-webkit2-greeter --noconfirm --needed &>/dev/null"
+	bash -c "sudo systemctl enable lightdm &>/dev/null"
+	printf "\r"
+	printOK "Installing lightdm...\n"
+
+	printRunning "Installing final configs..."
+	bash -c "sudo cp ./etc/X11/xorg.conf.d/00-keyboard.conf /etc/X11/xorg.conf.d/"
+	bash -c "sudo cp ./etc/X11/xorg.conf.d/50-mouse-acceleration.conf /etc/X11/xorg.conf.d/"
+	bash -c "sudo cp ./etc/lightdm/lightdm.conf /etc/lightdm/"	
+	printf "\r"
+	printOK "Installing final configs...\n"
+
+	printRunning "Installing wallpapers..."
+	bash -c "sudo cp ./usr/share/backgrounds/*.jpg /usr/share/backgrounds/"
+	printf "\r"
+	printOK "Installing wallpapers...\n"
+
+	printRunning "Setting autostart..."
+	bash -c "sudo cp ./.bash_profile ~"
+	bash -c "sudo cp ./.bashrc ~"
+	bash -c "sudo cp ./.xrinit ~"
+	printf "\r"
+	printOK "Setting autostart...\n\n"
 }
