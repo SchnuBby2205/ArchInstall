@@ -61,7 +61,6 @@ partition() {
 
 	myPrint "red" "\n${DRIVE} will be partitioned with ${PARTTOOL} now!\n"
 	bash -c "${PARTTOOL} ${DRIVE}"
-	printf "\n"
 	printOK "Partitioning ${DRIVE} with ${PARTTOOL}\n"
 	printf "\nInstallation will start in 5 seconds."
 	sleep 1 
