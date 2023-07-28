@@ -373,7 +373,7 @@ myChroot2() {
 	printf "\r"
 	printOK "Setting keymap ${KEYBOARDLAYOUT}...\n"
 
-	myPrint "yellow" "\nEnter your hostname (default = arch):\n"
+	myPrint "yellow" "\nEnter your hostname (default = arch): "
 	read HOSTNAME
 	if [ "${HOSTNAME}" == "" ]
 	then
@@ -420,7 +420,7 @@ myChroot2() {
 	printf "\r"
 	printOK "Enabling networkmanager...\n"
 	
-	myPrint "yellow" "\n\nEnter your normal username (default = schnubby): "
+	myPrint "yellow" "\nEnter your normal username (default = schnubby): "
 	read USER
 	if [ "${USER}" == "" ]
 	then
@@ -439,7 +439,7 @@ myChroot2() {
 	bash -c "mv ArchInstall/ /home/${USER}"
 	bash -c "chown -R ${USER}:${USER} /home/${USER}/ArchInstall"
 
-	printf "\n\n"
+	printf "\n"
 	myPrint "green" "******************************\n"
 	myPrint "green" "* Installation is done !     *\n"
 	myPrint "green" "******************************\n"
