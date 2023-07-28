@@ -129,6 +129,7 @@ keyboardLayout() {
 	printf "\r"
 	printOK "Setting keyboard layout\n"
 }
+
 keyboardLayout2() {
 	myPrint "yellow" "\nEnter your Keyboard Layout (default = de-latin1): "
 	read KEYBOARDLAYOUT
@@ -152,6 +153,7 @@ timezone() {
 	printf "\r"
 	printOK "Setting timezone (with ntp)\n\n"
 }
+
 timezone2() {
 	myPrint "yellow" "Enter your Timezone (default = Europe/Berlin): "
 	read TIMEZONE
