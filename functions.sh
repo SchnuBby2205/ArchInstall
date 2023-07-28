@@ -505,8 +505,6 @@ installPrograms() {
 	printf "\r"
 	printOK "Installing pulseaudio-control...\n"
 
-	printRunning "Installing oh-my-fish..."
-	bash -c "curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish &>/dev/null"
-	printf "\r"
-	printOK "Installing oh-my-fish...\n"
+	bash -c "curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish"
+	printOK "\n"
 }
