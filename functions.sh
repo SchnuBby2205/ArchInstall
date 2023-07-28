@@ -342,7 +342,8 @@ myChroot2() {
 	keyboardLayout2
 	timezone2
 	
-	printRunning "\nSetting timezone ${TIMEZONE}..."
+	printf "\n"
+	printRunning "Setting timezone ${TIMEZONE}..."
 	bash -c "ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime"
 	bash -c "hwclock --systohc"
 	printf "\r"
