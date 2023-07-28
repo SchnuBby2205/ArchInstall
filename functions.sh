@@ -461,7 +461,7 @@ myChroot2() {
 
 	myPrint "red" "\nIMPORTANT\n"
 	printf "\t- Type \"exit\" or press CTRL+D\n"
-	printf "\t- Type \"umount -R ${ROOTMOUNT}\"\n"
+	printf "\t- Type \"umount -R /mnt\"\n"
 	printf "\t- Type \"reboot\"\n"
 	printf "\t- After reboot login with the new user\n"
 	printf "\t- Type ArchInstall/postinstall.sh\n\n"
