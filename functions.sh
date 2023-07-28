@@ -466,3 +466,47 @@ myChroot2() {
 	printf "\t- After reboot login with the new user\n"
 	printf "\t- Type ArchInstall/postinstall.sh\n\n"
 }	
+
+installYAY() {
+	printRunning "Installing YAY..."
+	bash -c "git clone https://aur.archlinux.org/yay.git &>/dev/null"
+	cd yay/
+	bash -c "makepkg --noconfirm --needed -si &>/dev/null"
+	cd ..
+	printf "\r"
+	printOK "Installing YAY...\n"
+}
+
+installYAYPrograms() {
+	printRunning "Installing pulseaudio-control..."
+	bash -c "yay -S pulseaudio-control --noconfirm --needed &>/dev/null"
+	printf "\r"
+	printOK "Installing pulseaudio-control...\n"
+
+	printRunning "Installing jonaburg-picom..."
+	bash -c "yay -S picom-jonaburg-git --noconfirm --needed &>/dev/null"
+	printf "\r"
+	printOK "Installing jonaburg-picom...\n"
+
+	printRunning "Installing nerd-fonts..."
+	bash -c "yay -S nerd-fonts --noconfirm --needed &>/dev/null"
+	printf "\r"
+	printOK "Installing nerd-fonts...\n"
+
+	printRunning "Installing fontAwesome..."
+	bash -c "yay -S ttf-font-awesome --noconfirm --needed &>/dev/null"
+	printf "\r"
+	printOK "Installing fontAwesome...\n"
+}
+
+installPrograms() {
+	printRunning "Installing additional programs..."
+	bash -c "sudo pacman -S alacritty awesome fish polybar rofi --noconfirm --needed &>/dev/null"
+	printf "\r"
+	printOK "Installing pulseaudio-control...\n"
+
+	printRunning "Installing oh-my-fish..."
+	bash -c "curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish &>/dev/null"
+	printf "\r"
+	printOK "Installing oh-my-fish...\n"
+}
