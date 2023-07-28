@@ -296,7 +296,7 @@ myChroot1() {
 	
 	#printf "\nEntering chroot on ${ROOTMOUNT}...\t\t"
 	cd ..
-	bash -c "mv ArchInstall/ ${ROOTMOUNT} &>/dev/null"
+	bash -c "mv ArchInstall/ ${ROOTMOUNT}"
 	bash -c "arch-chroot ${ROOTMOUNT}"
 	#printf "["
 	#myPrint "green" "OK"
