@@ -580,7 +580,7 @@ installConfig() {
 	printRunning "Setting autostart..."
 	bash -c "sudo cp ./.bash_profile ~"
 	bash -c "sudo cp ./.bashrc ~"
-	bash -c "sudo cp ./.xrinit ~"
+	bash -c "sudo cp ./.xinitrc ~"
 	printf "\r"
 	printOK "Setting autostart...\n\n"
 }
