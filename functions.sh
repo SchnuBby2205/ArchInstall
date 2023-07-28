@@ -7,6 +7,9 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
+RUNNING="[${YELLOW}  RUNNING ${NC}]"
+MYOK="[${GREEN}    OK    ${NC}]"
+ERROR="[${RED}  ERROR   ${NC}]"
 
 # Partitionen
 EFIPART=""
@@ -58,10 +61,7 @@ partition() {
 
 	myPrint "red" "\n${DRIVE} will be partitioned with ${PARTTOOL} now!\n"
 	bash -c "${PARTTOOL} ${DRIVE}"
-	printf "Partitioning ${DRIVE} with ${PARTTOOL}\t"
-	printf "[" 
-	myPrint "green" "OK"
-	printf "]\n"
+	printOK "Partitioning ${DRIVE} with ${PARTTOOL}"
 	printf "\nInstallation will start in 5 seconds."
 	sleep 1 
 	printf "\rInstallation will start in 4 seconds."
@@ -92,6 +92,19 @@ myPrint() {
 	fi
 }
 
+printOK() {
+	message="$1"
+	printf "${MYOK} ${message}"
+}
+printRunning() {
+	message="$1"
+	printf "${RUNNING} ${message}"
+}
+printError() {
+	message="$1"
+	printf "${ERROR} ${message}"
+}
+
 checkEFI() {
 	_EFI=$(cat /sys/firmware/efi/fw_platform_size 2>/dev/null)
 	if [[ "${_EFI}" != "64" && "${_EFI}" != "32" ]]
@@ -110,11 +123,8 @@ keyboardLayout() {
 	then
 		KEYBOARDLAYOUT="de-latin1"
 	fi
-	bash -c "loadkeys ${KEYBOARDLAYOUT}"
-	printf "\nSetting keyboard layout\t\t"
-	printf "[" 
-	myPrint "green" "OK"
-	printf "]\n\n"
+	bash -c "loadkeys ${KEYBOARDLAYOUT} &>/dev/null"
+	printOK "\nSetting keyboard layout"
 }
 
 timezone() {
@@ -124,12 +134,9 @@ timezone() {
 	then
 		TIMEZONE="Europe/Berlin"
 	fi
-	bash -c "timedatectl set-timezone \"${TIMEZONE}\""
-	bash -c "timedatectl set-ntp true"
-	printf "\nSetting timezone (with ntp)\t"
-	printf "[" 
-	myPrint "green" "OK"
-	printf "]\n\n"
+	bash -c "timedatectl set-timezone \"${TIMEZONE}\" &>/dev/null"
+	bash -c "timedatectl set-ntp true &>/dev/null"
+	printOK "\nSetting timezone (with ntp)\n\n"
 }
 
 format() {
@@ -156,12 +163,12 @@ format() {
 	printf "SWAP partition =\t"
 	myPrint "green" "${SWAPPART}\n\n"	
 	
-	printf "Formating EFI parition (${EFIPART})...\n"
-	bash -c "mkfs.fat -F 32 ${EFIPART}"
-	printf "Formating ROOT parition (${ROOTPART})...\n"
-	bash -c "mkfs.ext4 ${ROOTPART}"
-	printf "Making swapfile (${SWAPPART})...\n"
-	bash -c "mkswap ${SWAPPART}"
+	bash -c "mkfs.fat -F 32 ${EFIPART} &>/dev/null"
+	printOK "Formating EFI parition (${EFIPART})...\n"
+	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
+	printOK "Formating ROOT parition (${ROOTPART})...\n"
+	bash -c "mkswap ${SWAPPART} &>/dev/null"
+	printOK "Making swapfile (${SWAPPART})...\n"
 }
 
 myMount() {
@@ -184,23 +191,14 @@ myMount() {
 	printf "ROOT mountpount =\t"
 	myPrint "green" "${ROOTMOUNT}\n\n"
 	
-	printf "Mounting ROOT parition (${ROOTMOUNT})..."
-	bash -c "mount ${ROOTPART} ${ROOTMOUNT}"
-	printf "\t\t["
-	myPrint "green" "OK"
-	printf "]\n"
+	bash -c "mount ${ROOTPART} ${ROOTMOUNT} &>/dev/null"
+	printOK "Mounting ROOT parition (${ROOTMOUNT})...\n"
 
-	printf "Mounting EFI parition (${EFIMOUNT})..."
-	bash -c "mount --mkdir ${EFIPART} ${EFIMOUNT}"
-	printf "\t\t["
-	myPrint "green" "OK"
-	printf "]\n"
+	bash -c "mount --mkdir ${EFIPART} ${EFIMOUNT} &>/dev/null"
+	printOK "Mounting EFI parition (${EFIMOUNT})...\n"
 
-	printf "Enabling swapfile (${SWAPPART})..."
-	bash -c "swapon ${SWAPPART}"	
-	printf "\t\t["
-	myPrint "green" "OK"
-	printf "]\n\n"
+	bash -c "swapon ${SWAPPART} &>/dev/null"	
+	printOK "Enabling swapfile (${SWAPPART})...\n"
 }
 
 mirrors() {
@@ -211,17 +209,11 @@ mirrors() {
 	then
 		COUNTRY="Germany"
 	fi
-	printf "\nSorting mirrors..."
-	bash -c "reflector -c ${COUNTRY} -a 6 --save /etc/pacman.d/mirrorlist"
-	printf "\t\t["
-	myPrint "green" "OK"
-	printf "]\n\n"
+	bash -c "reflector -c ${COUNTRY} -a 6 --save /etc/pacman.d/mirrorlist &>/dev/null"
+	printOK "\nSorting mirrors...\n\n"
 	
-	#printf "Updating pacman..."
-	bash -c "pacman -Syyy"
-	#printf "\t\t["
-	#myPrint "green" "OK"
-	#printf "]\n"	
+	bash -c "pacman -Syyy &>/dev/null"
+	printOK "Updating pacman...\n"
 }
 
 baseInstall() {
@@ -259,19 +251,14 @@ baseInstall() {
 	myPrint "green" "************************************\n"
 	myPrint "green" "* Starting base installation       *\n"
 	myPrint "green" "************************************\n\n"	
-	printf "\nRunning pacstrap...\t\t\t"
+	printRunning "\nRunning pacstrap..."
 	bash -c "pacstrap -K /mnt base linux linux-firmware sudo ${PROZ} &>/dev/null"
-	#printf "["
-	#myPrint "green" "OK"
-	#printf "]"
+	printOK "\rRunning pacstrap..."
 }
 
 makeFstab() {
-	#printf "\nCreating Fstab...\t\t\t"
-	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
-	#printf "["
-	#myPrint "green" "OK"
-	#printf "]"
+	bash -c "genfstab -U /mnt >> /mnt/etc/fstab &>/dev/null"
+	printOK "\nCreating Fstab..."
 }
 
 myChroot1() {
@@ -288,8 +275,8 @@ myChroot1() {
 	
 	#printf "\nEntering chroot on ${ROOTMOUNT}...\t\t"
 	cd ..
-	bash -c "mv ArchInstall/ ${ROOTMOUNT}"
-	bash -c "arch-chroot ${ROOTMOUNT}"
+	bash -c "mv ArchInstall/ ${ROOTMOUNT} &>/dev/null"
+	bash -c "arch-chroot ${ROOTMOUNT} &>/dev/null"
 	#printf "["
 	#myPrint "green" "OK"
 	#printf "]"
