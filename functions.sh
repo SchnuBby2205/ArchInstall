@@ -511,7 +511,6 @@ installPrograms() {
 }
 
 installConfig() {
-	omf install slacker
 	printRunning "Installing dotfiles..."
 	bash -c "git clone https://github.com/SchnuBby2205/DotFiles.git &>/dev/null"
 	cd DotFiles/
@@ -527,6 +526,7 @@ installConfig() {
 
 	bash -c "sudo rm -rf ~/.config/omf"
 	mv ./omf ~/.config/
+	bash -c "omf install slacker"
 
 	bash -c "sudo rm -rf ~/.config/picom"
 	mv ./picom ~/.config/
