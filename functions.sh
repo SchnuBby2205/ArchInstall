@@ -515,12 +515,25 @@ installConfig() {
 	bash -c "git clone https://github.com/SchnuBby2205/DotFiles.git &>/dev/null"
 	cd DotFiles/
 	
+	bash -c "sudo rm -rf ~/.config/alacritty"
 	mv ./alacritty ~/.config/
+
+	bash -c "sudo rm -rf ~/.config/awesome"
 	mv ./awesome ~/.config/
+
+	bash -c "sudo rm -rf ~/.config/fish"
 	mv ./fish ~/.config/
+
+	bash -c "sudo rm -rf ~/.config/omf"
 	mv ./omf ~/.config/
+
+	bash -c "sudo rm -rf ~/.config/picom"
 	mv ./picom ~/.config/
+
+	bash -c "sudo rm -rf ~/.config/polybar"
 	mv ./polybar ~/.config/
+
+	bash -c "sudo rm -rf ~/.config/rofi"
 	mv ./rofi ~/.config/
 	
 
