@@ -26,15 +26,16 @@ myPrint "green" "************************************\n"
 
 # EFI Boot checken
 checkEFI
+printf "\n"
 EFI=$?
 if [ "${EFI}" == 0 ]
 then
-	printError "\nChecking EFI Boot...\n\n"
+	printError "Checking EFI Boot...\n\n"
 	myPrint "red" "Only EFI Boot is supported right now! Sorry!\n"
 	myPrint "red" "The Installer will now exit!\n\n"
 	exit
 else
-	printOK "\nChecking EFI Boot...\n\n"
+	printOK "Checking EFI Boot...\n\n"
 fi
 
 # Timezone
