@@ -94,15 +94,15 @@ myPrint() {
 
 printOK() {
 	message="$1"
-	printf "${MYOK} ${message}"
+	printf "${MYOK}   ${message}"
 }
 printRunning() {
 	message="$1"
-	printf "${RUNNING} ${message}"
+	printf "${RUNNING}   ${message}"
 }
 printError() {
 	message="$1"
-	printf "${ERROR} ${message}"
+	printf "${ERROR}   ${message}"
 }
 
 checkEFI() {
@@ -124,7 +124,8 @@ keyboardLayout() {
 		KEYBOARDLAYOUT="de-latin1"
 	fi
 	bash -c "loadkeys ${KEYBOARDLAYOUT} &>/dev/null"
-	printOK "\nSetting keyboard layout"
+	printf "\n"
+	printOK "Setting keyboard layout\n"
 }
 
 timezone() {
