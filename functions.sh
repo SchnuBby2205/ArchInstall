@@ -471,7 +471,8 @@ installYAY() {
 	bash -c "git clone https://aur.archlinux.org/yay.git &>/dev/null"
 	cd yay/
 	bash -c "makepkg --noconfirm --needed -si &>/dev/null"
-	printRunning "\nInstalling YAY..."
+	printf "\n"
+	printRunning "Installing YAY..."
 	cd ..
 	printf "\r"
 	printOK "Installing YAY...\n"
@@ -503,7 +504,7 @@ installPrograms() {
 	printRunning "Installing additional programs..."
 	bash -c "sudo pacman -S alacritty awesome fish polybar rofi --noconfirm --needed &>/dev/null"
 	printf "\r"
-	printRunning "Installing additional programs...\n"
+	printRunning "Installing additional programs...\nprintOK "Installing pulseaudio-control...\n""
 
 	bash -c "curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish"
 	printOK "\n"
