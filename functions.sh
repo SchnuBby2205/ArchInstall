@@ -295,7 +295,8 @@ myChroot1() {
 	printf "\t- Type ./chrootinstall.sh\n\n"
 	
 	#printf "\nEntering chroot on ${ROOTMOUNT}...\t\t"
-	mv "ArchInstall/" "${ROOTMOUNT}"
+	cd ..
+	mv "Archinstall/" "${ROOTMOUNT}"
 	bash -c "arch-chroot ${ROOTMOUNT}"
 }
 

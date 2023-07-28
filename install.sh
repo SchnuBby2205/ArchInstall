@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./ArchInstall/functions.sh
+source ./functions.sh
 
 # Mein Arch Installationsscript
 
