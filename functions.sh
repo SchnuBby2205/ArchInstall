@@ -500,8 +500,8 @@ installYAYPrograms() {
 }
 
 installPrograms() {
-	printRunning "Installing additional programs..."
 	bash -c "sudo pacman -S alacritty awesome fish polybar rofi --noconfirm --needed &>/dev/null"
+	printRunning "Installing additional programs..."
 	printf "\r"
 	printOK "Installing pulseaudio-control...\n"
 
