@@ -508,10 +508,10 @@ installPrograms() {
 
 	bash -c "curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish"
 	printf "\n"
-	omf install slacker
 }
 
 installConfig() {
+	bash -c "omf install slacker"
 	printRunning "Installing dotfiles..."
 	bash -c "git clone https://github.com/SchnuBby2205/DotFiles.git &>/dev/null"
 	cd DotFiles/
