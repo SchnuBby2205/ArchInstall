@@ -211,11 +211,15 @@ mirrors() {
 	then
 		COUNTRY="Germany"
 	fi
-	bash -c "reflector -c ${COUNTRY} -a 6 --save /etc/pacman.d/mirrorlist &>/dev/null"
 	printf "\n"
+	printRunning "Sorting mirrors..."
+	bash -c "reflector -c ${COUNTRY} -a 6 --save /etc/pacman.d/mirrorlist &>/dev/null"
+	printf "\r"
 	printOK "Sorting mirrors...\n"
-	
+
+	printRunning "Updating pacman..."
 	bash -c "pacman -Syyy &>/dev/null"
+	printf "\r"
 	printOK "Updating pacman...\n"
 }
 
