@@ -305,19 +305,19 @@ baseInstall() {
 makeFstab() {
 	printf "\n"
 	printRunning "Creating fstab..."
-	bash -c "genfstab -U /mnt >> /mnt/etc/fstab &>/dev/null"
+	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
 	printf "\r"
 	printOK "Creating fstab...\n"
 
-	printf "\nEntering chroot on ${ROOTMOUNT} 5 seconds."
+	printf "\nEntering chroot on ${ROOTMOUNT} in 5 seconds."
 	sleep 1 
-	printf "\rEntering chroot on ${ROOTMOUNT} 4 seconds."
+	printf "\rEntering chroot on ${ROOTMOUNT} in 4 seconds."
 	sleep 1 
-	printf "\rEntering chroot on ${ROOTMOUNT} 3 seconds."
+	printf "\rEntering chroot on ${ROOTMOUNT} in 3 seconds."
 	sleep 1 
-	printf "\rEntering chroot on ${ROOTMOUNT} 2 seconds."
+	printf "\rEntering chroot on ${ROOTMOUNT} in 2 seconds."
 	sleep 1 
-	printf "\rEntering chroot on ${ROOTMOUNT} 1 seconds."
+	printf "\rEntering chroot on ${ROOTMOUNT} in 1 seconds."
 	sleep 1 
 	clearScreen
 }
@@ -342,7 +342,7 @@ myChroot2() {
 	keyboardLayout2
 	timezone2
 	
-	printRunning "Setting timezone ${TIMEZONE}..."
+	printRunning "\nSetting timezone ${TIMEZONE}..."
 	bash -c "ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime"
 	bash -c "hwclock --systohc"
 	printf "\r"
@@ -357,7 +357,7 @@ myChroot2() {
 	
 	printf "\n"
 	printRunning "Setting locale.gen ${LOCALE}..."
-	bash -c "sed -e '/${LOCALE}/s/^#*//' -i /etc/locale.gen"
+	bash -c "sed -e '/${LOCALE}/s/^#*//' -i /etc/locale.gen &>/dev/null"
 	bash -c "locale-gen"
 	printf "\r"
 	printOK "Setting locale.gen ${LOCALE}...\n"
@@ -372,7 +372,7 @@ myChroot2() {
 	printf "\r"
 	printOK "Setting keymap ${KEYBOARDLAYOUT}...\n"
 
-	myPrint "yellow" "Enter your hostname (default = arch): "
+	myPrint "yellow" "\nEnter your hostname (default = arch):\n"
 	read HOSTNAME
 	if [ "${HOSTNAME}" == "" ]
 	then
@@ -391,7 +391,7 @@ myChroot2() {
 	printOK "Setting hosts...\n"
 
 	printRunning "Creating initramfs..."
-	bash -c "mkinitcpio -P"
+	bash -c "mkinitcpio -P &>/dev/null"
 	printf "\r"
 	printOK "Creating initramfs...\n"
 	
@@ -399,17 +399,17 @@ myChroot2() {
 	bash -c "passwd"
 		
 	printRunning "Installing base programs..."
-	bash -c "pacman -S grub efibootmgr os-prober ntfs-3g networkmanager dialog mtools dosfstools base-devel linux-headers git pulseaudio --noconfirm --needed"
+	bash -c "pacman -S grub efibootmgr os-prober ntfs-3g networkmanager dialog mtools dosfstools base-devel linux-headers git pulseaudio --noconfirm --needed &>/dev/null"
 	printf "\r"
 	printOK "Installing base programs...\n"
 
 	printRunning "Configuring GRUB..."
-	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB"
+	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null"
 	printf "\r"
 	printOK "Configuring GRUB...\n"
 
 	printRunning "Writing GRUB config..."
-	bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
+	bash -c "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
 	printf "\r"
 	printOK "Writing GRUB config...\n"
 
@@ -430,10 +430,7 @@ myChroot2() {
 	printf "\r"
 	printOK "Creating new user...\n"
 
-	printRunning "Setting password for new user..."
 	bash -c "passwd ${USER}"
-	printf "\r"
-	printOK "Setting password for new user...\n"
 	
 	printf "Setting sudo for new user..."
 	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
