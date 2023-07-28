@@ -515,7 +515,6 @@ installConfig() {
 	bash -c "git clone https://github.com/SchnuBby2205/DotFiles.git &>/dev/null"
 	cd DotFiles/
 	
-	mkdir ~/.config
 	mv ./alacritty ~/.config/
 	mv ./awesome ~/.config/
 	mv ./fish ~/.config/
@@ -524,7 +523,7 @@ installConfig() {
 	mv ./polybar ~/.config/
 	mv ./rofi ~/.config/
 	
-	
+
 	
 	printf "\r"
 	printRunning "Installing dotfiles...\n"	
