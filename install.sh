@@ -26,8 +26,8 @@ myPrint "green" "************************************\n"
 
 # EFI Boot checken
 checkEFI
-printf "\n"
 EFI=$?
+printf "\n"
 if [ "${EFI}" == 0 ]
 then
 	printError "Checking EFI Boot...\n\n"
