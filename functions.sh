@@ -441,7 +441,19 @@ myChroot2() {
 	bash -c "mv ArchInstall/ /home/${USER}"
 	bash -c "chown -R ${USER}:${USER} /home/${USER}/ArchInstall"
 
-	printf "\n"
+
+	printf "\nFinishing installation in 5 seconds."
+	sleep 1 
+	printf "\rFinishing installation in 4 seconds."
+	sleep 1 
+	printf "\rFinishing installation in 3 seconds."
+	sleep 1 
+	printf "\rFinishing installation in 2 seconds."
+	sleep 1 
+	printf "\rFinishing installation in 1 seconds."
+	sleep 1 
+	clearScreen
+
 	myPrint "green" "******************************\n"
 	myPrint "green" "* Installation is done !     *\n"
 	myPrint "green" "******************************\n"
