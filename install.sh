@@ -17,7 +17,7 @@ myPrint "red" "\nIMPORTANT\n"
 printf "\t- You need to make your Partition Table manually\n"
 
 # Partitioning
-#partition
+partition
 
 # Installation
 myPrint "green" "************************************\n"
@@ -42,19 +42,19 @@ fi
 timezone
 
 # Formatting drives
-#format
+format
 
 # Mounten
-#myMount
+myMount
 
 # Mirrors sortieren
 mirrors
 
 # Base Installation starten
-#baseInstall
+baseInstall
 
 # Fstab
-#makeFstab
+makeFstab
 
 # chroot
 myChroot1
