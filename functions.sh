@@ -379,6 +379,7 @@ myChroot2() {
 	then
 		HOSTNAME="arch"
 	fi
+	printf "\n"
 	printRunning "Setting hostname ${HOSTNAME}..."
 	bash -c "echo "${HOSTNAME}" >> /etc/hostname"
 	printf "\r"
@@ -420,7 +421,7 @@ myChroot2() {
 	printf "\r"
 	printOK "Enabling networkmanager...\n"
 	
-	myPrint "yellow" "\nEnter your normal username (default = schnubby): "
+	myPrint "yellow" "\nEnter your normal username (default = schnubby):\n"
 	read USER
 	if [ "${USER}" == "" ]
 	then
@@ -430,10 +431,11 @@ myChroot2() {
 	bash -c "useradd -mG wheel ${USER}"
 	bash -c "passwd ${USER}"
 	
-	printf "Setting sudo for new user..."
+	printf "\n"
+	printRunning "Setting sudo for new user..."
 	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
 	printf "\r"
-	printf "Setting sudo for new user...\n"
+	printOK "Setting sudo for new user...\n"
 	
 	cd ..
 	bash -c "mv ArchInstall/ /home/${USER}"
