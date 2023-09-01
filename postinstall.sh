@@ -9,8 +9,10 @@ myPrint "green" "*************************\n"
 myPrint "green" "* Entering postinstall  *\n"
 myPrint "green" "*************************\n\n"
 
-installYAY
+#installYAY
 
-installYAYPrograms
+#installYAYPrograms
 
-installPrograms
+#installPrograms
+
+sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
