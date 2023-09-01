@@ -16,4 +16,4 @@ myPrint "green" "*************************\n\n"
 #installPrograms
 
 bash -c "sudo sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf"
-bash -c "sudo pacman -Syy &>/dev/null"
+bash -c "sudo pacman -Syy"
