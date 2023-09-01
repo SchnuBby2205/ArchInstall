@@ -403,7 +403,8 @@ myChroot2() {
 		
 	printf "\n"
 	printRunning "Installing base programs..."
-	bash -c "pacman -S grub efibootmgr os-prober ntfs-3g networkmanager dialog mtools dosfstools base-devel linux-headers git pulseaudio --noconfirm --needed &>/dev/null"
+	#bash -c "pacman -S grub efibootmgr os-prober ntfs-3g networkmanager dialog mtools dosfstools base-devel linux-headers git pulseaudio --noconfirm --needed &>/dev/null"
+ 	bash -c "pacman -S grub efibootmgr os-prober ntfs-3g networkmanager dialog mtools dosfstools base-devel linux-headers git --noconfirm --needed &>/dev/null"
 	printf "\r"
 	printOK "Installing base programs...\n"
 
