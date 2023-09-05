@@ -35,7 +35,6 @@ fi
 if [ "${CONFIGS}" == "y" ]
 then
   printf "\n"
-  #sed '/pattern/d' numbers.csv
   printf "\n"
   printRunning "Preparing SchnuBby2205 Configs"
 
