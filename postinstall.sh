@@ -32,6 +32,20 @@ then
   CONFIGS="y"
 fi
 
+myPrint "yellow" "\nUse Bluetooth? (default = n): "
+read BT
+if [ "${BT}" == "" ]
+then
+  BT="n"
+fi
+
+myPrint "yellow" "\nBrightness Control for Laptop? (default = n): "
+read LAPTOP
+if [ "${LAPTOP}" == "" ]
+then
+  LAPTOP="n"
+fi
+
 if [ "${CONFIGS}" == "y" ]
 then
   printf "\n"
@@ -49,10 +63,18 @@ then
   cd ~/Hyprdots/Scripts
   bash -c "sudo rm custom_apps.lst &>/dev/null"
   bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_apps.lst &>/dev/null"
-  bash -c "sed '/bluez/d' custom_hypr.lst"
-  bash -c "sed '/bluez-utils/d' custom_hypr.lst"
-  bash -c "sed '/blueman/d' custom_hypr.lst"
-  bash -c "sed '/brightnessctl/d' custom_hypr.lst"  
+
+  if [ "${BT}" == "n" ]
+  then  
+    bash -c "sed '/bluez/d' custom_hypr.lst"
+    bash -c "sed '/bluez-utils/d' custom_hypr.lst"
+    bash -c "sed '/blueman/d' custom_hypr.lst"
+  fi
+
+  if [ "${LAPTOP}" == "n" ]
+  then  
+    bash -c "sed '/brightnessctl/d' custom_hypr.lst"  
+  fi
   
   printf "\r"
   printOK "Preparing SchnuBby2205 Configs\n"
