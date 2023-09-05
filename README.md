@@ -7,5 +7,5 @@ ToDo
 - Bildschirm / Keyboard Sprache / Mouse Accel übernehmen
 
 - Konfigs aus momentaner Installation (waybar / hypr hier anpassen)
-- custom_apps und custom_hypr + configs vor installation austauschen:
+- custom_apps und custom_hypr (Nur BT Rauswerfen sed -i??) + configs vor installation austauschen:
 - https://askubuntu.com/questions/912545/how-to-retrive-a-single-file-from-github-using-git
