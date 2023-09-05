@@ -17,3 +17,6 @@ myPrint "green" "*************************\n\n"
 
 bash -c "sudo sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf"
 bash -c "sudo pacman -Syy"
+
+bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/Hyprdots"
+bash -c "cd ~/Hyprdots"
