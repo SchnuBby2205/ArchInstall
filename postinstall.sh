@@ -60,6 +60,10 @@ then
   bash -c "sudo rm wb_top_01.jsonc &>/dev/null"
   bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/modes/wb_top_01.jsonc &>/dev/null"
 
+  cd ..
+  bash -c "sudo rm wbarconfgen.sh &>/dev/null"
+  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/wbarconfgen.sh &>/dev/null"
+
   cd ~/Hyprdots/Scripts
   bash -c "sudo rm custom_apps.lst &>/dev/null"
   bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_apps.lst &>/dev/null"
