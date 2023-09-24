@@ -56,13 +56,21 @@ then
   bash -c "sudo rm hyprland.conf &>/dev/null"
   bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/hypr/hyprland.conf &>/dev/null"
 
-  cd ../waybar/modes
-  bash -c "sudo rm wb_top_01.jsonc &>/dev/null"
-  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/modes/wb_top_01.jsonc &>/dev/null"
+  cd ../waybar
+  bash -c "sudo rm config.ctl &>/dev/null"
+  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/config.ctl &>/dev/null"
 
-  cd ..
-  bash -c "sudo rm wbarconfgen.sh &>/dev/null"
-  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/wbarconfgen.sh &>/dev/null"
+  cd modules
+  bash -c "sudo rm clock.jsonc &>/dev/null"
+  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/modules/clock.jsonc &>/dev/null"
+  
+  # cd ../waybar/modes
+  # bash -c "sudo rm wb_top_01.jsonc &>/dev/null"
+  # bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/modes/wb_top_01.jsonc &>/dev/null"
+
+  # cd ..
+  # bash -c "sudo rm wbarconfgen.sh &>/dev/null"
+  # bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/wbarconfgen.sh &>/dev/null"
 
   cd ~/Hyprdots/Scripts
   bash -c "sudo rm custom_apps.lst &>/dev/null"
