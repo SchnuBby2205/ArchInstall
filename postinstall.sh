@@ -25,19 +25,19 @@ cd ~/Hyprdots
 printf "\r"
 printOK "Cloning Hyprdots\n"
 
-myPrint "yellow" "\nUse SchnuBby2205 Configs? (default = y): "
-read CONFIGS
-if [ "${CONFIGS}" == "" ]
-then
-  CONFIGS="y"
-fi
+#myPrint "yellow" "\nUse SchnuBby2205 Configs? (default = y): "
+#read CONFIGS
+#if [ "${CONFIGS}" == "" ]
+#then
+  #CONFIGS="y"
+#fi
 
-myPrint "yellow" "\nUse Bluetooth? (default = n): "
-read BT
-if [ "${BT}" == "" ]
-then
-  BT="n"
-fi
+#myPrint "yellow" "\nUse Bluetooth? (default = n): "
+#read BT
+#if [ "${BT}" == "" ]
+#then
+  #BT="n"
+#fi
 
 myPrint "yellow" "\nBrightness Control for Laptop? (default = n): "
 read LAPTOP
@@ -46,23 +46,23 @@ then
   LAPTOP="n"
 fi
 
-if [ "${CONFIGS}" == "y" ]
-then
-  printf "\n"
-  printf "\n"
-  printRunning "Preparing SchnuBby2205 Configs"
+#if [ "${CONFIGS}" == "y" ]
+#then
+#  printf "\n"
+#  printf "\n"
+#  printRunning "Preparing SchnuBby2205 Configs"
 
-  cd Configs/.config/hypr
-  bash -c "sudo rm hyprland.conf &>/dev/null"
-  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/hypr/hyprland.conf &>/dev/null"
+#  cd Configs/.config/hypr
+#  bash -c "sudo rm hyprland.conf &>/dev/null"
+#  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/hypr/hyprland.conf &>/dev/null"
 
-  cd ../waybar
-  bash -c "sudo rm config.ctl &>/dev/null"
-  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/config.ctl &>/dev/null"
+#  cd ../waybar
+#  bash -c "sudo rm config.ctl &>/dev/null"
+#  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/config.ctl &>/dev/null"
 
-  cd modules
-  bash -c "sudo rm clock.jsonc &>/dev/null"
-  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/modules/clock.jsonc &>/dev/null"
+#  cd modules
+#  bash -c "sudo rm clock.jsonc &>/dev/null"
+#  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/modules/clock.jsonc &>/dev/null"
   
   # cd ../waybar/modes
   # bash -c "sudo rm wb_top_01.jsonc &>/dev/null"
@@ -72,25 +72,25 @@ then
   # bash -c "sudo rm wbarconfgen.sh &>/dev/null"
   # bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Configs/.config/waybar/wbarconfgen.sh &>/dev/null"
 
-  cd ~/Hyprdots/Scripts
-  bash -c "sudo rm custom_apps.lst &>/dev/null"
-  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_apps.lst &>/dev/null"
+#  cd ~/Hyprdots/Scripts
+#  bash -c "sudo rm custom_apps.lst &>/dev/null"
+#  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_apps.lst &>/dev/null"
 
-  if [ "${BT}" == "n" ]
-  then  
-    bash -c "sed '/bluez/d' custom_hypr.lst"
-    bash -c "sed '/bluez-utils/d' custom_hypr.lst"
-    bash -c "sed '/blueman/d' custom_hypr.lst"
-  fi
+#  if [ "${BT}" == "n" ]
+#  then  
+#    bash -c "sed '/bluez/d' custom_hypr.lst"
+#    bash -c "sed '/bluez-utils/d' custom_hypr.lst"
+#    bash -c "sed '/blueman/d' custom_hypr.lst"
+#  fi
 
   if [ "${LAPTOP}" == "n" ]
   then  
     bash -c "sed '/brightnessctl/d' custom_hypr.lst"  
   fi
   
-  printf "\r"
-  printOK "Preparing SchnuBby2205 Configs\n"
-fi
+#  printf "\r"
+#  printOK "Preparing SchnuBby2205 Configs\n"
+#fi
 
 printf "\nPostinstallation will start in 5 seconds."
 sleep 1 
@@ -107,5 +107,4 @@ clearScreen
 cd ~/Hyprdots/Scripts
 bash -c "rm -rf custom_apps.lst &>/dev/null"
 bash -c "curl https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_apps.lst -o custom_apps.lst &>/dev/null"
-#printf "\nPlease Run ./install.sh custom_apps.lst"
-bash -c "./install.sh custom_apps.lst --noconfirm"
+bash -c "./install.sh custom_apps.lst /d"
