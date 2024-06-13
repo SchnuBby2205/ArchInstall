@@ -108,4 +108,4 @@ cd ~/Hyprdots/Scripts
 bash -c "rm -rf custom_apps.lst &>/dev/null"
 bash -c "curl https://https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_apps.lst -o custom_apps.lst &>/dev/null"
 printf "\nPlease Run ./install.sh custom_apps.lst"
-#bash -c "./install.sh custom_apps.lst"
+#bash -c "./install.sh custom_apps.lst --noconfirm"
