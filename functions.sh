@@ -170,39 +170,39 @@ format() {
 		myPrint "yellow" "Enter your EFI partition: "
 		read EFIPART
 	done
-	while [ "${ROOTPART}" == "" ]
-	do
-		myPrint "yellow" "Enter your ROOT partition: "
-		read ROOTPART
-	done
 	while [ "${SWAPPART}" == "" ]
 	do
 		myPrint "yellow" "Enter your SWAP partition: "
 		read SWAPPART
 	done
+ 	while [ "${ROOTPART}" == "" ]
+	do
+		myPrint "yellow" "Enter your ROOT partition: "
+		read ROOTPART
+	done
 		
 	printf "\nEFI partition  =\t"
 	myPrint "green" "${EFIPART}\n"
-	printf "ROOT partition =\t"
-	myPrint "green" "${ROOTPART}\n"
 	printf "SWAP partition =\t"
-	myPrint "green" "${SWAPPART}\n\n"	
+	myPrint "green" "${SWAPPART}\n\n"
+ 	printf "ROOT partition =\t"
+	myPrint "green" "${ROOTPART}\n"	
 	
 	printRunning "Formating EFI parition (${EFIPART})..."
 	bash -c "mkfs.fat -F 32 ${EFIPART} &>/dev/null"
 	printf "\r"
 	printOK "Formating EFI parition (${EFIPART})...\n"
 	
-	printRunning "Formating ROOT parition (${ROOTPART})..."
-	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
-	printf "\r"
-	printOK "Formating ROOT parition (${ROOTPART})...\n"
-	
 	printRunning "Making swapfile (${SWAPPART})..."
 	bash -c "mkswap ${SWAPPART} &>/dev/null"
 	printf "\r"
 	printOK "Making swapfile (${SWAPPART})...\n"
-}
+	
+	printRunning "Formating ROOT parition (${ROOTPART})..."
+	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
+	printf "\r"
+	printOK "Formating ROOT parition (${ROOTPART})...\n"
+ }
 
 myMount() {
 	myPrint "yellow" "\nEnter your EFI mountpoint (default = /mnt/boot): "
