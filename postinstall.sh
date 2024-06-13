@@ -76,6 +76,8 @@ fi
 #  bash -c "sudo rm custom_apps.lst &>/dev/null"
 #  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_apps.lst &>/dev/null"
 
+cd ~/Hyprdots/Scripts
+
   if [ "${BT}" == "n" ]
   then  
     bash -c "sed '/bluez/d' custom_hypr.lst"
@@ -104,7 +106,7 @@ printf "\rPostinstallation will start in 1 seconds."
 sleep 1 
 clearScreen
 
-cd ~/Hyprdots/Scripts
+#cd ~/Hyprdots/Scripts
 bash -c "rm -rf custom_apps.lst &>/dev/null"
 bash -c "curl https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_apps.lst -o custom_apps.lst &>/dev/null"
 bash -c "./install.sh custom_apps.lst -d"
