@@ -109,4 +109,4 @@ clearScreen
 #cd ~/Hyprdots/Scripts
 bash -c "rm -rf custom_apps.lst &>/dev/null"
 bash -c "curl https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_apps.lst -o custom_apps.lst &>/dev/null"
-bash -c "./install.sh custom_apps.lst /d"
+#bash -c "./install.sh custom_apps.lst /d"
