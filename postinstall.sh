@@ -32,12 +32,12 @@ printOK "Cloning Hyprdots\n"
   #CONFIGS="y"
 #fi
 
-#myPrint "yellow" "\nUse Bluetooth? (default = n): "
-#read BT
-#if [ "${BT}" == "" ]
-#then
-  #BT="n"
-#fi
+myPrint "yellow" "\nUse Bluetooth? (default = n): "
+read BT
+if [ "${BT}" == "" ]
+then
+  BT="n"
+fi
 
 myPrint "yellow" "\nBrightness Control for Laptop? (default = n): "
 read LAPTOP
@@ -76,12 +76,12 @@ fi
 #  bash -c "sudo rm custom_apps.lst &>/dev/null"
 #  bash -c "wget https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_apps.lst &>/dev/null"
 
-#  if [ "${BT}" == "n" ]
-#  then  
-#    bash -c "sed '/bluez/d' custom_hypr.lst"
-#    bash -c "sed '/bluez-utils/d' custom_hypr.lst"
-#    bash -c "sed '/blueman/d' custom_hypr.lst"
-#  fi
+  if [ "${BT}" == "n" ]
+  then  
+    bash -c "sed '/bluez/d' custom_hypr.lst"
+    bash -c "sed '/bluez-utils/d' custom_hypr.lst"
+    bash -c "sed '/blueman/d' custom_hypr.lst"
+  fi
 
   if [ "${LAPTOP}" == "n" ]
   then  
@@ -107,4 +107,4 @@ clearScreen
 cd ~/Hyprdots/Scripts
 bash -c "rm -rf custom_apps.lst &>/dev/null"
 bash -c "curl https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_apps.lst -o custom_apps.lst &>/dev/null"
-bash -c "./install.sh custom_apps.lst /d"
+bash -c "./install.sh custom_apps.lst -d"
