@@ -2,6 +2,7 @@
 #lsblk um platten zu sehen
 #mkfs.fat -F 32 auf boot platte
 #mkfs.ext4 auf root platte
+#mkswap / swapon auf swapplatte
 #mount --mkdir rootplatte /mnt
 #mount --mkdir bootplatte /mnt/boot
 #in archinstall platten nochmal kontrollieren
