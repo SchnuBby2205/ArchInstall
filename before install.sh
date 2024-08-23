@@ -35,3 +35,7 @@
 #unter /home/schnubby/.local/share/lutris/runners/wine/ entpacken
 #in lutris neues Game hinzufügen es reicht runnter auf wine + name vergeben danach WINEPREFIX wählen und Executable wählen
 #Für Hearthstone unter Play Configure DLL Override key: location.dll value disabled
+
+#Für Firefox Bonjour runterladen
+#danach https://github.com/SchnuBby2205/W11Settings/blob/main/bonjourr%20settings.json
+#settings einspielen
