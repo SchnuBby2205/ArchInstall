@@ -164,7 +164,8 @@
         "lib32-gtk3",
         "gtk3",
         "v4l-utils",
-        "lib32-v4l-utils"
+        "lib32-v4l-utils",
+        "git"
     ],
     "parallel downloads": 0,
     "profile_config": {
