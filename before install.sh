@@ -40,3 +40,9 @@
 #Für Firefox Bonjour runterladen
 #danach https://github.com/SchnuBby2205/W11Settings/blob/main/bonjourr%20settings.json
 #settings einspielen
+
+#fstab ggf anpassen
+## /dev/nvme0n1p4
+#/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1
+## /dev/nvme0n1p5
+#/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1
