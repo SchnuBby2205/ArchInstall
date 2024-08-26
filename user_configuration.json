@@ -16,7 +16,7 @@
     "disk_encryption": null,
     "hostname": "archlinux",
     "kernels": [
-        "linux"
+        "linux-lts"
     ],
     "locale_config": {
         "kb_layout": "de-latin1",
