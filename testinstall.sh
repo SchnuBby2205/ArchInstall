@@ -79,6 +79,8 @@ then
   #Monitor und Inputsettings in hyprland.conf anpassen
   #keybinding aus datei in .config/hypr/keybindings.conf einfügen
   #Remove the Flags from .config/code-flags.conf
+  #in der Waybar die Uhrzeit auf alternative Urhzeit anpassen.
+  #.config/waybar/modules/clock.jsonc
   
   #folgende Dependencies und Driver installieren  
   #https://github.com/lutris/docs/blob/master/WineDependencies.md
