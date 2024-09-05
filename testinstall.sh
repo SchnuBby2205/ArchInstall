@@ -2,7 +2,14 @@
 
 #before install
 #conf zusätzliche Module durchschauen
+#https://github.com/SchnuBby2205/ArchInstall/blob/main/conf.json
+#https://github.com/lutris/docs/blob/master/WineDependencies.md
+#https://github.com/lutris/docs/blob/master/InstallingDrivers.md
+
 #custom_hypr.lst und custom_flat.lst anpassen
+#https://github.com/prasanthrangan/hyprdots/blob/main/Scripts/custom_hypr.lst
+#https://github.com/prasanthrangan/hyprdots/blob/main/Scripts/.extra/custom_flat.lst
+
 #lsblk um platten zu sehen
 #mkfs.fat -F 32 auf boot platte
 #mkfs.ext4 auf root platte
