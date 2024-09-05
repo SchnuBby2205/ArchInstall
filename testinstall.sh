@@ -1,10 +1,6 @@
 #!/bin/bash
 
 #before install
-#conf zusätzliche Module durchschauen
-#https://github.com/SchnuBby2205/ArchInstall/blob/main/conf.json
-#https://github.com/lutris/docs/blob/master/WineDependencies.md
-#https://github.com/lutris/docs/blob/master/InstallingDrivers.md
 
 #custom_hypr.lst und custom_flat.lst anpassen
 #https://github.com/prasanthrangan/hyprdots/blob/main/Scripts/custom_hypr.lst
@@ -83,6 +79,11 @@ then
   #Monitor und Inputsettings in hyprland.conf anpassen
   #keybinding aus datei in .config/hypr/keybindings.conf einfügen
   #Remove the Flags from .config/code-flags.conf
+  
+  #folgende Dependencies und Driver installieren  
+  #https://github.com/lutris/docs/blob/master/WineDependencies.md
+  #https://github.com/lutris/docs/blob/master/InstallingDrivers.md
+
   #neustes GE-proton von: https://github.com/GloriousEggroll/wine-ge-custom/releases/tag/GE-Proton8-26
   #unter /home/schnubby/.local/share/lutris/runners/wine/ entpacken
   #in lutris neues Game hinzufügen es reicht runnter auf wine + name vergeben danach WINEPREFIX wählen und Executable wählen
