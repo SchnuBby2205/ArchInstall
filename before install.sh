@@ -12,7 +12,6 @@
 #ausführen
 #curl -o conf.json https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json
 #curl -o creds.json https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json
-#cd ..
 #archinstall --conf ./conf.json --creds ./creds.json
 
 #after install ausführen
