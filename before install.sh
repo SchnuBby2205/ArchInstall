@@ -1,4 +1,6 @@
 #before install
+#conf zusätzliche Module durchschauen
+#custom_hypr.lst und custom_flat.lst anpassen
 #lsblk um platten zu sehen
 #mkfs.fat -F 32 auf boot platte
 #mkfs.ext4 auf root platte
@@ -14,10 +16,15 @@
 #archinstall --conf ./conf.json --creds ./creds.json
 
 #after install ausführen
+#ZSH wegen Pokemon als Terminal testen
 #git clone https://github.com/prasanthrangan/hyprdots ~/Hyprdots
 #cd ~/Hyprdots/Scripts
-#sed '/brightnessctl/d' ./custom_hypr.lst
-#kontrolle mit cat / nano / vim oder less
+#sudo rm -rf custom_hypr.lst
+#curl -o custom_hypr.lst https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_hypr.lst
+#cd ./.extra
+#sudo rm -rf custom_flat.lst
+#curl -o custom_flat.lst https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/extra/custom_flat.lst
+#cd ..
 #./install.sh -drs
 #Hier noch prüfen was default flag ist (testen mit drs)
 
