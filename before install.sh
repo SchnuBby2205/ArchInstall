@@ -8,12 +8,10 @@
 #in archinstall platten nochmal kontrollieren
 
 #ausführen
-#mkdir schnubby_downloads
-#cd schnubby_downloads
-#curl -o conf.json https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/user_configuration.json
-#curl -o creds.json https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/user_credentials.json
+#curl -o conf.json https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json
+#curl -o creds.json https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json
 #cd ..
-#archinstall --conf ./schnubby_downloads/conf.json --creds ./schnubby_downloads/creds.json
+#archinstall --conf ./conf.json --creds ./creds.json
 
 #after install ausführen
 #git clone https://github.com/prasanthrangan/hyprdots ~/Hyprdots
