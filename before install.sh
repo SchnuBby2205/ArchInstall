@@ -1,6 +1,12 @@
 #before install
 #conf zusätzliche Module durchschauen
 #custom_hypr.lst und custom_flat.lst anpassen
+
+#wenn SSH Install gemacht werden soll
+#passwd - Root Passwort einstellen
+#PermitRootLogin yes -> /etc/ssh/sshd_config
+#systemctl reload sshd.service
+
 #lsblk um platten zu sehen
 #mkfs.fat -F 32 auf boot platte
 #mkfs.ext4 auf root platte
