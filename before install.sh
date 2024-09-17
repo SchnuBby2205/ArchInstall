@@ -13,6 +13,7 @@
 #curl -o conf.json https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json
 #curl -o creds.json https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json
 #archinstall --conf ./conf.json --creds ./creds.json
+#archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json
 
 #after install ausführen
 #ZSH wegen Pokemon als Terminal testen
