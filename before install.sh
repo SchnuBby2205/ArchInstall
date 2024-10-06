@@ -4,6 +4,7 @@ umbenennen in txt
 mirror sortierung 
 pacman 5 paralell 
 yay gane pack
+Hyde-install
 
 
 #before install
