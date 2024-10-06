@@ -1,3 +1,11 @@
+todo 
+bild von platten
+umbenennen in txt
+mirror sortierung 
+pacman 5 paralell 
+yay gane pack
+
+
 #before install
 #conf zusätzliche Module durchschauen
 #custom_hypr.lst und custom_flat.lst anpassen
