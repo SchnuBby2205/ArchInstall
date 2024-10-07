@@ -70,7 +70,17 @@
     #Für Hearthstone unter Play Configure DLL Override key: location.dll value disabled
 
 -  KDWallet Passwort für Brave deaktivieren
-    kwallet-query -w "" "kdewallet"
+    #kwallet passwortmanger runterladen
+    #sudo pacman -S kwalletmanager
+    #im Manager passwort auf benutzerpasswort ändern
+
+-  Autologin
+    code /etc/sddm.conf.d/autologin.conf
+    --------------------
+    [Autologin]
+    User=schnubby
+    Session=Hyprland
+    --------------------
 
 -  Für Firefox Bonjour runterladen
     #danach https://github.com/SchnuBby2205/W11Settings/blob/main/bonjourr%20settings.json
