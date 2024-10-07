@@ -78,8 +78,9 @@
     code /etc/sddm.conf.d/autologin.conf
     --------------------
     [Autologin]
+    Relogin=false
+    Session=hyprland
     User=schnubby
-    Session=Hyprland
     --------------------
 
 -  Für Firefox Bonjour runterladen
