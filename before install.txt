@@ -72,7 +72,7 @@
 -  KDWallet Passwort für Brave deaktivieren
     #kwallet passwortmanger runterladen
     #sudo pacman -S kwalletmanager
-    #im Manager passwort auf benutzerpasswort ändern
+    #im Manager passwort auf leer ändern
 
 -  Autologin
     code /etc/sddm.conf.d/autologin.conf
