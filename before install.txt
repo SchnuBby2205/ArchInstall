@@ -48,9 +48,11 @@
     #ZSH als Terminal // Candy als Login
     git clone https://github.com/prasanthrangan/hyprdots ~/Hyprdots
     cd ~/Hyprdots/Scripts
+		#brigthnessctl auskommentieren
     sudo rm -rf custom_hypr.lst
     curl -o custom_hypr.lst https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/custom_hypr.lst
-    cd ./.extra
+    #brave sonst nichts installieren
+		cd ./.extra
     sudo rm -rf custom_flat.lst
     curl -o custom_flat.lst https://raw.githubusercontent.com/SchnuBby2205/hyprdots/main/Scripts/extra/custom_flat.lst
     cd ..
