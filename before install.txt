@@ -77,7 +77,7 @@
     #im Manager passwort auf leer ändern
 
 -  Autologin
-    code /etc/sddm.conf.d/autologin.conf
+    code /etc/sddm.conf.d/sddm.conf
     --------------------
     [Autologin]
     Relogin=false
