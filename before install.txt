@@ -64,6 +64,8 @@
     #Monitor und Inputsettings in hyprland.conf anpassen
     #keybinding aus datei in .config/hypr/keybindings.conf einfügen
     Hyde-install
+    .config/waybar/modules/clock.jsonc // Alt-Format auf Format kopieren
+    .config/swaylock/config // timestr=%H:%M %p
     #game pack runterladen
     yay arch gaming meta
     #Remove the Flags from .config/code-flags.conf
