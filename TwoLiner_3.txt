@@ -1,1 +1,2 @@
-
+rm -rf ~/.config/hypr/userprefs.conf &&
+curl -o ~/.config/hypr/userprefs.conf roh github userprefs &&
