@@ -11,4 +11,4 @@ cd ~/Hyprdots/Scripts &&
 nano custom_hypr.lst &&
 nano ./.extra/custom_flat.lst &&
 cd.. &&
-
+./install.sh -drs
