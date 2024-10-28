@@ -8,4 +8,7 @@ nano /etc/pacman.conf &&
 
 git clone https://github.com/prasanthrangan/hyprdots ~/Hyprdots &&
 cd ~/Hyprdots/Scripts &&
-nano custom_hypr.lst
+nano custom_hypr.lst &&
+nano ./.extra/custom_flat.lst &&
+cd.. &&
+
