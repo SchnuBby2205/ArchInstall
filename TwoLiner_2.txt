@@ -1,8 +1,8 @@
-pacman -S reflector &&
-reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist &&
+sudo pacman -S reflector &&
+sudp reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist &&
 
 # Brauchen wir vll. garnicht mehr
-pacman -S nano &&
+sudp pacman -S nano &&
 nano /etc/pacman.conf &&
 # ------
 
