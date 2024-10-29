@@ -279,6 +279,7 @@ then
 	myPrint "green" " / __  / /_/ / /_/ / /  / /_/ / /_/ / /_(__  ) \n"
 	myPrint "green" "/_/ /_/\__, / .___/_/  /_____/\____/\__/____/  \n"
 	myPrint "green" "      /____/_/                                 \n\n"
+	printOK "Setting up pacman      \n"
 	printOK "Setting up hyprDots\n\n"
 	#-----------------------------------------------------------
 	
