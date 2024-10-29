@@ -155,8 +155,14 @@ then
 	sleep 1
 	
 	#bash -c "mkfs.fat -F 32 ${BOOTPART} &>/dev/null"
+	printf "\r"
+	printRunning "Formatting Drives (25%)"
 	#bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
+	printf "\r"
+	printRunning "Formatting Drives (50%)"
 	#bash -c "mkswap ${SWAPPART} &>/dev/null"
+	printf "\r"
+	printRunning "Formatting Drives (75%)"
 	#bash -c "swapon ${SWAPPART} &>/dev/null"
 	
 	printf "\r"
@@ -168,6 +174,8 @@ then
 	sleep 1
 
 	#bash -c "mount --mkdir ${ROOTPART} /mnt &>/dev/null"
+ 	printf "\r"
+	printRunning "Mounting partitions (50%)"
 	#bash -c "mount --mkdir ${BOOTPART} /mnt/boot &>/dev/null"
 
 	printf "\r"
@@ -179,8 +187,14 @@ then
 	sleep 1
 
 	#bash -c "pacman -S reflector &>/dev/null"
+	printf "\r"
+	printRunning "Setting up pacman (25%)"
 	#bash -c "reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist &>/dev/null"
+	printf "\r"
+	printRunning "Setting up pacman (50%)"
 	##bash -c "pacman -S nano &>/dev/null"
+	printf "\r"
+	printRunning "Setting up pacman (75%)"
 	#bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 
 	printf "\r"
@@ -223,7 +237,11 @@ then
 	sleep 1
 
 	#bash -c "sudo pacman -S reflector &>/dev/null"
+	printf "\r"
+	printRunning "Setting up pacman (25%)"
 	#bash -c "sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist &>/dev/null"
+	printf "\r"
+	printRunning "Setting up pacman (50%)"
 	##bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 
 	printf "\r"
@@ -235,8 +253,14 @@ then
 	sleep 1
 
 	#bash -c "sudo pacman -S nano &>/dev/null"
+	printf "\r"
+	printRunning "Setting up HyprDots (25%)"
 	#bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/Hyprdots &>/dev/null"
+	printf "\r"
+	printRunning "Setting up HyprDots (50%)"
 	#cd ~/HyprDots/Scripts
+	printf "\r"
+	printRunning "Setting up HyprDots (75%)"
 	#bash -c "nano custom_hypr.lst"
 	#bash -c "nano ./.extra/custom_flat.lst"
 	#cd ..
@@ -281,12 +305,33 @@ then
 	sleep 1
 
 	#bash -c "sudo rm -rf ~/.config/hypr/userprefs.conf &>/dev/null"
+	printf "\r"
+	printRunning "Installing Config files (15%)"
 	#bash -c "curl -o ~/.config/hypr/userprefs.conf https://raw.githubusercontent.com/SchnuBby2205/hyprdots/refs/heads/main/Configs/.config/hypr/userprefs.conf &>/dev/null"
+	printf "\r"
+	printRunning "Installing Config files (30%)"
 	#bash -c "nano .config/code-flags.conf"
 	#bash -c "nano .config/waybar/modules/clock.jsonc"
 	#bash -c "nano .config/swaylock/config"
+ 	clearScreen	
+	myPrint "green" "    ____           __        _____                   \n"
+	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"
+	myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/       \n"
+	myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ /        \n"
+	myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /         \n"
+	myPrint "green" "   ______            _____          _/____/_         \n"
+	myPrint "green" "  / ____/___  ____  / __(_)___ _   / __(_) /__  _____\n"
+	myPrint "green" " / /   / __ \/ __ \/ /_/ / __ \`/  / /_/ / / _ \/ ___/\n"
+	myPrint "green" "/ /___/ /_/ / / / / __/ / /_/ /  / __/ / /  __(__  ) \n"
+	myPrint "green" "\____/\____/_/ /_/_/ /_/\__, /  /_/ /_/_/\___/____/  \n"
+	myPrint "green" "                       /____/                        \n\n"
+	printRunning "Installing Config files (45%)"
 	#bash -c "yay arch gaming meta &>/dev/null"
+	printf "\r"
+	printRunning "Installing Config files (60%)"
 	#bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=schnubby' >> /etc/sddm.conf.d/sddm.conf"
+	printf "\r"
+	printRunning "Installing Config files (75%)"
 	#bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fsta"
 	#bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	#bash -c "sudo pacman -Runs nano &>/dev/null"
