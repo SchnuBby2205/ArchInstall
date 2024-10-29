@@ -203,7 +203,14 @@ then
 	printOK "Setting up pacman      \n\n"
 	#-----------------------------------------------------------
 
- 	myPrint "green" "Starting installation"
+ 	myPrint "green" "Starting installation in 3..."
+  	sleep 1
+	printf "\r"
+  	myPrint "green" "Starting installation in 2..."
+  	sleep 1
+	printf "\r"
+ 	myPrint "green" "Starting installation in 1..."
+	sleep 1
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
 	#bash -c "cp ./ArchInstall.sh /mnt/home/schnubby/ &>/dev/null"
 fi
@@ -272,7 +279,14 @@ then
 	printOK "Setting up hyprDots\n\n"
 	#-----------------------------------------------------------
 	
-	myPrint "green" "Starting installation"
+ 	myPrint "green" "Starting installation in 3..."
+  	sleep 1
+	printf "\r"
+  	myPrint "green" "Starting installation in 2..."
+  	sleep 1
+	printf "\r"
+ 	myPrint "green" "Starting installation in 1..."
+	sleep 1
 	#bash -c "./install.sh -drs"
 
 fi
