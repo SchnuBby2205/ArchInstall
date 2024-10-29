@@ -91,6 +91,7 @@
 -  Für Firefox Bonjour runterladen
     #danach https://github.com/SchnuBby2205/W11Settings/blob/main/bonjourr%20settings.json
     #settings einspielen
+    # https://new-tab.sophia-dev.io/ // Als Startpage
 
 -  fstab ggf anpassen
     ## /dev/nvme0n1p4
