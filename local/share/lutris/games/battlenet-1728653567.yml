@@ -1,0 +1,7 @@
+game:
+  exe: /spiele/battlenet/drive_c/Program Files (x86)/Battle.net/Battle.net.exe
+  prefix: /spiele/battlenet
+wine:
+  overrides:
+    location.dll: d
+  version: lutris-GE-Proton8-26-x86_64
