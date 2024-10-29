@@ -200,7 +200,7 @@ then
 	
 	myPrint "green" "Starting installation"
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
-
+	#bash -c "cp ./ArchInstall.sh /mnt/home/schnubby/ &>/dev/null"
 fi
 
 if [ "${OPTION}" == "2" ]
