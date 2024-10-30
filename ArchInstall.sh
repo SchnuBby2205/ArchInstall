@@ -313,9 +313,16 @@ then
 	bash -c "curl -o ~/.config/hypr/userprefs.conf https://raw.githubusercontent.com/SchnuBby2205/hyprdots/refs/heads/main/Configs/.config/hypr/userprefs.conf &>/dev/null"
 	printf "\r"
 	printRunning "Installing Config files (30%%)"
-	bash -c "nano .config/code-flags.conf"
-	bash -c "nano .config/waybar/modules/clock.jsonc"
-	bash -c "nano .config/swaylock/config"
+	#bash -c "nano .config/code-flags.conf"
+ 	bash -c "rm -rf ~/.config/code-flags.conf &>/dev/null"
+  	bash -c "touch ~/.config/code-flags.conf &>/dev/null"
+   
+	#bash -c "nano .config/waybar/modules/clock.jsonc"
+ 	bash -c "sed -i '/{:%I:%M %p}/c\{:%R 󰃭 %d·%m·%y}' ~/.config/waybar/modules/clock.jsonc"
+  
+	#bash -c "nano .config/swaylock/config"
+	bash -c "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config"
+  
  	clearScreen	
 	myPrint "green" "    ____           __        _____                   \n"
 	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"
@@ -362,8 +369,15 @@ then
 
 	myPrint "green" "Hints:\n"
 	myPrint "yellow" "- kdwalletmanager (set empty password) if Brave cant open the wallet\n"
-	myPrint "yellow" "- sddm-config-git if autologin doesnt work\n"
-	myPrint "yellow" "- Set Play > Configure DLL Override key: location.dll value: disabled for Hearthstone in Lutris\n\n"
+	myPrint "yellow" "- sddm-config-git if autologin doesnt work\n\n"
+	#myPrint "yellow" "- Set Play > Configure DLL Override key: location.dll value: disabled for Hearthstone in Lutris\n\n"
+
+    	bash -c "firefox https://github.com/GloriousEggroll/wine-ge-custom"
+  	bash -c "firefox https://github.com/lutris/docs/blob/master/InstallingDrivers.md"
+   	bash -c "firefox https://github.com/lutris/docs/blob/master/WineDependencies.md"
+ 	bash -c "firefox https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/"
+  	bash -c "firefox https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json"
+     	bash -c "firefox https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
 
 fi
 
