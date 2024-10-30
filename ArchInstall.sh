@@ -364,7 +364,7 @@ then
 	myPrint "green" "ToDos:\n"
 	myPrint "yellow" "- Hyde-install\n"
 	myPrint "yellow" "- Install newest GE-Proton to /home/schnubby/.local/share/lutris/runners/wine/\n"
-	myPrint "yellow" "- Install wine Drivers and Dependencies\n"
+	myPrint "yellow" "- Install Drivers and wine Dependencies\n"
 	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
 
 	myPrint "green" "Hints:\n"
