@@ -260,6 +260,7 @@ then
 	bash -c "nano custom_hypr.lst"
 	bash -c "nano ./.extra/custom_flat.lst"
 	cd ..
+	bash -c "sudo pacman -Runs nano &>/dev/null"
 
 	clearScreen
 	myPrint "green" "    ____           __        _____             \n"
@@ -344,7 +345,6 @@ then
 	printRunning "Installing Config files (75%%)"
 	bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
-	bash -c "sudo pacman -Runs nano &>/dev/null"
 
 	clearScreen	
 	myPrint "green" "    ____           __        _____                   \n"
