@@ -78,7 +78,12 @@ myPrint "yellow" "HyprDots\n"
 printf "["
 myPrint "yellow" "3"
 printf "]: Install "
-myPrint "yellow" "Config files\n\n"
+myPrint "yellow" "Config files\n"
+
+printf "["
+myPrint "yellow" "4"
+printf "]: Install "
+myPrint "yellow" "Lutris config\n\n"
 
 read OPTION
 
@@ -330,7 +335,7 @@ then
 	bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=schnubby' >> /etc/sddm.conf.d/sddm.conf"
 	printf "\r"
 	printRunning "Installing Config files (75%%)"
-	bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fsta"
+	bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	bash -c "sudo pacman -Runs nano &>/dev/null"
 
@@ -360,6 +365,48 @@ then
 	myPrint "yellow" "- sddm-config-git if autologin doesnt work\n"
 	myPrint "yellow" "- Set Play > Configure DLL Override key: location.dll value: disabled for Hearthstone in Lutris\n\n"
 
+fi
+
+if [ "${OPTION}" == "4" ]
+then
+	clearScreen
+	myPrint "green" "    ____           __        _____                             \n"
+	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _                 \n"
+	myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/                 \n"
+	myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ /                  \n"
+	myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /        _____      \n"
+	myPrint "green" "   / /   __  __/ /______(_)____   ___/____/  ____  / __(_)___ _\n"
+	myPrint "green" "  / /   / / / / __/ ___/ / ___/  / ___/ __ \/ __ \/ /_/ / __ \`/\n"
+	myPrint "green" " / /___/ /_/ / /_/ /  / (__  )  / /__/ /_/ / / / / __/ / /_/ / \n"
+	myPrint "green" "/_____/\__,_/\__/_/  /_/____/   \___/\____/_/ /_/_/ /_/\__, /  \n"
+	myPrint "green" "                                                      /____/   \n\n"
+
+	#-----------------------------------------------------------
+	printRunning "Installing Lutris config"
+
+ 	cd ~/Downloads
+  	bash -c "mkdir lutris &>/dev/null"
+   	cd lutris
+ 	printf "\r"
+	printRunning "Installing Lutris config (50%%)"
+     	bash -c "git init &>/dev/null"
+     	bash -c "git remote add -f origin https://github.com/SchnuBby2205/ArchInstall &>/dev/null"
+ 	bash -c "git config core.sparseCheckout true &>/dev/null"
+  	bash -c "echo 'local/share/lutris' >> .git/info/sparse-checkout  &>/dev/null"
+   	bach -c "git pull origin master &>/dev/null"	
+ 	printf "\r"
+	printRunning "Installing Lutris config (75%%)"
+    	# Banner u. Coverart muss noch hochgeladen und dann kopiert werden.
+     	bash -c "yes | cp -rf ./games/* ~/.local/share/lutris/games &>/dev/null"
+     	bash -c "yes | cp -rf ./lutris.conf ~/.local/share/lutris &>/dev/null"
+      	bash -c "yes | cp -rf ./pga.db ~/.local/share/lutris &>/dev/null"      	
+
+        cd ..
+	bash -c "rm -rf ./lutris &>/dev/null"
+	
+ 	printf "\r"
+	printOK "Installing Lutris config      \n"
+	#-----------------------------------------------------------  	
 fi
 
 exit 0
