@@ -372,7 +372,7 @@ then
 	myPrint "yellow" "- sddm-config-git if autologin doesnt work\n\n"
 	#myPrint "yellow" "- Set Play > Configure DLL Override key: location.dll value: disabled for Hearthstone in Lutris\n\n"
 
-    	bash -c "firefox https://github.com/GloriousEggroll/wine-ge-custom"
+	bash -c "firefox https://github.com/GloriousEggroll/wine-ge-custom"
   	bash -c "firefox https://github.com/lutris/docs/blob/master/InstallingDrivers.md"
    	bash -c "firefox https://github.com/lutris/docs/blob/master/WineDependencies.md"
  	bash -c "firefox https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/"
