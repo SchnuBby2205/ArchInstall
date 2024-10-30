@@ -377,7 +377,7 @@ then
    	bash -c "firefox https://github.com/lutris/docs/blob/master/WineDependencies.md"
  	bash -c "firefox https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/"
   	bash -c "firefox https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json"
-     	bash -c "firefox https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
+	bash -c "firefox https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
 
 fi
 
@@ -403,19 +403,19 @@ then
    	cd lutris
  	printf "\r"
 	printRunning "Installing Lutris config (50%%)"
-     	bash -c "git init &>/dev/null"
-     	bash -c "git remote add -f origin https://github.com/SchnuBby2205/ArchInstall &>/dev/null"
+	bash -c "git init &>/dev/null"
+	bash -c "git remote add -f origin https://github.com/SchnuBby2205/ArchInstall &>/dev/null"
  	bash -c "git config core.sparseCheckout true &>/dev/null"
   	bash -c "echo 'local/share/lutris' >> .git/info/sparse-checkout  &>/dev/null"
    	bach -c "git pull origin master &>/dev/null"	
  	printf "\r"
 	printRunning "Installing Lutris config (75%%)"
-    	# Banner u. Coverart muss noch hochgeladen und dann kopiert werden.
-     	bash -c "yes | cp -rf ./games/* ~/.local/share/lutris/games &>/dev/null"
-     	bash -c "yes | cp -rf ./lutris.conf ~/.local/share/lutris &>/dev/null"
-      	bash -c "yes | cp -rf ./pga.db ~/.local/share/lutris &>/dev/null"      	
+	# Banner u. Coverart muss noch hochgeladen und dann kopiert werden.
+	bash -c "yes | cp -rf ./games/* ~/.local/share/lutris/games &>/dev/null"
+	bash -c "yes | cp -rf ./lutris.conf ~/.local/share/lutris &>/dev/null"
+	bash -c "yes | cp -rf ./pga.db ~/.local/share/lutris &>/dev/null"      	
 
-        cd ..
+	cd ..
 	bash -c "rm -rf ./lutris &>/dev/null"
 	
  	printf "\r"
