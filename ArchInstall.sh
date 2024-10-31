@@ -264,7 +264,6 @@ then
 	printRunning "Setting up HyprDots (75%%)"
 	bash -c "nano ./custom_hypr.lst"
 	bash -c "nano ./.extra/custom_flat.lst"
-	cd ..
 	bash -c "sudo pacman --noconfirm -Runs nano"
 
 	clearScreen
