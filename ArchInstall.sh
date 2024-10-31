@@ -292,15 +292,15 @@ then
 	#printRunning "Installing Config files (15%%)"
 	#bash -c "curl -o ~/.config/hypr/userprefs.conf https://raw.githubusercontent.com/SchnuBby2205/hyprdots/refs/heads/main/Configs/.config/hypr/userprefs.conf &>/dev/null"
 	cd ~/.config
-	bash -c "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null"
+	bash -c "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig"
 	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
 	bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
 	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris"
 	#printf "\r"
 	#printRunning "Installing Config files (30%%)"
 	#bash -c "nano .config/code-flags.conf"
- 	bash -c "rm -rf ~/.config/code-flags.conf &>/dev/null"
-  	bash -c "touch ~/.config/code-flags.conf &>/dev/null"
+ 	bash -c "rm -rf ~/.config/code-flags.conf"
+  	bash -c "touch ~/.config/code-flags.conf"
    
 	#bash -c "nano .config/waybar/modules/clock.jsonc"
  	bash -c "sed -i '/{:%I:%M %p}/c\{:%R 󰃭 %d·%m·%y}' ~/.config/waybar/modules/clock.jsonc"
@@ -319,7 +319,6 @@ then
 	
 	myPrint "green" "ToDos:\n"
 	myPrint "yellow" "- Hyde-install\n"
-	#myPrint "yellow" "- Install newest GE-Proton to /home/schnubby/.local/share/lutris/runners/wine/\n"
 	myPrint "yellow" "- Install Drivers and wine Dependencies\n"
 	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
 	myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
@@ -327,6 +326,7 @@ then
 	myPrint "green" "Hints:\n"
 	myPrint "yellow" "- kdwalletmanager (set empty password) if Brave cant open the wallet\n"
 	myPrint "yellow" "- sddm-config-git if autologin doesnt work\n\n"
+	myPrint "yellow" "- Install newest GE-Proton to /home/schnubby/.config/.schnubbyconfig/Configs/.local/share/lutris/runners/wine/\n"
 	#myPrint "yellow" "- Set Play > Configure DLL Override key: location.dll value: disabled for Hearthstone in Lutris\n\n"
 
 	bash -c "firefox https://github.com/GloriousEggroll/wine-ge-custom"
