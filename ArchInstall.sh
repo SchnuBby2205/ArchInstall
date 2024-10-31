@@ -183,6 +183,7 @@ then
 	#-----------------------------------------------------------
 	#printRunning "Setting up pacman"
 
+	bash -c "pacman -Syy"
 	bash -c "pacman --noconfirm -S reflector"
 	#printf "\r"
 	#printRunning "Setting up pacman (25%%)"
@@ -227,6 +228,7 @@ then
 	#-----------------------------------------------------------
 	#printRunning "Setting up pacman"
 
+	bash -c "pacman -Syy"
 	bash -c "sudo pacman --noconfirm -S reflector"
 	#printf "\r"
 	#printRunning "Setting up pacman (25%%)"
