@@ -230,7 +230,7 @@ then
 	bash -c "sudo pacman --noconfirm -S reflector"
 	printf "\r"
 	printRunning "Setting up pacman (25%%)"
-	#bash -c "sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
+	bash -c "sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
 	printf "\r"
 	printRunning "Setting up pacman (50%%)"
 
@@ -256,7 +256,7 @@ then
 	bash -c "sudo pacman --noconfirm -S nano"
 	printf "\r"
 	printRunning "Setting up HyprDots (25%%)"
-	#bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null"
+	bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots"
 	printf "\r"
 	printRunning "Setting up HyprDots (50%%)"
 	cd ~/HyprDots/Scripts
