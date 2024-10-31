@@ -183,13 +183,12 @@ then
 	#-----------------------------------------------------------
 	printRunning "Setting up pacman"
 
-	bash -c "pacman --noconfirm -S reflector &>/dev/null"
+	bash -c "pacman --noconfirm -S reflector"
 	printf "\r"
 	printRunning "Setting up pacman (25%%)"
-	bash -c "reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist &>/dev/null"
+	bash -c "reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
 	printf "\r"
 	printRunning "Setting up pacman (50%%)"
-	#bash -c "pacman -S nano &>/dev/null"
 	printf "\r"
 	printRunning "Setting up pacman (75%%)"
 	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
@@ -228,10 +227,10 @@ then
 	#-----------------------------------------------------------
 	printRunning "Setting up pacman"
 
-	bash -c "sudo pacman --noconfirm -S reflector &>/dev/null"
+	bash -c "sudo pacman --noconfirm -S reflector"
 	printf "\r"
 	printRunning "Setting up pacman (25%%)"
-	#bash -c "sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist &>/dev/null"
+	#bash -c "sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
 	printf "\r"
 	printRunning "Setting up pacman (50%%)"
 
@@ -266,7 +265,7 @@ then
 	bash -c "nano ./custom_hypr.lst"
 	bash -c "nano ./.extra/custom_flat.lst"
 	cd ..
-	bash -c "yes | sudo pacman -Runs nano &>/dev/null"
+	bash -c "sudo pacman --noconfirm -Runs nano"
 
 	clearScreen
 	myPrint "green" "    ____           __        _____             \n"
