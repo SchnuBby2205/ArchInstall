@@ -234,7 +234,6 @@ then
 	#bash -c "sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist &>/dev/null"
 	printf "\r"
 	printRunning "Setting up pacman (50%%)"
-	#bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 
 	clearScreen		
 	myPrint "green" "    ____           __        _____             \n"
@@ -266,8 +265,8 @@ then
 	printRunning "Setting up HyprDots (75%%)"
 	bash -c "nano ./custom_hypr.lst"
 	bash -c "nano ./.extra/custom_flat.lst"
-	cd ..
-	bash -c "sudo pacman -Runs nano &>/dev/null"
+	#cd ..
+	#bash -c "sudo pacman -Runs nano &>/dev/null"
 
 	clearScreen
 	myPrint "green" "    ____           __        _____             \n"
@@ -293,7 +292,7 @@ then
 	printf "\r"
  	myPrint "green" "Starting installation in 1..."
 	sleep 1
-	bash -c "./install.sh -drs"
+	./install.sh -drs
 
 fi
 
