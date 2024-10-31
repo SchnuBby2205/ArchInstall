@@ -183,7 +183,7 @@ then
 	#-----------------------------------------------------------
 	printRunning "Setting up pacman"
 
-	bash -c "pacman -S reflector &>/dev/null"
+	bash -c "pacman --noconfirm -S reflector &>/dev/null"
 	printf "\r"
 	printRunning "Setting up pacman (25%%)"
 	bash -c "reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist &>/dev/null"
@@ -228,7 +228,7 @@ then
 	#-----------------------------------------------------------
 	printRunning "Setting up pacman"
 
-	bash -c "yes | sudo pacman -S reflector &>/dev/null"
+	bash -c "sudo pacman --noconfirm -S reflector &>/dev/null"
 	printf "\r"
 	printRunning "Setting up pacman (25%%)"
 	#bash -c "sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist &>/dev/null"
@@ -254,7 +254,7 @@ then
 	#-----------------------------------------------------------
 	printRunning "Setting up HyprDots"
 
-	bash -c "yes | sudo pacman -S nano &>/dev/null"
+	bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
 	printf "\r"
 	printRunning "Setting up HyprDots (25%%)"
 	#bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null"
@@ -266,7 +266,7 @@ then
 	bash -c "nano ./custom_hypr.lst"
 	bash -c "nano ./.extra/custom_flat.lst"
 	cd ..
-	bash -c "sudo pacman -Runs nano &>/dev/null"
+	bash -c "yes | sudo pacman -Runs nano &>/dev/null"
 
 	clearScreen
 	myPrint "green" "    ____           __        _____             \n"
