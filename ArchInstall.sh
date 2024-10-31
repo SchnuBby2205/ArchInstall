@@ -303,7 +303,8 @@ then
   	bash -c "touch ~/.config/code-flags.conf"
    
 	#bash -c "nano .config/waybar/modules/clock.jsonc"
- 	bash -c "sed -i '/{:%I:%M %p}/c\{:%R 󰃭 %d·%m·%y}' ~/.config/waybar/modules/clock.jsonc"
+ 	bash -c "sed -i 's/{:%I:%M %p}/{:%R 󰃭 %d·%m·%y}/g' ~/.config/waybar/modules/clock.jsonc"
+  	bash -c "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc"
   
 	#bash -c "nano .config/swaylock/config"
 	bash -c "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config"
