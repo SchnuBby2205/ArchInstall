@@ -80,11 +80,6 @@ myPrint "yellow" "3"
 printf "]: Install "
 myPrint "yellow" "Config files\n"
 
-printf "["
-myPrint "yellow" "4"
-printf "]: Install "
-myPrint "yellow" "Lutris config\n\n"
-
 read OPTION
 
 if [ "${OPTION}" == "" ]
