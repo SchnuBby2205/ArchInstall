@@ -236,8 +236,20 @@ then
 	printRunning "Setting up pacman (50%%)"
 	#bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 
-	printf "\r"
-	printOK "Setting up pacman      \n"
+	clearScreen		
+	myPrint "green" "    ____           __        _____             \n"
+	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _ \n"
+	myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/ \n"
+	myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ /  \n"
+	myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /   \n"
+	myPrint "green" "    __  __                 ____      /____/    \n"
+	myPrint "green" "   / / / /_  ______  _____/ __ \____  / /______\n"
+	myPrint "green" "  / /_/ / / / / __ \/ ___/ / / / __ \/ __/ ___/\n"
+	myPrint "green" " / __  / /_/ / /_/ / /  / /_/ / /_/ / /_(__  ) \n"
+	myPrint "green" "/_/ /_/\__, / .___/_/  /_____/\____/\__/____/  \n"
+	myPrint "green" "      /____/_/                                 \n\n"
+
+ 	printOK "Setting up pacman      \n"
 	#-----------------------------------------------------------
 	
 	#-----------------------------------------------------------
