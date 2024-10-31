@@ -308,10 +308,16 @@ then
 	#-----------------------------------------------------------
 	printRunning "Installing Config files"
 
-	bash -c "sudo rm -rf ~/.config/hypr/userprefs.conf &>/dev/null"
+	#bash -c "sudo rm -rf ~/.config/hypr/userprefs.conf &>/dev/null"
+	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 	printf "\r"
 	printRunning "Installing Config files (15%%)"
-	bash -c "curl -o ~/.config/hypr/userprefs.conf https://raw.githubusercontent.com/SchnuBby2205/hyprdots/refs/heads/main/Configs/.config/hypr/userprefs.conf &>/dev/null"
+	#bash -c "curl -o ~/.config/hypr/userprefs.conf https://raw.githubusercontent.com/SchnuBby2205/hyprdots/refs/heads/main/Configs/.config/hypr/userprefs.conf &>/dev/null"
+	cd ~/.config
+	bash -c "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null"
+	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
+	bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
+	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris"
 	printf "\r"
 	printRunning "Installing Config files (30%%)"
 	#bash -c "nano .config/code-flags.conf"
@@ -363,7 +369,7 @@ then
 	
 	myPrint "green" "ToDos:\n"
 	myPrint "yellow" "- Hyde-install\n"
-	myPrint "yellow" "- Install newest GE-Proton to /home/schnubby/.local/share/lutris/runners/wine/\n"
+	#myPrint "yellow" "- Install newest GE-Proton to /home/schnubby/.local/share/lutris/runners/wine/\n"
 	myPrint "yellow" "- Install Drivers and wine Dependencies\n"
 	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
 	myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
@@ -380,48 +386,6 @@ then
   	bash -c "firefox https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json"
 	bash -c "firefox https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
 
-fi
-
-if [ "${OPTION}" == "4" ]
-then
-	clearScreen
-	myPrint "green" "    ____           __        _____                             \n"
-	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _                 \n"
-	myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/                 \n"
-	myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ /                  \n"
-	myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /        _____      \n"
-	myPrint "green" "   / /   __  __/ /______(_)____   ___/____/  ____  / __(_)___ _\n"
-	myPrint "green" "  / /   / / / / __/ ___/ / ___/  / ___/ __ \/ __ \/ /_/ / __ \`/\n"
-	myPrint "green" " / /___/ /_/ / /_/ /  / (__  )  / /__/ /_/ / / / / __/ / /_/ / \n"
-	myPrint "green" "/_____/\__,_/\__/_/  /_/____/   \___/\____/_/ /_/_/ /_/\__, /  \n"
-	myPrint "green" "                                                      /____/   \n\n"
-
-	#-----------------------------------------------------------
-	printRunning "Installing Lutris config"
-
- 	cd ~/Downloads
-  	bash -c "mkdir lutris &>/dev/null"
-   	cd lutris
- 	printf "\r"
-	printRunning "Installing Lutris config (50%%)"
-	bash -c "git init &>/dev/null"
-	bash -c "git remote add -f origin https://github.com/SchnuBby2205/ArchInstall &>/dev/null"
- 	bash -c "git config core.sparseCheckout true &>/dev/null"
-  	bash -c "echo 'local/share/lutris' >> .git/info/sparse-checkout  &>/dev/null"
-   	bach -c "git pull origin master &>/dev/null"	
- 	printf "\r"
-	printRunning "Installing Lutris config (75%%)"
-	# Banner u. Coverart muss noch hochgeladen und dann kopiert werden.
-	bash -c "yes | cp -rf ./games/* ~/.local/share/lutris/games &>/dev/null"
-	bash -c "yes | cp -rf ./lutris.conf ~/.local/share/lutris &>/dev/null"
-	bash -c "yes | cp -rf ./pga.db ~/.local/share/lutris &>/dev/null"      	
-
-	cd ..
-	bash -c "rm -rf ./lutris &>/dev/null"
-	
- 	printf "\r"
-	printOK "Installing Lutris config      \n"
-	#-----------------------------------------------------------  	
 fi
 
 exit 0
