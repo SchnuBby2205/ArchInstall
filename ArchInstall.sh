@@ -256,7 +256,8 @@ then
 	bash -c "sudo pacman --noconfirm -S nano"
 	printf "\r"
 	printRunning "Setting up HyprDots (25%%)"
-	bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null"
+	bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots"
+ exit 0
 	printf "\r"
 	printRunning "Setting up HyprDots (50%%)"
 	cd ~/HyprDots/Scripts
