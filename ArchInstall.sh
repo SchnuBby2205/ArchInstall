@@ -249,16 +249,19 @@ then
 	
 	myPrint "green" "ToDos:\n"
 	myPrint "yellow" "- Hyde-install\n"
-	myPrint "yellow" "- Install Drivers and wine Dependencies\n"
+	myPrint "yellow" "- Install wine Drivers and Dependencies\n"
 	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
-	myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
 
 	myPrint "green" "Hints:\n"
-	myPrint "yellow" "- kdwalletmanager (set empty password) if Brave cant open the wallet\n"
-	myPrint "yellow" "- sddm-config-git if autologin doesnt work\n\n"
+	myPrint "yellow" "- kdwalletmanager (set empty password)\n"
+ 	myPrint "yellow" "  (if Brave was installed instead of Firefox and Brave cant open the kdwallet.)\n"
 	myPrint "yellow" "- Install newest GE-Proton to /home/schnubby/.config/.schnubbyconfig/Configs/.local/share/lutris/runners/wine/\n"
-	#myPrint "yellow" "- Set Play > Configure DLL Override key: location.dll value: disabled for Hearthstone in Lutris\n\n"
+ 	myPrint "yellow" "  (if there are Problems with Games.)\n"
+	myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
+ 	myPrint "yellow" "  (if you want to use git from the terminal.)\n\n"
 
+ 	myPrint "green" "You can reboot the System now!\n\n"
+  
 	bash -c "firefox -new-tab -url https://github.com/GloriousEggroll/wine-ge-custom \
 	-new-tab -url https://github.com/lutris/docs/blob/master/InstallingDrivers.md \
 	-new-tab -url https://github.com/lutris/docs/blob/master/WineDependencies.md \
