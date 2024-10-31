@@ -366,6 +366,7 @@ then
 	myPrint "yellow" "- Install newest GE-Proton to /home/schnubby/.local/share/lutris/runners/wine/\n"
 	myPrint "yellow" "- Install Drivers and wine Dependencies\n"
 	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
+	myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
 
 	myPrint "green" "Hints:\n"
 	myPrint "yellow" "- kdwalletmanager (set empty password) if Brave cant open the wallet\n"
