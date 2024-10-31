@@ -263,8 +263,8 @@ then
 	printf "\r"
 	printRunning "Setting up HyprDots (75%%)"
 	bash -c "nano ./custom_hypr.lst"
-	bash -c "sudo pacman --noconfirm -Runs nano"
 	bash -c "nano ./.extra/custom_flat.lst"
+	bash -c "sudo pacman --noconfirm -Runs nano"
 
 	clearScreen
 	myPrint "green" "    ____           __        _____             \n"
@@ -290,6 +290,7 @@ then
 	printf "\r"
  	myPrint "green" "Starting installation in 1..."
 	sleep 1
+ 	cd ~/HyprDots/Scripts
 	bash -c "./install.sh -drs"
 
 fi
