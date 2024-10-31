@@ -311,11 +311,11 @@ then
 	bash -c "yay arch gaming meta"
 	#printf "\r"
 	#printRunning "Installing Config files (60%%)"
-	bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=schnubby' >> /etc/sddm.conf.d/sddm.conf"
+	sudo bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=schnubby' >> /etc/sddm.conf.d/sddm.conf"
 	#printf "\r"
 	#printRunning "Installing Config files (75%%)"
-	bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab"
-	bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
+	sudo bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab"
+	sudo bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	
 	myPrint "green" "ToDos:\n"
 	myPrint "yellow" "- Hyde-install\n"
@@ -329,7 +329,12 @@ then
 	myPrint "yellow" "- Install newest GE-Proton to /home/schnubby/.config/.schnubbyconfig/Configs/.local/share/lutris/runners/wine/\n"
 	#myPrint "yellow" "- Set Play > Configure DLL Override key: location.dll value: disabled for Hearthstone in Lutris\n\n"
 
-	bash -c "firefox -new-tab -url https://github.com/GloriousEggroll/wine-ge-custom -new-tab -url https://github.com/lutris/docs/blob/master/InstallingDrivers.md -new-tab -url https://github.com/lutris/docs/blob/master/WineDependencies.md -new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ -new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json -new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
+	bash -c "firefox -new-tab -url https://github.com/GloriousEggroll/wine-ge-custom \
+	-new-tab -url https://github.com/lutris/docs/blob/master/InstallingDrivers.md \
+	-new-tab -url https://github.com/lutris/docs/blob/master/WineDependencies.md \
+	-new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
+	-new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json \
+	-new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
 
 fi
 
