@@ -78,7 +78,7 @@ myPrint "yellow" "HyprDots\n"
 printf "["
 myPrint "yellow" "3"
 printf "]: Install "
-myPrint "yellow" "Config files\n"
+myPrint "yellow" "Config files\n\n"
 
 read OPTION
 
