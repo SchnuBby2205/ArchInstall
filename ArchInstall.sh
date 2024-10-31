@@ -151,50 +151,50 @@ then
 	myPrint "yellow" "${SWAPPART}\n\n"
 	
 	#-----------------------------------------------------------
-	printRunning "Formatting Drives"
+	#printRunning "Formatting Drives"
 	
-	bash -c "mkfs.fat -F 32 ${BOOTPART} &>/dev/null"
-	printf "\r"
-	printRunning "Formatting Drives (25%%)"
-	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
-	printf "\r"
-	printRunning "Formatting Drives (50%%)"
-	bash -c "mkswap ${SWAPPART} &>/dev/null"
-	printf "\r"
-	printRunning "Formatting Drives (75%%)"
-	bash -c "swapon ${SWAPPART} &>/dev/null"
+	bash -c "mkfs.fat -F 32 ${BOOTPART}"
+	#printf "\r"
+	#printRunning "Formatting Drives (25%%)"
+	bash -c "mkfs.ext4 ${ROOTPART}"
+	#printf "\r"
+	#printRunning "Formatting Drives (50%%)"
+	bash -c "mkswap ${SWAPPART}"
+	#printf "\r"
+	#printRunning "Formatting Drives (75%%)"
+	bash -c "swapon ${SWAPPART}"
 	
-	printf "\r"
-	printOK "Formatting Drives      \n"
+	#printf "\r"
+	#printOK "Formatting Drives      \n"
 	#-----------------------------------------------------------
 	
 	#-----------------------------------------------------------
-	printRunning "Mounting partitions"
+	#printRunning "Mounting partitions"
 
- 	bash -c "mount --mkdir ${ROOTPART} /mnt &>/dev/null"
- 	printf "\r"
-	printRunning "Mounting partitions (50%%)"
-	bash -c "mount --mkdir ${BOOTPART} /mnt/boot &>/dev/null"
+ 	bash -c "mount --mkdir ${ROOTPART} /mnt"
+ 	#printf "\r"
+	#printRunning "Mounting partitions (50%%)"
+	bash -c "mount --mkdir ${BOOTPART} /mnt/boot"
 
-	printf "\r"
-	printOK "Mounting partitions      \n"
+	#printf "\r"
+	#printOK "Mounting partitions      \n"
 	#-----------------------------------------------------------
 
 	#-----------------------------------------------------------
-	printRunning "Setting up pacman"
+	#printRunning "Setting up pacman"
 
 	bash -c "pacman --noconfirm -S reflector"
-	printf "\r"
-	printRunning "Setting up pacman (25%%)"
+	#printf "\r"
+	#printRunning "Setting up pacman (25%%)"
 	bash -c "reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
-	printf "\r"
-	printRunning "Setting up pacman (50%%)"
-	printf "\r"
-	printRunning "Setting up pacman (75%%)"
+	#printf "\r"
+	#printRunning "Setting up pacman (50%%)"
+	#printf "\r"
+	#printRunning "Setting up pacman (75%%)"
 	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 
-	printf "\r"
-	printOK "Setting up pacman      \n\n"
+	#printf "\r"
+	#printOK "Setting up pacman      \n\n"
 	#-----------------------------------------------------------
 
  	myPrint "green" "Starting installation in 3..."
@@ -206,7 +206,7 @@ then
  	myPrint "green" "Starting installation in 1..."
 	sleep 1
 	bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
-	bash -c "cp ./ArchInstall.sh /mnt/home/schnubby/ &>/dev/null"
+	bash -c "cp ./ArchInstall.sh /mnt/home/schnubby/"
 fi
 
 if [ "${OPTION}" == "2" ]
@@ -225,62 +225,33 @@ then
 	myPrint "green" "      /____/_/                                 \n\n"
 
 	#-----------------------------------------------------------
-	printRunning "Setting up pacman"
+	#printRunning "Setting up pacman"
 
 	bash -c "sudo pacman --noconfirm -S reflector"
-	printf "\r"
-	printRunning "Setting up pacman (25%%)"
+	#printf "\r"
+	#printRunning "Setting up pacman (25%%)"
 	bash -c "sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
-	printf "\r"
-	printRunning "Setting up pacman (50%%)"
+	#printf "\r"
+	#printRunning "Setting up pacman (50%%)"
 
-	clearScreen		
-	myPrint "green" "    ____           __        _____             \n"
-	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _ \n"
-	myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/ \n"
-	myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ /  \n"
-	myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /   \n"
-	myPrint "green" "    __  __                 ____      /____/    \n"
-	myPrint "green" "   / / / /_  ______  _____/ __ \____  / /______\n"
-	myPrint "green" "  / /_/ / / / / __ \/ ___/ / / / __ \/ __/ ___/\n"
-	myPrint "green" " / __  / /_/ / /_/ / /  / /_/ / /_/ / /_(__  ) \n"
-	myPrint "green" "/_/ /_/\__, / .___/_/  /_____/\____/\__/____/  \n"
-	myPrint "green" "      /____/_/                                 \n\n"
-
- 	printOK "Setting up pacman      \n"
+ 	#printOK "Setting up pacman      \n"
 	#-----------------------------------------------------------
 	
 	#-----------------------------------------------------------
-	printRunning "Setting up HyprDots"
+	#printRunning "Setting up HyprDots"
 
 	bash -c "sudo pacman --noconfirm -S nano"
-	printf "\r"
-	printRunning "Setting up HyprDots (25%%)"
+	#printf "\r"
+	#printRunning "Setting up HyprDots (25%%)"
 	bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots"
- 	printf "\r"
-	printRunning "Setting up HyprDots (50%%)"
+ 	#printf "\r"
+	#printRunning "Setting up HyprDots (50%%)"
 	cd ~/HyprDots/Scripts
-	printf "\r"
-	printRunning "Setting up HyprDots (75%%)"
+	#printf "\r"
+	#printRunning "Setting up HyprDots (75%%)"
 	bash -c "nano ./custom_hypr.lst"
 	bash -c "nano ./.extra/custom_flat.lst"
 	bash -c "sudo pacman --noconfirm -Runs nano"
-
-	clearScreen
-	myPrint "green" "    ____           __        _____             \n"
-	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _ \n"
-	myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/ \n"
-	myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ /  \n"
-	myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /   \n"
-	myPrint "green" "    __  __                 ____      /____/    \n"
-	myPrint "green" "   / / / /_  ______  _____/ __ \____  / /______\n"
-	myPrint "green" "  / /_/ / / / / __ \/ ___/ / / / __ \/ __/ ___/\n"
-	myPrint "green" " / __  / /_/ / /_/ / /  / /_/ / /_/ / /_(__  ) \n"
-	myPrint "green" "/_/ /_/\__, / .___/_/  /_____/\____/\__/____/  \n"
-	myPrint "green" "      /____/_/                                 \n\n"
-	printOK "Setting up pacman      \n"
-	printOK "Setting up hyprDots\n\n"
-	#-----------------------------------------------------------
 	
  	myPrint "green" "Starting installation in 3..."
   	sleep 1
@@ -311,20 +282,20 @@ then
 	myPrint "green" "                       /____/                        \n\n"
 	
 	#-----------------------------------------------------------
-	printRunning "Installing Config files"
+	#printRunning "Installing Config files"
 
 	#bash -c "sudo rm -rf ~/.config/hypr/userprefs.conf &>/dev/null"
 	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
-	printf "\r"
-	printRunning "Installing Config files (15%%)"
+	#printf "\r"
+	#printRunning "Installing Config files (15%%)"
 	#bash -c "curl -o ~/.config/hypr/userprefs.conf https://raw.githubusercontent.com/SchnuBby2205/hyprdots/refs/heads/main/Configs/.config/hypr/userprefs.conf &>/dev/null"
 	cd ~/.config
 	bash -c "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null"
 	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
 	bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
 	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris"
-	printf "\r"
-	printRunning "Installing Config files (30%%)"
+	#printf "\r"
+	#printRunning "Installing Config files (30%%)"
 	#bash -c "nano .config/code-flags.conf"
  	bash -c "rm -rf ~/.config/code-flags.conf &>/dev/null"
   	bash -c "touch ~/.config/code-flags.conf &>/dev/null"
@@ -335,42 +306,14 @@ then
 	#bash -c "nano .config/swaylock/config"
 	bash -c "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config"
   
- 	clearScreen	
-	myPrint "green" "    ____           __        _____                   \n"
-	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"
-	myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/       \n"
-	myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ /        \n"
-	myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /         \n"
-	myPrint "green" "   ______            _____          _/____/_         \n"
-	myPrint "green" "  / ____/___  ____  / __(_)___ _   / __(_) /__  _____\n"
-	myPrint "green" " / /   / __ \/ __ \/ /_/ / __ \`/  / /_/ / / _ \/ ___/\n"
-	myPrint "green" "/ /___/ /_/ / / / / __/ / /_/ /  / __/ / /  __(__  ) \n"
-	myPrint "green" "\____/\____/_/ /_/_/ /_/\__, /  /_/ /_/_/\___/____/  \n"
-	myPrint "green" "                       /____/                        \n\n"
-	printRunning "Installing Config files (45%%)"
-	bash -c "yay arch gaming meta &>/dev/null"
-	printf "\r"
-	printRunning "Installing Config files (60%%)"
+	bash -c "yay arch gaming meta"
+	#printf "\r"
+	#printRunning "Installing Config files (60%%)"
 	bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=schnubby' >> /etc/sddm.conf.d/sddm.conf"
-	printf "\r"
-	printRunning "Installing Config files (75%%)"
+	#printf "\r"
+	#printRunning "Installing Config files (75%%)"
 	bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
-
-	clearScreen	
-	myPrint "green" "    ____           __        _____                   \n"
-	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"
-	myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/       \n"
-	myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ /        \n"
-	myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /         \n"
-	myPrint "green" "   ______            _____          _/____/_         \n"
-	myPrint "green" "  / ____/___  ____  / __(_)___ _   / __(_) /__  _____\n"
-	myPrint "green" " / /   / __ \/ __ \/ /_/ / __ \`/  / /_/ / / _ \/ ___/\n"
-	myPrint "green" "/ /___/ /_/ / / / / __/ / /_/ /  / __/ / /  __(__  ) \n"
-	myPrint "green" "\____/\____/_/ /_/_/ /_/\__, /  /_/ /_/_/\___/____/  \n"
-	myPrint "green" "                       /____/                        \n\n"
-	printOK "Installing Config files\n\n"
-	#-----------------------------------------------------------	
 	
 	myPrint "green" "ToDos:\n"
 	myPrint "yellow" "- Hyde-install\n"
