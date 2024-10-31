@@ -243,7 +243,7 @@ then
 	bash -c "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config"
 	bash -c "yay arch gaming meta"
  	bash -c "yay -S dxvk-bin"
-  	bash -c "yay -S wine-ge-custom"
+  	#bash -c "yay -S wine-ge-custom"
 	sudo bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=schnubby' >> /etc/sddm.conf.d/sddm.conf"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
@@ -257,15 +257,15 @@ then
 	myPrint "green" "Hints:\n"
 	myPrint "yellow" "- kdwalletmanager (set empty password)\n"
  	myPrint "yellow" "  (if Brave was installed instead of Firefox and Brave cant open the kdwallet.)\n"
-	#myPrint "yellow" "- Install newest GE-Proton to /home/schnubby/.config/.schnubbyconfig/Configs/.local/share/lutris/runners/wine/\n"
- 	#myPrint "yellow" "  (if there are Problems with Games.)\n"
+	myPrint "yellow" "- Install newest GE-Proton to /home/schnubby/.config/.schnubbyconfig/Configs/.local/share/lutris/runners/wine/\n"
+ 	myPrint "yellow" "  (if there are Problems with Games.)\n"
 	myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
  	myPrint "yellow" "  (if you want to use git from the terminal.)\n\n"
 
  	myPrint "green" "You can reboot the System now!\n\n"
   
- 	#-new-tab -url https://github.com/GloriousEggroll/wine-ge-custom \
 	bash -c "firefox \
+ 	-new-tab -url https://github.com/GloriousEggroll/wine-ge-custom \
 	-new-tab -url https://github.com/lutris/docs/blob/master/InstallingDrivers.md \
 	-new-tab -url https://github.com/lutris/docs/blob/master/WineDependencies.md \
 	-new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
