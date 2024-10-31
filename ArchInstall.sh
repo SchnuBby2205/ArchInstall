@@ -228,7 +228,7 @@ then
 	#-----------------------------------------------------------
 	printRunning "Setting up pacman"
 
-	bash -c "sudo pacman -S reflector &>/dev/null"
+	bash -c "yes | sudo pacman -S reflector &>/dev/null"
 	printf "\r"
 	printRunning "Setting up pacman (25%%)"
 	bash -c "sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist &>/dev/null"
@@ -243,7 +243,7 @@ then
 	#-----------------------------------------------------------
 	printRunning "Setting up HyprDots"
 
-	bash -c "sudo pacman -S nano &>/dev/null"
+	bash -c "yes | sudo pacman -S nano &>/dev/null"
 	printf "\r"
 	printRunning "Setting up HyprDots (25%%)"
 	bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/Hyprdots &>/dev/null"
