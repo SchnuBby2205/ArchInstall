@@ -329,12 +329,7 @@ then
 	myPrint "yellow" "- Install newest GE-Proton to /home/schnubby/.config/.schnubbyconfig/Configs/.local/share/lutris/runners/wine/\n"
 	#myPrint "yellow" "- Set Play > Configure DLL Override key: location.dll value: disabled for Hearthstone in Lutris\n\n"
 
-	bash -c "firefox https://github.com/GloriousEggroll/wine-ge-custom"
-  	bash -c "firefox https://github.com/lutris/docs/blob/master/InstallingDrivers.md"
-   	bash -c "firefox https://github.com/lutris/docs/blob/master/WineDependencies.md"
- 	bash -c "firefox https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/"
-  	bash -c "firefox https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json"
-	bash -c "firefox https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
+	bash -c "firefox -new-tab -url https://github.com/GloriousEggroll/wine-ge-custom -new-tab -url https://github.com/lutris/docs/blob/master/InstallingDrivers.md -new-tab -url https://github.com/lutris/docs/blob/master/WineDependencies.md -new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ -new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json -new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
 
 fi
 
