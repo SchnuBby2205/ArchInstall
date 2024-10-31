@@ -257,8 +257,7 @@ then
 	printf "\r"
 	printRunning "Setting up HyprDots (25%%)"
 	bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots"
- exit 0
-	printf "\r"
+ 	printf "\r"
 	printRunning "Setting up HyprDots (50%%)"
 	cd ~/HyprDots/Scripts
 	printf "\r"
