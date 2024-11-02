@@ -106,7 +106,7 @@ then
 	
 	if [ "${CFDISK}" == "y" ] || [ "${CFDISK}" == "Y" ]
 	then
-		bash -c cfdisk ${DISK}
+		bash -c "cfdisk ${DISK}"
 	fi
 	
 	myPrint "yellow" "\nEnter root partition\n"
@@ -134,11 +134,11 @@ then
 	fi
 	
 	myPrint "green" "\nRoot partition: "
-	myPrint "yellow" "${ROOTPART}\n"
+	printf "${ROOTPART}\n"
 	myPrint "green" "Boot partition: "
-	myPrint "yellow" "${BOOTPART}\n"
+	printf "${BOOTPART}\n"
 	myPrint "green" "Swap partition: "
-	myPrint "yellow" "${SWAPPART}\n\n"
+	printf "${SWAPPART}\n\n"
 	
 	#---------------Formatting Drives---------------	
 	bash -c "mkfs.fat -F 32 ${BOOTPART}"
@@ -159,13 +159,13 @@ then
 	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 	#---------------Setting up pacman---------------
 
- 	myPrint "green" "Starting installation in 3..."
+ 	myPrint "green" "\nStarting installation in 3..."
   	sleep 1
 	printf "\r"
   	myPrint "green" "Starting installation in 2..."
   	sleep 1
 	printf "\r"
- 	myPrint "green" "Starting installation in 1..."
+ 	myPrint "green" "Starting installation in 1...\n\n"
 	sleep 1
 	bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
 	bash -c "cp ./ArchInstall.sh /mnt/home/schnubby/"
@@ -201,13 +201,13 @@ then
 	bash -c "sudo pacman --noconfirm -Runs nano"
 	#---------------Setting up HyprDots---------------
 
- 	myPrint "green" "Starting installation in 3..."
+ 	myPrint "green" "\nStarting installation in 3..."
   	sleep 1
 	printf "\r"
   	myPrint "green" "Starting installation in 2..."
   	sleep 1
 	printf "\r"
- 	myPrint "green" "Starting installation in 1..."
+ 	myPrint "green" "Starting installation in 1...\n\n"
 	sleep 1
  	cd ~/HyprDots/Scripts
 	bash -c "./install.sh -drs"
@@ -257,8 +257,8 @@ then
 	myPrint "green" "Hints:\n"
 	myPrint "yellow" "- kdwalletmanager (set empty password)\n"
  	myPrint "yellow" "  (if Brave was installed instead of Firefox and Brave cant open the kdwallet.)\n"
-	#myPrint "yellow" "- Install newest GE-Proton to /home/schnubby/.config/.schnubbyconfig/Configs/.local/share/lutris/runners/wine/\n"
- 	#myPrint "yellow" "  (if there are Problems with Games.)\n"
+	myPrint "yellow" "- Install newest GE-Proton through Lutris Wine Downloads\n"
+ 	myPrint "yellow" "  (if there are Problems with Games.)\n"
 	myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
  	myPrint "yellow" "  (if you want to use git from the terminal.)\n\n"
 
