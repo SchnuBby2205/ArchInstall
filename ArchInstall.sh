@@ -265,8 +265,7 @@ then
  	myPrint "green" "You can reboot the System now!\n\n"
 
   	#-new-tab -url https://github.com/GloriousEggroll/wine-ge-custom \
-	bash -c "firefox \ 	
-	-new-tab -url https://github.com/lutris/docs/blob/master/InstallingDrivers.md \
+	bash -c "firefox -new-tab -url https://github.com/lutris/docs/blob/master/InstallingDrivers.md \
 	-new-tab -url https://github.com/lutris/docs/blob/master/WineDependencies.md \
 	-new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
 	-new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json \
