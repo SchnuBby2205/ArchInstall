@@ -63,10 +63,15 @@ myPrint "yellow" "Arch\n"
 printf "["
 myPrint "yellow" "2"
 printf "]: Install "
-myPrint "yellow" "HyprDots\n"
+myPrint "yellow" "Arch (Chroot)\n"
 
 printf "["
 myPrint "yellow" "3"
+printf "]: Install "
+myPrint "yellow" "HyprDots\n"
+
+printf "["
+myPrint "yellow" "4"
 printf "]: Install "
 myPrint "yellow" "Config files\n\n"
 
@@ -176,7 +181,7 @@ then
    	bash -c "arch-chroot /mnt"
 fi
 
-if [ "${OPTION}" == "2" ]
+if [ "${OPTION}" == "3" ]
 then
 	clearScreen		
 	myPrint "green" "    ____           __        _____             \n"
@@ -219,7 +224,7 @@ then
 
 fi
 
-if [ "${OPTION}" == "3" ]
+if [ "${OPTION}" == "4" ]
 then
 	clearScreen	
 	myPrint "green" "    ____           __        _____                   \n"
@@ -278,7 +283,7 @@ then
 
 fi
 
-if [ "${OPTION}" == "98" ]
+if [ "${OPTION}" == "2" ]
 then
     	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime"
   	bash -c "hwclock --systohc"
