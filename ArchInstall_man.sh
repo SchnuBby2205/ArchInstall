@@ -63,7 +63,7 @@ myPrint "yellow" "Arch\n"
 printf "["
 myPrint "yellow" "2"
 printf "]: Install "
-myPrint "yellow" "Arch (Chroot)\n"
+myPrint "yellow" "Chroot\n"
 
 printf "["
 myPrint "yellow" "3"
@@ -178,6 +178,7 @@ then
  	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub networkmanager sudo git"
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	bash -c "cp ./ArchInstall.sh /mnt"
+				myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
    	bash -c "arch-chroot /mnt"
 fi
 
@@ -302,7 +303,7 @@ then
 
  	bash -c "systemctl enable NetworkManager"
   	bash -c "mv ./ArchInstall.sh /home/schnubby/"
-
+ myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
 fi    
 
 
