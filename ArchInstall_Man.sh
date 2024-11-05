@@ -168,32 +168,11 @@ then
  	myPrint "green" "Starting installation in 1...\n\n"
 	sleep 1
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
-	#bash -c "cp ./ArchInstall.sh /mnt/home/schnubby/"
 
  	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub networkmanager"
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
-   	#bash -c "cp ./ArchInstall.sh /mnt"
+   	bash -c "cp ./ArchInstall.sh /mnt"
    	bash -c "arch-chroot /mnt"
-    	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime"
-  	bash -c "hwclock --systohc"
-   	bash -c "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen"	
-    	bash -c "locale-gen"
-    	bash -c "echo LANG=de_DE.UTF-8 >> /etc/locale.conf"
-     	bash -c "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
-       	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB"
-	bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
-      	bash -c "echo Arch-Linux >> /etc/hostname"
-       	bash -c "passwd"
-
- 	bash -c "useradd -mG wheel schnubby"
-	bash -c "passwd schnubby"	
-	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
-
- 	bash -c "systemctl enable NetworkManager"
-	
- 	bash -c "exit"
-  	bash -c "umount -R /mnt"
-   	bash -c "reboot"
 fi
 
 if [ "${OPTION}" == "2" ]
@@ -297,5 +276,32 @@ then
 	-new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
 
 fi
+
+if [ "${OPTION}" == "98" ]
+then
+    	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime"
+  	bash -c "hwclock --systohc"
+   	bash -c "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen"	
+    	bash -c "locale-gen"
+    	bash -c "echo LANG=de_DE.UTF-8 >> /etc/locale.conf"
+     	bash -c "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
+       	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB"
+	bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
+      	bash -c "echo Arch-Linux >> /etc/hostname"
+       	bash -c "passwd"
+
+ 	bash -c "useradd -mG wheel schnubby"
+	bash -c "passwd schnubby"	
+	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
+
+ 	bash -c "systemctl enable NetworkManager"
+  	bash -c "rm -rf ./ArchInstall.sh"
+	
+ 	bash -c "exit"
+	bash -c "mv ./ArchInstall.sh /mnt/home/schnubby/"
+  	bash -c "umount -R /mnt"
+   	bash -c "reboot"
+fi    
+
 
 exit 0
