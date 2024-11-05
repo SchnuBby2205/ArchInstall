@@ -169,7 +169,7 @@ then
 	sleep 1
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
 
- 	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub networkmanager"
+ 	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub networkmanager sudo"
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	bash -c "cp ./ArchInstall.sh /mnt"
    	bash -c "arch-chroot /mnt"
