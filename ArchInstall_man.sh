@@ -175,7 +175,7 @@ then
 
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
 
- 	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub networkmanager sudo git"
+ 	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub sudo git" #networkmanager
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	bash -c "cp ./ArchInstall.sh /mnt"
 				myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
