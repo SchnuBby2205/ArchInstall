@@ -140,7 +140,16 @@ then
 	myPrint "green" "Swap partition: "
 	printf "${SWAPPART}\n\n"
 	
-	#---------------Formatting Drives---------------	
+ 	myPrint "green" "\nStarting installation in 3..."
+  	sleep 1
+	printf "\r"
+  	myPrint "green" "Starting installation in 2..."
+  	sleep 1
+	printf "\r"
+ 	myPrint "green" "Starting installation in 1...\n\n"
+	sleep 1
+
+ 	#---------------Formatting Drives---------------	
 	bash -c "mkfs.fat -F 32 ${BOOTPART}"
 	bash -c "mkfs.ext4 ${ROOTPART}"
 	bash -c "mkswap ${SWAPPART}"
@@ -159,14 +168,6 @@ then
 	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 	#---------------Setting up pacman---------------
 
- 	myPrint "green" "\nStarting installation in 3..."
-  	sleep 1
-	printf "\r"
-  	myPrint "green" "Starting installation in 2..."
-  	sleep 1
-	printf "\r"
- 	myPrint "green" "Starting installation in 1...\n\n"
-	sleep 1
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
 
  	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub networkmanager sudo"
