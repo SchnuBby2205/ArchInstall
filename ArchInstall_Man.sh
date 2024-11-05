@@ -193,7 +193,7 @@ then
 	#---------------Setting up pacman---------------
 	bash -c "pacman -Syy"
 	bash -c "sudo pacman --noconfirm -S reflector"
-	bash -c "sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
+	bash -c "sudo reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist"
 	#---------------Setting up pacman---------------
 	
 	#---------------Setting up HyprDots---------------
