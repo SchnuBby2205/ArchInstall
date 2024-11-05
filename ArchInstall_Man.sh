@@ -176,7 +176,7 @@ then
    	bash -c "arch-chroot /mnt"
     	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime"
   	bash -c "hwclock --systohc"
-   	bash -c "sed -e '/de_DE.UTF8/s/^#*//' -i /etc/locale.gen"	
+   	bash -c "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen"	
     	bash -c "locale-gen"
     	bash -c "echo LANG=de_DE.UTF-8 >> /etc/locale.conf"
      	bash -c "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
