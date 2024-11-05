@@ -178,7 +178,7 @@ then
   	bash -c "hwclock --systohc"
    	bash -c "sed -e '/de_DE.UTF8/s/^#*//' -i /etc/locale.gen"	
     	bash -c "locale-gen"
-    	bash -c "echo LANG=en_US.UTF-8 >> /etc/locale.conf"
+    	bash -c "echo LANG=de_DE.UTF-8 >> /etc/locale.conf"
      	bash -c "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
        	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB"
 	bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
