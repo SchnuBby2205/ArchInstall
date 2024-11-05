@@ -295,7 +295,7 @@ then
 	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
 
  	bash -c "systemctl enable NetworkManager"
-  	bash -c "rm -rf ./ArchInstall.sh"
+  	bash -c "mv ./ArchInstall.sh /home/schnubby/"
 
 fi    
 
