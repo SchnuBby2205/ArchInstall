@@ -170,7 +170,7 @@ then
 
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
 
- 	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub networkmanager sudo"
+ 	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub networkmanager sudo git"
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	bash -c "cp ./ArchInstall.sh /mnt"
    	bash -c "arch-chroot /mnt"
@@ -193,7 +193,7 @@ then
 
 	#---------------Setting up pacman---------------
 	bash -c "pacman -Syy"
-	bash -c "sudo pacman --noconfirm -S reflector git"
+	bash -c "sudo pacman --noconfirm -S reflector"
 	bash -c "sudo reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist"
 	#---------------Setting up pacman---------------
 	
