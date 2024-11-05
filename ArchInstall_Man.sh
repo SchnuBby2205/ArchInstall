@@ -296,11 +296,7 @@ then
 
  	bash -c "systemctl enable NetworkManager"
   	bash -c "rm -rf ./ArchInstall.sh"
-	
- 	exit
-	bash -c "mv ./ArchInstall.sh /mnt/home/schnubby/"
-  	bash -c "umount -R /mnt"
-   	bash -c "reboot"
+
 fi    
 
 
