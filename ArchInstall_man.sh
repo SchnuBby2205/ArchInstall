@@ -448,7 +448,7 @@ then
 
 	#---------------Enabling services---------------
  	bash -c "systemctl enable NetworkManager &>/dev/null"
-	printOK "\nEnabling services...\n"
+	printOK "Enabling services...\n"
 	#---------------Enabling services---------------
 
    	bash -c "mv ./ArchInstall.sh /home/schnubby/"
