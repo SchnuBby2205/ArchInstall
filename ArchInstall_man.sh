@@ -280,7 +280,7 @@ then
 	bash -c "pacman -Syy &>/dev/null"
 	bash -c "sudo pacman --noconfirm -S reflector &>/dev/null"
 	bash -c "sudo reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
-	printOK "\nSetting up pacman...\n"
+	printOK "Setting up pacman...\n"
 	#---------------Setting up pacman---------------
 	
 	#---------------Setting up HyprDots---------------
