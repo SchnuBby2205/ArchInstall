@@ -216,8 +216,8 @@ then
 	
 	#---------------Mounting partitions---------------
 	printRunning "Mounting partitions..."
- 	bash -c "mount --mkdir ${ROOTPART} /mnt &>/dev/null"
-	bash -c "mount --mkdir ${BOOTPART} /mnt/boot &>/dev/null"
+ 	bash -c "mount --mkdir ${ROOTPART} /mnt"
+	bash -c "mount --mkdir ${BOOTPART} /mnt/boot"
 	printf "\r"
 	printOK "Mounting partitions...\n"
 	#---------------Mounting partitions---------------
