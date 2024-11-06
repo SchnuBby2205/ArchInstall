@@ -452,7 +452,7 @@ then
  	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
 
 	#---------------Enabling services---------------
-	printRunning "Enabling services..."
+	printRunning "\nEnabling services..."
  	bash -c "systemctl enable NetworkManager &>/dev/null"
 	printf "\r"
 	printOK "Enabling services...\n"
