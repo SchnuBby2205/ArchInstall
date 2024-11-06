@@ -338,7 +338,8 @@ then
 	sudo bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=schnubby' >> /etc/sddm.conf.d/sddm.conf"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
-	printRunning "${WHITE}Installing${NC} Config files..."
+	printf "\n"
+ 	printRunning "${WHITE}Installing${NC} Config files..."
 	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 	cd ~/.config
 	bash -c "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null"
@@ -353,7 +354,7 @@ then
   	bash -c "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc"
 	bash -c "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config"
 	printf "\r"
-	printOK "${WHITE}Installing${NC} Config files...\n"
+	printOK "${WHITE}Installing${NC} Config files...\n\n"
  	#---------------Installing Config files---------------
 
  	#---------------Installing gaming dependencies---------------
