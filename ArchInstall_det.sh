@@ -294,7 +294,7 @@ then
 	bash -c "sudo pacman --noconfirm -S reflector &>/dev/null"
  	printf "\n"
   	printMain "Setting up" "pacman...\n"
-	printStep "Sorting mirror...\n"
+	printStep "Sorting mirrors...\n"
 	bash -c "sudo reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
 	#---------------Setting up pacman---------------
 	
