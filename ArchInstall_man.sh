@@ -373,7 +373,7 @@ then
 	printOK "${WHITE}Installing${NC} gaming dependencies...\n"
  	#---------------Installing gaming dependencies---------------
   
- 	sudo bash -c "rm -rf ~/ArchInstall.sh"
+ 	sudo bash -c "rm -rf ~/${FILENAME}"
   	sudo bash -c "sed -i '/\.\/${FILENAME}/d' ~/.bashrc"
 	
 	myPrint "green" "ToDos:\n"
