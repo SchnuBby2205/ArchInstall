@@ -277,9 +277,9 @@ then
 	myPrint "green" "      /____/_/                                 \n\n"
 
 	#---------------Setting up pacman---------------
-	printRunning "Setting up pacman..."
 	bash -c "pacman -Syy &>/dev/null"
 	bash -c "sudo pacman --noconfirm -S reflector &>/dev/null"
+	printRunning "Setting up pacman..."
 	bash -c "sudo reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
 	printf "\r"
 	printOK "Setting up pacman...\n"
