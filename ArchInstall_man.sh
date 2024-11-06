@@ -318,7 +318,7 @@ if [ "${OPTION}" == "4" ]
 then
 	clearScreen	
 	myPrint "green" "    ____           __        _____                   \n"
-	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"arch-root autostart a script
+	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"
 	myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/       \n"
 	myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ /        \n"
 	myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /         \n"
