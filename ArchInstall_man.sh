@@ -186,7 +186,7 @@ then
 	myPrint "green" "Swap partition: "
 	printf "${SWAPPART}\n\n"
 	
- 	myPrint "green" "\nStarting installation in 3..."
+ 	myPrint "green" "Starting installation in 3..."
   	sleep 1
 	printf "\r"
   	myPrint "green" "Starting installation in 2..."
