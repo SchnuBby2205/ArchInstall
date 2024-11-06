@@ -423,22 +423,22 @@ then
 	#---------------Setting up GRUB---------------      
 	if [ "${HOSTNAME}" == "" ]
 	then
-		myPrint "yellow" "\n\nEnter your Hostname:"
+		myPrint "yellow" "\n\nEnter your Hostname: "
 		read HOSTNAME
   	fi
       	bash -c "echo ${HOSTNAME} >> /etc/hostname"
        	
-	myPrint "yellow" "\nEnter your NEW root password:\n\n"
+	myPrint "yellow" "\nEnter your NEW root password\n\n"
 	bash -c "passwd"
 
 	if [ "${USER}" == "" ]
 	then
-		myPrint "yellow" "\nEnter your normal username:"
+		myPrint "yellow" "\nEnter your normal username: "
 		read USER
 	fi
  
 	bash -c "useradd -mG wheel ${USER}"
-	myPrint "yellow" "\nEnter your normal users password:\n\n"
+	myPrint "yellow" "\nEnter your normal users password\n\n"
 	bash -c "passwd ${USER}"	
 
  	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
