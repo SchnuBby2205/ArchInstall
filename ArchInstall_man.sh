@@ -4,7 +4,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-WHITE='\033[0;97m'
+WHITE='\033[1;37m'
 NC='\033[0m'
 RUNNING="[${YELLOW}  RUNNING ${NC}]"
 MYOK="[${GREEN}    OK    ${NC}]"
