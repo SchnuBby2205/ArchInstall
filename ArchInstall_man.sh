@@ -335,7 +335,9 @@ then
 	cd ~/.config
 	bash -c "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null"
 	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
-	bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
+	if [ -d "~/.local/share/lutris" ]; then
+		bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
+	fi
 	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris"
  	bash -c "rm -rf ~/.config/code-flags.conf"
   	bash -c "touch ~/.config/code-flags.conf"
