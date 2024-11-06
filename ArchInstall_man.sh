@@ -307,11 +307,8 @@ then
 	sleep 1
  	
 	#---------------Installing HyprDots---------------
-	printRunning "Installing HyprDots..."
   	cd ~/HyprDots/Scripts
-	bash -c "./install.sh -drs &>/dev/null"
-	printf "\r"
-	printOK "Installing HyprDotss...\n"
+	bash -c "./install.sh -drs"
 	#---------------Installing HyprDots---------------
 
 fi
