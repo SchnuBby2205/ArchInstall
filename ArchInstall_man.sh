@@ -279,7 +279,10 @@ then
 	#---------------Setting up pacman---------------
 	bash -c "pacman -Syy &>/dev/null"
 	bash -c "sudo pacman --noconfirm -S reflector &>/dev/null"
+ 	printf "\n"
+  	printRunning "Setting up pacman..."
 	bash -c "sudo reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
+ 	printf "\r"
 	printOK "Setting up pacman...\n"
 	#---------------Setting up pacman---------------
 	
@@ -447,7 +450,10 @@ then
  	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
 
 	#---------------Enabling services---------------
+  	printf "\n"
+   	printRunning "Enabling services..."
  	bash -c "systemctl enable NetworkManager &>/dev/null"
+	printf "\r"
 	printOK "Enabling services...\n"
 	#---------------Enabling services---------------
 
