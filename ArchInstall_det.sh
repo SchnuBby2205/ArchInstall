@@ -3,12 +3,16 @@
 # Konstanten für Farben
 RED='\033[0;31m'
 GREEN='\033[0;32m'
+BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 WHITE='\033[1;37m'
 NC='\033[0m'
 RUNNING="[${YELLOW}  RUNNING ${NC}]"
 MYOK="[${GREEN}    OK    ${NC}]"
 ERROR="[${RED}  ERROR   ${NC}]"
+
+=>
+->
 
 # Partitionen
 DISK=""
@@ -209,49 +213,54 @@ then
 	myPrint "green" " / ___ |/ /  / /__/ / / /                     \n"
 	myPrint "green" "/_/  |_/_/   \___/_/ /_/                      \n\n"
 
-  	#---------------Formatting Drives---------------	
-	printRunning "Formatting ${WHITE}drives...${NC}"
-	bash -c "mkfs.fat -F 32 ${BOOTPART} &>/dev/null"
+  	#---------------Formatting Drives---------------		
+ 	printf "${GREEN}=> Formatting ${WHITE}drives...${NC}\n"	
+ 	printf "${BLUE}   -> mkfs.fat -F 32 ${BOOTPART}\n"
+ 	bash -c "mkfs.fat -F 32 ${BOOTPART} &>/dev/null"
+ 	printf "${BLUE}   -> mkfs.ext4 ${ROOTPART}\n"
 	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
-	bash -c "mkswap ${SWAPPART} &>/dev/null"
-	bash -c "swapon ${SWAPPART} &>/dev/null"
-	printf "\r"
-	printOK "Formatting ${WHITE}drives...${NC}\n"
+ 	printf "${BLUE}   -> mkswap ${SWAPPART}\n"
+ 	bash -c "mkswap ${SWAPPART} &>/dev/null"
+ 	printf "${BLUE}   -> swapon ${SWAPPART}\n"
+ 	bash -c "swapon ${SWAPPART} &>/dev/null"
 	#---------------Formatting Drives---------------	
 	
 	#---------------Mounting partitions---------------
-	printRunning "Mounting ${WHITE}partitions...${NC}"
+	printf "${GREEN}=> Mounting ${WHITE}partitions...${NC}\n"
+ 	printf "${BLUE}   -> mount --mkdir ${ROOTPART} /mnt\n"
  	bash -c "mount --mkdir ${ROOTPART} /mnt"
+	printf "${BLUE}   -> mount --mkdir ${BOOTPART} /mnt/boot\n"
 	bash -c "mount --mkdir ${BOOTPART} /mnt/boot"
-	printf "\r"
-	printOK "Mounting ${WHITE}partitions...${NC}\n"
 	#---------------Mounting partitions---------------
 
 	#---------------Setting up pacman---------------
-	printRunning "Setting up ${WHITE}pacman...${NC}"
-	bash -c "pacman -Syy &>/dev/null"
-	bash -c "pacman --noconfirm -S reflector &>/dev/null"
-	bash -c "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
-	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
-	printf "\r"
-	printOK "Setting up ${WHITE}pacman...${NC}\n"
+	printf "${GREEN}=> Setting up ${WHITE}pacman...${NC}"
+	printf "${BLUE}   -> pacman -Syy\n"
+ 	bash -c "pacman -Syy &>/dev/null"
+	printf "${BLUE}   -> pacman --noconfirm -S reflector\n"
+ 	bash -c "pacman --noconfirm -S reflector &>/dev/null"
+	printf "${BLUE}   -> reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist\n"
+ 	bash -c "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
+	printf "${BLUE}   -> sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf\n"
+ 	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 	#---------------Setting up pacman---------------
 
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
 
  	#---------------Running base install---------------
-	printRunning "Running ${WHITE}base install...${NC}"
-	bash -c "pacstrap -K /mnt base base-devel linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager lutris &>/dev/null"
-  	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
-   	bash -c "cp ./${FILENAME} /mnt"
+	printf "${GREEN}=> Running ${WHITE}base install...${NC}"
+	printf "${BLUE}   -> pacstrap -K /mnt base base-devel linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager lutris\n"
+ 	bash -c "pacstrap -K /mnt base base-devel linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager lutris &>/dev/null"
+  	printf "${BLUE}   -> genfstab -U /mnt >> /mnt/etc/fstab\n"
+   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
+   	printf "${BLUE}   -> cp ./${FILENAME} /mnt\n"
+    	bash -c "cp ./${FILENAME} /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
-	printf "\r"
-	printOK "Running ${WHITE}base install...${NC}\n"
  	#---------------Running base install---------------
    	bash -c "arch-chroot /mnt ./${FILENAME} 2 ${HOSTNAME} ${USER}"
     	bash -c "umount -R /mnt &>/dev/null"
 
-  	myPrint "green" "\nInstallation complete! Restart in 3..."
+  	myPrint "green" "\n\nInstallation complete! Restart in 3..."
   	sleep 1
 	printf "\r"
   	myPrint "green" "Installation complete! Restart in 2..."
