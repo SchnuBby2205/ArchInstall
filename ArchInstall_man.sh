@@ -248,7 +248,7 @@ then
 	printf "\r"
 	printOK "Running ${WHITE}base install...${NC}\n"
  	#---------------Running base install---------------
-   	bash -c "arch-chroot /mnt ./${FILENAME} 2 2 3 4 5 6 ${HOSTNAME} ${USER}"
+   	bash -c "arch-chroot /mnt ./${FILENAME} 2 ${HOSTNAME} ${USER}"
     	bash -c "umount -R /mnt &>/dev/null"
 
   	myPrint "green" "\nInstallation complete! Restart in 3..."
@@ -319,7 +319,9 @@ fi
 
 if [ "${OPTION}" == "4" ]
 then
-	clearScreen	
+	USER=$2
+ 
+ 	clearScreen	
 	myPrint "green" "    ____           __        _____                   \n"
 	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"
 	myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/       \n"
@@ -331,12 +333,18 @@ then
 	myPrint "green" "/ /___/ /_/ / / / / __/ / /_/ /  / __/ / /  __(__  ) \n"
 	myPrint "green" "\____/\____/_/ /_/_/ /_/\__, /  /_/ /_/_/\___/____/  \n"
 	myPrint "green" "                       /____/                        \n\n"
+
+ 	if [ "${USER}" == "" ]
+	then
+		myPrint "yellow" "Enter your normal username: "
+		read USER
+	fi
 	
 	#---------------Installing Config files---------------
-	sudo bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=schnubby' >> /etc/sddm.conf.d/sddm.conf"
+	sudo bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${USER}' >> /etc/sddm.conf.d/sddm.conf"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
-	printf "\n"
+	printf "\n\n"
  	printRunning "Installing ${WHITE}Config files...${NC}"
 	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 	cd ~/.config
@@ -402,13 +410,8 @@ fi
 
 if [ "${OPTION}" == "2" ]
 then
-	DISK=$2
-	CFDISK=$3
-	ROOTPART=$4
-	BOOTPART=$5
-	SWAPPART=$6
-	HOSTNAME=$7
-	USER=$8
+	HOSTNAME=$2
+	USER=$3
 
 	#---------------Setting up localtime---------------
 	printRunning "Setting up ${WHITE}localtime...${NC}"
@@ -465,8 +468,8 @@ then
 	printOK "Enabling ${WHITE}services...${NC}\n"
 	#---------------Enabling services---------------
 
-   	bash -c "mv ./${FILENAME} /home/schnubby/"
-    	bash -c "echo ./${FILENAME} 3 >> /home/schnubby/.bashrc"
+   	bash -c "mv ./${FILENAME} /home/${USER}/"
+    	bash -c "echo ./${FILENAME} 3 >> /home/${USER}/.bashrc"
  	#myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
 fi    
 
