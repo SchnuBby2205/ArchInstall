@@ -242,7 +242,7 @@ then
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	bash -c "cp ./ArchInstall.sh /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
-   	bash -c "arch-chroot /mnt ./ArchInstall.sh 2"
+   	bash -c "arch-chroot /mnt ./ArchInstall.sh 2 2 3 4 5 6 ${HOSTNAME} ${NAME}"
     	bash -c "umount -R /mnt &>/dev/null"
 	printf "\r"
 	printOK "Running base install...\n"
@@ -396,6 +396,14 @@ fi
 
 if [ "${OPTION}" == "2" ]
 then
+	DISK=$2
+	CFDISK=$3
+	ROOTPART=$4
+	BOOTPART=$5
+	SWAPPART=$6
+	HOSTNAME=$7
+	USER=$8
+
 	#---------------Setting up localtime---------------
 	printRunning "Setting up localtime..."
      	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null"
@@ -423,7 +431,7 @@ then
 	#---------------Setting up GRUB---------------      
 	if [ "${HOSTNAME}" == "" ]
 	then
-		myPrint "yellow" "\n\nEnter your Hostname: "
+		myPrint "yellow" "\nEnter your Hostname: "
 		read HOSTNAME
   	fi
       	bash -c "echo ${HOSTNAME} >> /etc/hostname"
