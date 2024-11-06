@@ -72,6 +72,8 @@ CFDISK=$3
 ROOTPART=$4
 BOOTPART=$5
 SWAPPART=$6
+HOSTNAME=$7
+USER=$8
 
 if [ "${OPTION}" == "" ]
 then
@@ -330,10 +332,10 @@ then
 	myPrint "green" "                       /____/                        \n\n"
 	
 	#---------------Installing Config files---------------
-	printRunning "Installing HyprDots..."
+	printRunning "Installing Config files..."
 	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 	cd ~/.config
-	bash -c "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig"
+	bash -c "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null"
 	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
 	bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
 	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris"
@@ -342,17 +344,31 @@ then
  	bash -c "sed -i 's/{:%I:%M %p}/{:%R 󰃭 %d·%m·%y}/g' ~/.config/waybar/modules/clock.jsonc"
   	bash -c "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc"
 	bash -c "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config"
-	bash -c "yay arch gaming meta"
- 	bash -c "yay -S dxvk-bin"
-  	#bash -c "yay -S wine-ge-custom"
 	sudo bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=schnubby' >> /etc/sddm.conf.d/sddm.conf"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
+	printf "\r"
+	printOK "Installing Config files...\n"
+ 	#---------------Installing Config files---------------
+
+ 	#---------------Installing gaming dependencies---------------
+	printRunning "Installing gaming dependencies..."
+ 	bash -c "yay arch gaming meta &>/dev/null"
+ 	bash -c "yay -S dxvk-bin &>/dev/null"
+  	#bash -c "yay -S wine-ge-custom"
+	bash -c "sudo pacman -Syu &>/dev/null"
+	bash -c "sudo pacman -S wine-staging &>/dev/null"
+	bash -c "sudo pacman -S --needed --asdeps giflib lib32-giflib gnutls lib32-gnutls v4l-utils lib32-v4l-utils libpulse \
+	lib32-libpulse alsa-plugins lib32-alsa-plugins alsa-lib lib32-alsa-lib sqlite lib32-sqlite libxcomposite \
+	lib32-libxcomposite ocl-icd lib32-ocl-icd libva lib32-libva gtk3 lib32-gtk3 gst-plugins-base-libs \
+	lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader sdl2 lib32-sdl2 lib32-gamemode &>/dev/null"
+ 	bash -c "sudo pacman -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
+	printf "\r"
+	printOK "Installing gaming dependencies...\n"
+ 	#---------------Installing gaming dependencies---------------
+  
  	sudo bash -c "rm -rf ~/ArchInstall.sh"
   	sudo bash -c "sed -i '/\.\/ArchInstall.sh/d' ~/.bashrc"
-	printf "\r"
-	printOK "Installing HyprDotss...\n"
- 	#---------------Installing Config files---------------
 	
 	myPrint "green" "ToDos:\n"
 	myPrint "yellow" "- Hyde-install\n"
@@ -370,9 +386,9 @@ then
  	myPrint "green" "You can reboot the System now!\n\n"
 
   	#-new-tab -url https://github.com/GloriousEggroll/wine-ge-custom \
-	bash -c "firefox -new-tab -url https://github.com/lutris/docs/blob/master/InstallingDrivers.md \
-	-new-tab -url https://github.com/lutris/docs/blob/master/WineDependencies.md \
-	-new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
+   	#-new-tab -url https://github.com/lutris/docs/blob/master/InstallingDrivers.md \
+    	#-new-tab -url https://github.com/lutris/docs/blob/master/WineDependencies.md \
+	bash -c "firefox -new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
 	-new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json \
 	-new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
 
@@ -402,15 +418,30 @@ then
 	printRunning "Setting up GRUB..."
        	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null"
 	bash -c "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
-      	bash -c "echo Arch-Linux >> /etc/hostname"
+	if [ "${HOSTNAME}" == "" ]
+	then
+		myPrint "yellow" "\nEnter your Hostname:"
+		read HOSTNAME
+  	fi
+      	bash -c "echo ${HOSTNAME} >> /etc/hostname"
 	printf "\r"
 	printOK "Setting up GRUB...\n"
 	#---------------Setting up GRUB---------------      
        	
+	myPrint "yellow" "\nEnter your NEW root password:\n\n"
 	bash -c "passwd"
- 	bash -c "useradd -mG wheel schnubby"
-	bash -c "passwd schnubby"	
-	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
+
+	if [ "${USER}" == "" ]
+	then
+		myPrint "yellow" "\nEnter your normal username:"
+		read USER
+	fi
+ 
+	bash -c "useradd -mG wheel ${USER}"
+	myPrint "yellow" "\nEnter your normal users password:\n\n"
+	bash -c "passwd ${USER}"	
+
+ 	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
 
 	#---------------Enabling services---------------
 	printRunning "Enabling services..."
