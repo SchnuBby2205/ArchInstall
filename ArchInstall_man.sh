@@ -275,18 +275,24 @@ then
 	myPrint "green" "      /____/_/                                 \n\n"
 
 	#---------------Setting up pacman---------------
-	bash -c "pacman -Syy"
-	bash -c "sudo pacman --noconfirm -S reflector"
-	bash -c "sudo reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist"
+	printRunning "Setting up pacman..."
+	bash -c "pacman -Syy &>/dev/null"
+	bash -c "sudo pacman --noconfirm -S reflector &>/dev/null"
+	bash -c "sudo reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
+	printf "\r"
+	printOK "Setting up pacman...\n"
 	#---------------Setting up pacman---------------
 	
 	#---------------Setting up HyprDots---------------
-	bash -c "sudo pacman --noconfirm -S nano"
-	bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots"
+	printRunning "Setting up HyprDots..."
+	bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
+	bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null"
 	cd ~/HyprDots/Scripts
 	bash -c "nano ./custom_hypr.lst"
 	bash -c "nano ./.extra/custom_flat.lst"
-	bash -c "sudo pacman --noconfirm -Runs nano"
+	bash -c "sudo pacman --noconfirm -Runs nano &>/dev/null"
+	printf "\r"
+	printOK "Setting up HyprDots...\n"
 	#---------------Setting up HyprDots---------------
 
  	myPrint "green" "\nStarting installation in 3..."
@@ -297,8 +303,14 @@ then
 	printf "\r"
  	myPrint "green" "Starting installation in 1...\n\n"
 	sleep 1
- 	cd ~/HyprDots/Scripts
-	bash -c "./install.sh -drs"
+ 	
+	#---------------Installing HyprDots---------------
+	printRunning "Installing HyprDots..."
+  	cd ~/HyprDots/Scripts
+	bash -c "./install.sh -drs &>/dev/null"
+	printf "\r"
+	printOK "Installing HyprDotss...\n"
+	#---------------Installing HyprDots---------------
 
 fi
 
@@ -318,6 +330,7 @@ then
 	myPrint "green" "                       /____/                        \n\n"
 	
 	#---------------Installing Config files---------------
+	printRunning "Installing HyprDots..."
 	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 	cd ~/.config
 	bash -c "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig"
@@ -335,6 +348,10 @@ then
 	sudo bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=schnubby' >> /etc/sddm.conf.d/sddm.conf"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
+ 	sudo bash -c "rm -rf ~/ArchInstall.sh"
+  	sudo bash -c "sed -i '/\.\/ArchInstall.sh/d' ~/.bashrc"
+	printf "\r"
+	printOK "Installing HyprDotss...\n"
  	#---------------Installing Config files---------------
 	
 	myPrint "green" "ToDos:\n"
@@ -403,7 +420,8 @@ then
 	#---------------Enabling services---------------
 
    	bash -c "mv ./ArchInstall.sh /home/schnubby/"
- 	myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
+    	bash -c "echo ./ArchInstall.sh 3 >> /home/schnubby/.bashrc"
+ 	#myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
 fi    
 
 
