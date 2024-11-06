@@ -104,10 +104,13 @@ then
 	myPrint "green" " / ___ |/ /  / /__/ / / /                     \n"
 	myPrint "green" "/_/  |_/_/   \___/_/ /_/                      \n\n"
 	
-	bash -c lsblk
+	bash -c "lsblk"
 	
-	myPrint "yellow" "\nEnter drive\n"
-	read DISK
+	if [ "${DISK}" == "" ]
+	then
+		myPrint "yellow" "\nEnter drive\n"
+		read DISK
+  	fi
 	
 	if [ "${DISK}" == "" ]
 	then
@@ -115,32 +118,47 @@ then
 		exit 0
 	fi
 	
-	myPrint "yellow" "\nStart cfdisk (y/N) ?\n"
-	read CFDISK
+	if [ "${CFDISK}" == "" ]
+	then
+		myPrint "yellow" "\nStart cfdisk (y/N) ?\n"
+		read CFDISK
+  	fi
 	
 	if [ "${CFDISK}" == "y" ] || [ "${CFDISK}" == "Y" ]
 	then
 		bash -c "cfdisk ${DISK}"
 	fi
 	
-	myPrint "yellow" "\nEnter root partition\n"
-	read ROOTPART
+	if [ "${ROOTPART}" == "" ]
+	then
+		myPrint "yellow" "\nEnter root partition\n"
+		read ROOTPART
+  	fi
+ 
 	if [ "${ROOTPART}" == "" ]
 	then
 		printError "No partition entered -> exit\n"
 		exit 0
 	fi
 	
-	myPrint "yellow" "\nEnter boot partition\n"
-	read BOOTPART
+	if [ "${BOOTPART}" == "" ]
+	then
+		myPrint "yellow" "\nEnter boot partition\n"
+		read BOOTPART
+  	fi
+ 
 	if [ "${BOOTPART}" == "" ]
 	then
 		printError "No partition entered -> exit\n"
 		exit 0
 	fi
 	
-	myPrint "yellow" "\nEnter swap partition\n"
-	read SWAPPART
+	if [ "${SWAPPART}" == "" ]
+	then
+		myPrint "yellow" "\nEnter swap partition\n"
+		read SWAPPART
+  	fi
+ 
 	if [ "${SWAPPART}" == "" ]
 	then
 		printError "No partition entered -> exit\n"
@@ -188,7 +206,7 @@ then
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	bash -c "cp ./ArchInstall.sh /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
-   	bash -c "arch-chroot /mnt ./ArchInstall.sh"
+   	bash -c "arch-chroot /mnt ./ArchInstall.sh 2"
     	bash -c "umount -R /mnt"
 
   	myPrint "green" "\nInstallation complete! Restart in 3..."
