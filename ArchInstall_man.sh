@@ -193,33 +193,55 @@ then
  	myPrint "green" "Starting installation in 1...\n\n"
 	sleep 1
 
- 	#---------------Formatting Drives---------------	
+	clearScreen	
+	myPrint "green" "    ____           __        _____            \n"
+	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _\n"
+	myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/\n"
+	myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ / \n"
+	myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /  \n"
+	myPrint "green" "   /   |  __________/ /_             /____/   \n"
+	myPrint "green" "  / /| | / ___/ ___/ __ \                     \n"
+	myPrint "green" " / ___ |/ /  / /__/ / / /                     \n"
+	myPrint "green" "/_/  |_/_/   \___/_/ /_/                      \n\n"
+
+  	#---------------Formatting Drives---------------	
+	printRunning "Formatting drives..."
 	bash -c "mkfs.fat -F 32 ${BOOTPART}"
 	bash -c "mkfs.ext4 ${ROOTPART}"
 	bash -c "mkswap ${SWAPPART}"
 	bash -c "swapon ${SWAPPART}"
+	printf "\r"
+	printOK "Formatting drives...\n"
 	#---------------Formatting Drives---------------	
 	
 	#---------------Mounting partitions---------------
+	printRunning "Mounting partitions..."
  	bash -c "mount --mkdir ${ROOTPART} /mnt"
 	bash -c "mount --mkdir ${BOOTPART} /mnt/boot"
+	printf "\r"
+	printOK "Mounting partitions...\n"
 	#---------------Mounting partitions---------------
 
 	#---------------Setting up pacman---------------
+	printRunning "Setting up pacman..."
 	bash -c "pacman -Syy"
 	bash -c "pacman --noconfirm -S reflector"
 	bash -c "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist"
 	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
+	printf "\r"
+	printOK "Setting up pacman...\n"
 	#---------------Setting up pacman---------------
 
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
 
- 	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager"
+ 	#---------------Running base install---------------
+	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager"
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
-   	bash -c "cp ./ArchInstall.sh /mnt"
+   	#bash -c "cp ./ArchInstall.sh /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
    	bash -c "arch-chroot /mnt ./ArchInstall.sh 2"
     	bash -c "umount -R /mnt"
+ 	#---------------Running base install---------------
 
   	myPrint "green" "\nInstallation complete! Restart in 3..."
   	sleep 1
