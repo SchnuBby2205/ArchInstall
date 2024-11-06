@@ -418,15 +418,15 @@ then
 	printRunning "Setting up GRUB..."
        	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null"
 	bash -c "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
-	if [ "${HOSTNAME}" == "" ]
-	then
-		myPrint "yellow" "\nEnter your Hostname:"
-		read HOSTNAME
-  	fi
-      	bash -c "echo ${HOSTNAME} >> /etc/hostname"
 	printf "\r"
 	printOK "Setting up GRUB...\n"
 	#---------------Setting up GRUB---------------      
+	if [ "${HOSTNAME}" == "" ]
+	then
+		myPrint "yellow" "\n\nEnter your Hostname:"
+		read HOSTNAME
+  	fi
+      	bash -c "echo ${HOSTNAME} >> /etc/hostname"
        	
 	myPrint "yellow" "\nEnter your NEW root password:\n\n"
 	bash -c "passwd"
