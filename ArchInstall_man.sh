@@ -206,28 +206,28 @@ then
 
   	#---------------Formatting Drives---------------	
 	printRunning "Formatting drives..."
-	bash -c "mkfs.fat -F 32 ${BOOTPART}"
-	bash -c "mkfs.ext4 ${ROOTPART}"
-	bash -c "mkswap ${SWAPPART}"
-	bash -c "swapon ${SWAPPART}"
+	bash -c "mkfs.fat -F 32 ${BOOTPART} > /dev/null"
+	bash -c "mkfs.ext4 ${ROOTPART} > /dev/null"
+	bash -c "mkswap ${SWAPPART} > /dev/null"
+	bash -c "swapon ${SWAPPART} > /dev/null"
 	printf "\r"
 	printOK "Formatting drives...\n"
 	#---------------Formatting Drives---------------	
 	
 	#---------------Mounting partitions---------------
 	printRunning "Mounting partitions..."
- 	bash -c "mount --mkdir ${ROOTPART} /mnt"
-	bash -c "mount --mkdir ${BOOTPART} /mnt/boot"
+ 	bash -c "mount --mkdir ${ROOTPART} /mnt > /dev/null"
+	bash -c "mount --mkdir ${BOOTPART} /mnt/boot > /dev/null"
 	printf "\r"
 	printOK "Mounting partitions...\n"
 	#---------------Mounting partitions---------------
 
 	#---------------Setting up pacman---------------
 	printRunning "Setting up pacman..."
-	bash -c "pacman -Syy"
-	bash -c "pacman --noconfirm -S reflector"
-	bash -c "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist"
-	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
+	bash -c "pacman -Syy > /dev/null"
+	bash -c "pacman --noconfirm -S reflector > /dev/null"
+	bash -c "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist > /dev/null"
+	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf > /dev/null"
 	printf "\r"
 	printOK "Setting up pacman...\n"
 	#---------------Setting up pacman---------------
@@ -235,12 +235,12 @@ then
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
 
  	#---------------Running base install---------------
-	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager"
+	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager > /dev/null"
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
-   	#bash -c "cp ./ArchInstall.sh /mnt"
+   	bash -c "cp ./ArchInstall.sh /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
    	bash -c "arch-chroot /mnt ./ArchInstall.sh 2"
-    	bash -c "umount -R /mnt"
+    	bash -c "umount -R /mnt > /dev/null"
  	#---------------Running base install---------------
 
   	myPrint "green" "\nInstallation complete! Restart in 3..."
@@ -360,24 +360,47 @@ fi
 
 if [ "${OPTION}" == "2" ]
 then
-    	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime"
-  	bash -c "hwclock --systohc"
+	#---------------Setting up localtime---------------
+	printRunning "Setting up localtime..."
+     	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime > /dev/null"
+  	bash -c "hwclock --systohc > /dev/null" 
+	printf "\r"
+	printOK "Setting up localtime...\n"
+	#---------------Setting up localtime---------------
+
+	#---------------Setting up locale---------------
+	printRunning "Setting up locale..."
    	bash -c "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen"	
-    	bash -c "locale-gen"
+    	bash -c "locale-gen > /dev/null"
     	bash -c "echo LANG=de_DE.UTF-8 >> /etc/locale.conf"
      	bash -c "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
-       	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB"
-	bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
-      	bash -c "echo Arch-Linux >> /etc/hostname"
-       	bash -c "passwd"
+	printf "\r"
+	printOK "Setting up locale...\n"
+	#---------------Setting up locale---------------
 
+	#---------------Setting up GRUB---------------
+	printRunning "Setting up GRUB..."
+       	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB > /dev/null"
+	bash -c "grub-mkconfig -o /boot/grub/grub.cfg > /dev/null"
+      	bash -c "echo Arch-Linux >> /etc/hostname"
+	printf "\r"
+	printOK "Setting up GRUB...\n"
+	#---------------Setting up GRUB---------------      
+       	
+	bash -c "passwd"
  	bash -c "useradd -mG wheel schnubby"
 	bash -c "passwd schnubby"	
 	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
 
- 	bash -c "systemctl enable NetworkManager"
-  	bash -c "mv ./ArchInstall.sh /home/schnubby/"
- myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
+	#---------------Enabling services---------------
+	printRunning "Enabling services..."
+ 	bash -c "systemctl enable NetworkManager > /dev/null"
+	printf "\r"
+	printOK "Enabling services...\n"
+	#---------------Enabling services---------------
+
+   	bash -c "mv ./ArchInstall.sh /home/schnubby/"
+ 	myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
 fi    
 
 
