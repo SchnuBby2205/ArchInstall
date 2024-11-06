@@ -261,7 +261,7 @@ then
    	bash -c "arch-chroot /mnt ./${FILENAME} 2 ${HOSTNAME} ${USER}"
     	bash -c "umount -R /mnt &>/dev/null"
 
-  	myPrint "green" "\n\nInstallation complete! Restart in 3..."
+  	myPrint "green" "\nInstallation complete! Restart in 3..."
   	sleep 1
 	printf "\r"
   	myPrint "green" "Installation complete! Restart in 2..."
