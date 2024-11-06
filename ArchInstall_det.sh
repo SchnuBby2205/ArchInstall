@@ -11,8 +11,8 @@ RUNNING="[${YELLOW}  RUNNING ${NC}]"
 MYOK="[${GREEN}    OK    ${NC}]"
 ERROR="[${RED}  ERROR   ${NC}]"
 
-=>
-->
+#=>
+#->
 
 # Partitionen
 DISK=""
