@@ -48,7 +48,7 @@ myPrint() {
 printMain() {
 	mode="$1"
  	message="$2"
- 	printf "${GREEN}=>${NC} ${mode} ${WHITE}${message}${NC}"
+ 	printf "${GREEN}==>${NC} ${WHITE}${mode} ${message}${NC}"
 }
 
 printStep() {
