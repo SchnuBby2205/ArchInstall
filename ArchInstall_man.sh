@@ -16,6 +16,8 @@ BOOTPART=""
 ROOTPART=""
 SWAPPART=""
 
+FILENAME=$(basename "$0")
+
 # Functions
 clearScreen() {
 	bash -c clear
@@ -240,12 +242,12 @@ then
 	printRunning "Running base install..."
 	bash -c "pacstrap -K /mnt base base-devel linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager lutris &>/dev/null"
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
-   	bash -c "cp ./ArchInstall.sh /mnt"
+   	bash -c "cp ${FILENAME} /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
 	printf "\r"
 	printOK "Running base install...\n"
  	#---------------Running base install---------------
-   	bash -c "arch-chroot /mnt ./ArchInstall.sh 2 2 3 4 5 6 ${HOSTNAME} ${USER}"
+   	bash -c "arch-chroot /mnt ${FILENAME} 2 2 3 4 5 6 ${HOSTNAME} ${USER}"
     	bash -c "umount -R /mnt &>/dev/null"
 
   	myPrint "green" "\nInstallation complete! Restart in 3..."
@@ -368,7 +370,7 @@ then
  	#---------------Installing gaming dependencies---------------
   
  	sudo bash -c "rm -rf ~/ArchInstall.sh"
-  	sudo bash -c "sed -i '/\.\/ArchInstall.sh/d' ~/.bashrc"
+  	sudo bash -c "sed -i '/\.\/${FILENAME}/d' ~/.bashrc"
 	
 	myPrint "green" "ToDos:\n"
 	myPrint "yellow" "- Hyde-install\n"
@@ -459,8 +461,8 @@ then
 	printOK "Enabling services...\n"
 	#---------------Enabling services---------------
 
-   	bash -c "mv ./ArchInstall.sh /home/schnubby/"
-    	bash -c "echo ./ArchInstall.sh 3 >> /home/schnubby/.bashrc"
+   	bash -c "mv ${FILENAME} /home/schnubby/"
+    	bash -c "echo ${FILENAME} 3 >> /home/schnubby/.bashrc"
  	#myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
 fi    
 
