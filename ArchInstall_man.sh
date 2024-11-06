@@ -54,28 +54,37 @@ myPrint "green" "  / /| | / ___/ ___/ __ \ / // __ \/ ___/ __/ __ \`/ / / \n"
 myPrint "green" " / ___ |/ /  / /__/ / / // // / / (__  ) /_/ /_/ / / /  \n"
 myPrint "green" "/_/  |_/_/   \___/_/ /_/___/_/ /_/____/\__/\__,_/_/_/   \n\n"
 
-OPTION=""
-printf "["
-myPrint "yellow" "1"
-printf "]: Install "
-myPrint "yellow" "Arch\n"
+OPTION=$1
+DISK=$2
+CFDISK=$3
+ROOTPART=$4
+BOOTPART=$5
+SWAPPART=$6
 
-printf "["
-myPrint "yellow" "2"
-printf "]: Install "
-myPrint "yellow" "Chroot\n"
-
-printf "["
-myPrint "yellow" "3"
-printf "]: Install "
-myPrint "yellow" "HyprDots\n"
-
-printf "["
-myPrint "yellow" "4"
-printf "]: Install "
-myPrint "yellow" "Config files\n\n"
-
-read OPTION
+if [ "${OPTION}" == "" ]
+then
+	printf "["
+	myPrint "yellow" "1"
+	printf "]: Install "
+	myPrint "yellow" "Arch\n"
+	
+	printf "["
+	myPrint "yellow" "2"
+	printf "]: Install "
+	myPrint "yellow" "Chroot\n"
+	
+	printf "["
+	myPrint "yellow" "3"
+	printf "]: Install "
+	myPrint "yellow" "HyprDots\n"
+	
+	printf "["
+	myPrint "yellow" "4"
+	printf "]: Install "
+	myPrint "yellow" "Config files\n\n"
+	
+	read OPTION
+ fi
 
 if [ "${OPTION}" == "" ]
 then
@@ -175,7 +184,7 @@ then
 
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
 
- 	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub sudo git" #networkmanager
+ 	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager"
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	bash -c "cp ./ArchInstall.sh /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
