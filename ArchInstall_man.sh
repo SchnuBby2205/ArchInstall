@@ -242,7 +242,7 @@ then
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	bash -c "cp ./ArchInstall.sh /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
-   	bash -c "arch-chroot /mnt ./ArchInstall.sh 2 2 3 4 5 6 ${HOSTNAME} ${NAME}"
+   	bash -c "arch-chroot /mnt ./ArchInstall.sh 2 2 3 4 5 6 ${HOSTNAME} ${USER}"
     	bash -c "umount -R /mnt &>/dev/null"
 	printf "\r"
 	printOK "Running base install...\n"
