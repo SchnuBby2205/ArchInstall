@@ -234,7 +234,7 @@ then
 	#---------------Mounting partitions---------------
 
 	#---------------Setting up pacman---------------
-	printf "${GREEN}=> Setting up ${WHITE}pacman...${NC}"
+	printf "${GREEN}=> Setting up ${WHITE}pacman...${NC}\n"
 	printf "${BLUE}   -> pacman -Syy\n"
  	bash -c "pacman -Syy &>/dev/null"
 	printf "${BLUE}   -> pacman --noconfirm -S reflector\n"
