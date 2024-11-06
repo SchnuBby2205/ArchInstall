@@ -178,8 +178,21 @@ then
  	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub sudo git" #networkmanager
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	bash -c "cp ./ArchInstall.sh /mnt"
-	myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
-   	bash -c "arch-chroot /mnt"
+	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
+   	bash -c "arch-chroot /mnt ./ArchInstall.sh"
+    	bash -c "umount -R /mnt"
+
+  	myPrint "green" "\nInstallation complete! Restart in 3..."
+  	sleep 1
+	printf "\r"
+  	myPrint "green" "Installation complete! Restart in 2..."
+  	sleep 1
+	printf "\r"
+ 	myPrint "green" "Installation complete! Restart in 1...\n\n"
+	sleep 1
+
+      	bash -c "reboot"
+
 fi
 
 if [ "${OPTION}" == "3" ]
@@ -229,7 +242,7 @@ if [ "${OPTION}" == "4" ]
 then
 	clearScreen	
 	myPrint "green" "    ____           __        _____                   \n"
-	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"
+	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"arch-root autostart a script
 	myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/       \n"
 	myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ /        \n"
 	myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /         \n"
