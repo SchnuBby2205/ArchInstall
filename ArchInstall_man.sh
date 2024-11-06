@@ -4,10 +4,13 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+WHITE='\033[0;37m'
 NC='\033[0m'
 RUNNING="[${YELLOW}  RUNNING ${NC}]"
 MYOK="[${GREEN}    OK    ${NC}]"
 ERROR="[${RED}  ERROR   ${NC}]"
+
+#${WHITE}${NC}
 
 # Partitionen
 DISK=""
@@ -182,11 +185,11 @@ then
 	fi
 	
 	myPrint "green" "\nRoot partition: "
-	printf "${ROOTPART}\n"
+	printf "${WHITE}${ROOTPART}${NC}\n"
 	myPrint "green" "Boot partition: "
-	printf "${BOOTPART}\n"
+	printf "${WHITE}${BOOTPART}${NC}\n"
 	myPrint "green" "Swap partition: "
-	printf "${SWAPPART}\n\n"
+	printf "${WHITE}${SWAPPART}${NC}\n\n"
 	
  	myPrint "green" "Starting installation in 3..."
   	sleep 1
@@ -209,43 +212,43 @@ then
 	myPrint "green" "/_/  |_/_/   \___/_/ /_/                      \n\n"
 
   	#---------------Formatting Drives---------------	
-	printRunning "Formatting drives..."
+	printRunning "${WHITE}Formatting${NC} drives..."
 	bash -c "mkfs.fat -F 32 ${BOOTPART} &>/dev/null"
 	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
 	bash -c "mkswap ${SWAPPART} &>/dev/null"
 	bash -c "swapon ${SWAPPART} &>/dev/null"
 	printf "\r"
-	printOK "Formatting drives...\n"
+	printOK "${WHITE}Formatting${NC} drives...\n"
 	#---------------Formatting Drives---------------	
 	
 	#---------------Mounting partitions---------------
-	printRunning "Mounting partitions..."
+	printRunning "${WHITE}Mounting${NC} partitions..."
  	bash -c "mount --mkdir ${ROOTPART} /mnt"
 	bash -c "mount --mkdir ${BOOTPART} /mnt/boot"
 	printf "\r"
-	printOK "Mounting partitions...\n"
+	printOK "${WHITE}Mounting${NC} partitions...\n"
 	#---------------Mounting partitions---------------
 
 	#---------------Setting up pacman---------------
-	printRunning "Setting up pacman..."
+	printRunning "${WHITE}Setting up${NC} pacman..."
 	bash -c "pacman -Syy &>/dev/null"
 	bash -c "pacman --noconfirm -S reflector &>/dev/null"
 	bash -c "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
 	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 	printf "\r"
-	printOK "Setting up pacman...\n"
+	printOK "${WHITE}Setting up${NC} pacman...\n"
 	#---------------Setting up pacman---------------
 
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
 
  	#---------------Running base install---------------
-	printRunning "Running base install..."
+	printRunning "${WHITE}Running${NC} base install..."
 	bash -c "pacstrap -K /mnt base base-devel linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager lutris &>/dev/null"
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	bash -c "cp ./${FILENAME} /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
 	printf "\r"
-	printOK "Running base install...\n"
+	printOK "${WHITE}Running${NC} base install...\n"
  	#---------------Running base install---------------
    	bash -c "arch-chroot /mnt ./${FILENAME} 2 2 3 4 5 6 ${HOSTNAME} ${USER}"
     	bash -c "umount -R /mnt &>/dev/null"
@@ -282,14 +285,14 @@ then
 	bash -c "pacman -Syy &>/dev/null"
 	bash -c "sudo pacman --noconfirm -S reflector &>/dev/null"
  	printf "\n"
-  	printRunning "Setting up pacman..."
+  	printRunning "${WHITE}Setting up${NC} pacman..."
 	bash -c "sudo reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
  	printf "\r"
-	printOK "Setting up pacman...\n"
+	printOK "${WHITE}Setting up${NC} pacman...\n"
 	#---------------Setting up pacman---------------
 	
 	#---------------Setting up HyprDots---------------
-	printRunning "Setting up HyprDots..."
+	printRunning "${WHITE}Setting up${NC} HyprDots..."
 	bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
 	bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null"
 	cd ~/HyprDots/Scripts
@@ -297,7 +300,7 @@ then
 	bash -c "nano ./.extra/custom_flat.lst"
 	bash -c "sudo pacman --noconfirm -Runs nano &>/dev/null"
 	printf "\r"
-	printOK "Setting up HyprDots...\n"
+	printOK "${WHITE}Setting up${NC} HyprDots...\n"
 	#---------------Setting up HyprDots---------------
 
  	myPrint "green" "\nStarting installation in 3..."
@@ -335,7 +338,7 @@ then
 	sudo bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=schnubby' >> /etc/sddm.conf.d/sddm.conf"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
-	printRunning "Installing Config files..."
+	printRunning "${WHITE}Installing${NC} Config files..."
 	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 	cd ~/.config
 	bash -c "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null"
@@ -350,7 +353,7 @@ then
   	bash -c "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc"
 	bash -c "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config"
 	printf "\r"
-	printOK "Installing Config files...\n"
+	printOK "${WHITE}Installing${NC} Config files...\n"
  	#---------------Installing Config files---------------
 
  	#---------------Installing gaming dependencies---------------
@@ -359,14 +362,14 @@ then
   	#bash -c "yay -S wine-ge-custom"
 	bash -c "sudo pacman -Syu &>/dev/null"
 	bash -c "sudo pacman -S wine-staging &>/dev/null"
-	printRunning "Installing gaming dependencies..."
+	printRunning "${WHITE}Installing${NC} gaming dependencies..."
 	bash -c "sudo pacman -S --needed --asdeps giflib lib32-giflib gnutls lib32-gnutls v4l-utils lib32-v4l-utils libpulse \
 	lib32-libpulse alsa-plugins lib32-alsa-plugins alsa-lib lib32-alsa-lib sqlite lib32-sqlite libxcomposite \
 	lib32-libxcomposite ocl-icd lib32-ocl-icd libva lib32-libva gtk3 lib32-gtk3 gst-plugins-base-libs \
 	lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader sdl2 lib32-sdl2 lib32-gamemode &>/dev/null"
  	bash -c "sudo pacman -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
 	printf "\r"
-	printOK "Installing gaming dependencies...\n"
+	printOK "${WHITE}Installing${NC} gaming dependencies...\n"
  	#---------------Installing gaming dependencies---------------
   
  	sudo bash -c "rm -rf ~/ArchInstall.sh"
@@ -407,29 +410,29 @@ then
 	USER=$8
 
 	#---------------Setting up localtime---------------
-	printRunning "Setting up localtime..."
+	printRunning "${WHITE}Setting up${NC} localtime..."
      	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null"
   	bash -c "hwclock --systohc &>/dev/null" 
 	printf "\r"
-	printOK "Setting up localtime...\n"
+	printOK "${WHITE}Setting up${NC} localtime...\n"
 	#---------------Setting up localtime---------------
 
 	#---------------Setting up locale---------------
-	printRunning "Setting up locale..."
+	printRunning "${WHITE}Setting up${NC} locale..."
    	bash -c "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen"	
     	bash -c "locale-gen &>/dev/null"
     	bash -c "echo LANG=de_DE.UTF-8 >> /etc/locale.conf"
      	bash -c "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
 	printf "\r"
-	printOK "Setting up locale...\n"
+	printOK "${WHITE}Setting up${NC} locale...\n"
 	#---------------Setting up locale---------------
 
 	#---------------Setting up GRUB---------------
-	printRunning "Setting up GRUB..."
+	printRunning "${WHITE}Setting up${NC} GRUB..."
        	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null"
 	bash -c "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
 	printf "\r"
-	printOK "Setting up GRUB...\n"
+	printOK "${WHITE}Setting up${NC} GRUB...\n"
 	#---------------Setting up GRUB---------------      
 	if [ "${HOSTNAME}" == "" ]
 	then
@@ -455,10 +458,10 @@ then
 
 	#---------------Enabling services---------------
   	printf "\n"
-   	printRunning "Enabling services..."
+   	printRunning "${WHITE}Enabling${NC} services..."
  	bash -c "systemctl enable NetworkManager &>/dev/null"
 	printf "\r"
-	printOK "Enabling services...\n"
+	printOK "${WHITE}Enabling${NC} services...\n"
 	#---------------Enabling services---------------
 
    	bash -c "mv ./${FILENAME} /home/schnubby/"
