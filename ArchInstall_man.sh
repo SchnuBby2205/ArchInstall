@@ -372,13 +372,15 @@ then
 	printf "\r"
 	printOK "${WHITE}Installing${NC} gaming dependencies...\n"
  	#---------------Installing gaming dependencies---------------
+
+  	bash -c "Hyde-install"
   
  	sudo bash -c "rm -rf ~/${FILENAME}"
   	sudo bash -c "sed -i '/\.\/${FILENAME}/d' ~/.bashrc"
 	
-	myPrint "green" "ToDos:\n"
-	myPrint "yellow" "- Hyde-install\n"
-	myPrint "yellow" "- Install wine Drivers and Dependencies\n"
+	myPrint "green" "\n\nToDos:\n"
+	#myPrint "yellow" "- Hyde-install\n"
+	#myPrint "yellow" "- Install wine Drivers and Dependencies\n"
 	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
 
 	myPrint "green" "Hints:\n"
