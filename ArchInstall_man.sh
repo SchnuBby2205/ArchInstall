@@ -43,9 +43,9 @@ printRunning() {
 	printf "${RUNNING}   ${message}"
 }
 
-printError() {
+printOK() {
 	message="$1"
-	printf "${ERROR}   ${message}"
+	printf "${MYOK}   ${message}"
 }
 
 printError() {
@@ -206,28 +206,28 @@ then
 
   	#---------------Formatting Drives---------------	
 	printRunning "Formatting drives..."
-	bash -c "mkfs.fat -F 32 ${BOOTPART} > /dev/null"
-	bash -c "mkfs.ext4 ${ROOTPART} > /dev/null"
-	bash -c "mkswap ${SWAPPART} > /dev/null"
-	bash -c "swapon ${SWAPPART} > /dev/null"
+	bash -c "mkfs.fat -F 32 ${BOOTPART} &>/dev/null"
+	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
+	bash -c "mkswap ${SWAPPART} &>/dev/null"
+	bash -c "swapon ${SWAPPART} &>/dev/null"
 	printf "\r"
 	printOK "Formatting drives...\n"
 	#---------------Formatting Drives---------------	
 	
 	#---------------Mounting partitions---------------
 	printRunning "Mounting partitions..."
- 	bash -c "mount --mkdir ${ROOTPART} /mnt > /dev/null"
-	bash -c "mount --mkdir ${BOOTPART} /mnt/boot > /dev/null"
+ 	bash -c "mount --mkdir ${ROOTPART} /mnt &>/dev/null"
+	bash -c "mount --mkdir ${BOOTPART} /mnt/boot &>/dev/null"
 	printf "\r"
 	printOK "Mounting partitions...\n"
 	#---------------Mounting partitions---------------
 
 	#---------------Setting up pacman---------------
 	printRunning "Setting up pacman..."
-	bash -c "pacman -Syy > /dev/null"
-	bash -c "pacman --noconfirm -S reflector > /dev/null"
-	bash -c "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist > /dev/null"
-	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf > /dev/null"
+	bash -c "pacman -Syy &>/dev/null"
+	bash -c "pacman --noconfirm -S reflector &>/dev/null"
+	bash -c "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
+	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 	printf "\r"
 	printOK "Setting up pacman...\n"
 	#---------------Setting up pacman---------------
@@ -235,12 +235,15 @@ then
 	#bash -c "archinstall --conf https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/conf.json --creds https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/creds.json"
 
  	#---------------Running base install---------------
-	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager > /dev/null"
+	printRunning "Running base install..."
+	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager &>/dev/null"
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	bash -c "cp ./ArchInstall.sh /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
    	bash -c "arch-chroot /mnt ./ArchInstall.sh 2"
-    	bash -c "umount -R /mnt > /dev/null"
+    	bash -c "umount -R /mnt &>/dev/null"
+	printf "\r"
+	printOK "Running base install...\n"
  	#---------------Running base install---------------
 
   	myPrint "green" "\nInstallation complete! Restart in 3..."
@@ -362,8 +365,8 @@ if [ "${OPTION}" == "2" ]
 then
 	#---------------Setting up localtime---------------
 	printRunning "Setting up localtime..."
-     	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime > /dev/null"
-  	bash -c "hwclock --systohc > /dev/null" 
+     	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null"
+  	bash -c "hwclock --systohc &>/dev/null" 
 	printf "\r"
 	printOK "Setting up localtime...\n"
 	#---------------Setting up localtime---------------
@@ -371,7 +374,7 @@ then
 	#---------------Setting up locale---------------
 	printRunning "Setting up locale..."
    	bash -c "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen"	
-    	bash -c "locale-gen > /dev/null"
+    	bash -c "locale-gen &>/dev/null"
     	bash -c "echo LANG=de_DE.UTF-8 >> /etc/locale.conf"
      	bash -c "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
 	printf "\r"
@@ -380,8 +383,8 @@ then
 
 	#---------------Setting up GRUB---------------
 	printRunning "Setting up GRUB..."
-       	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB > /dev/null"
-	bash -c "grub-mkconfig -o /boot/grub/grub.cfg > /dev/null"
+       	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null"
+	bash -c "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
       	bash -c "echo Arch-Linux >> /etc/hostname"
 	printf "\r"
 	printOK "Setting up GRUB...\n"
@@ -394,7 +397,7 @@ then
 
 	#---------------Enabling services---------------
 	printRunning "Enabling services..."
- 	bash -c "systemctl enable NetworkManager > /dev/null"
+ 	bash -c "systemctl enable NetworkManager &>/dev/null"
 	printf "\r"
 	printOK "Enabling services...\n"
 	#---------------Enabling services---------------
