@@ -449,10 +449,8 @@ then
  	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
 
 	#---------------Enabling services---------------
-	printRunning "\nEnabling services..."
  	bash -c "systemctl enable NetworkManager &>/dev/null"
-	printf "\r"
-	printOK "Enabling services...\n"
+	printOK "\nEnabling services...\n"
 	#---------------Enabling services---------------
 
    	bash -c "mv ./ArchInstall.sh /home/schnubby/"
