@@ -178,7 +178,7 @@ then
  	bash -c "pacstrap -K /mnt base linux-lts linux-firmware intel-ucode efibootmgr grub sudo git" #networkmanager
   	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	bash -c "cp ./ArchInstall.sh /mnt"
-				myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
+	myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
    	bash -c "arch-chroot /mnt"
 fi
 
