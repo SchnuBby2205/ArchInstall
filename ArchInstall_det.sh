@@ -216,33 +216,33 @@ then
 
   	#---------------Formatting Drives---------------		
  	printMain "Formatting" "drives...\n"
- 	printStep "mkfs.fat -F 32 ${BOOTPART}\n"
+ 	printStep "Farmatting boot partition ${BOOTPART}...\n"
  	bash -c "mkfs.fat -F 32 ${BOOTPART} &>/dev/null"
- 	printStep "mkfs.ext4 ${ROOTPART}\n"
+ 	printStep "Formatting root partition ${ROOTPART}...\n"
 	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
- 	printStep "mkswap ${SWAPPART}\n"
+ 	printStep "Enabling swap ${SWAPPART}...\n"
  	bash -c "mkswap ${SWAPPART} &>/dev/null"
- 	printStep "swapon ${SWAPPART}\n"
+ 	printStep "Turning swap ${SWAPPART} on...\n"
  	bash -c "swapon ${SWAPPART} &>/dev/null"
 	#---------------Formatting Drives---------------	
 	
 	#---------------Mounting partitions---------------
 	printMain "Mounting" "partitions...\n"
- 	printStep "mount --mkdir ${ROOTPART} /mnt\n"
+ 	printStep "mounting ${ROOTPART} to /mnt...\n"
  	bash -c "mount --mkdir ${ROOTPART} /mnt"
-	printStep "mount --mkdir ${BOOTPART} /mnt/boot\n"
+	printStep "mounting ${BOOTPART} to /mnt/boot...\n"
 	bash -c "mount --mkdir ${BOOTPART} /mnt/boot"
 	#---------------Mounting partitions---------------
 
 	#---------------Setting up pacman---------------
 	printMain "Setting up" "pacman...\n"
-	printStep "pacman -Syy\n"
+	printStep "Updating package database...\n"
  	bash -c "pacman -Syy &>/dev/null"
-	printStep "pacman --noconfirm -S reflector\n"
+	printStep "Downloading reflector...\n"
  	bash -c "pacman --noconfirm -S reflector &>/dev/null"
-	printStep "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist\n"
+	printStep "Sorting mirrors...\n"
  	bash -c "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
-	printStep "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf\n"
+	printStep "Enabling 5 parallel downloads in pacman...\n"
  	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 	#---------------Setting up pacman---------------
 
@@ -250,11 +250,11 @@ then
 
  	#---------------Running base install---------------
 	printMain "Running" "base install...\n"
-	printStep "pacstrap -K /mnt base base-devel linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager lutris\n"
+	printStep "Running pacstrap...\n"
  	bash -c "pacstrap -K /mnt base base-devel linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager lutris &>/dev/null"
-  	printStep "genfstab -U /mnt >> /mnt/etc/fstab\n"
+  	printStep "Generating fstab...\n"
    	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
-   	printStep "cp ./${FILENAME} /mnt\n"
+   	printStep "Copying script ${FILENAME} to /mnt...\n"
     	bash -c "cp ./${FILENAME} /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
  	#---------------Running base install---------------
@@ -294,15 +294,15 @@ then
 	bash -c "sudo pacman --noconfirm -S reflector &>/dev/null"
  	printf "\n"
   	printMain "Setting up" "pacman...\n"
-	printStep "sudo reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist\n"
+	printStep "Sorting mirror...\n"
 	bash -c "sudo reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
 	#---------------Setting up pacman---------------
 	
 	#---------------Setting up HyprDots---------------
 	printMain "Setting up" "HyprDots...\n"
- 	printStep "sudo pacman --noconfirm -S nano\n"
+ 	printStep "Downloading nano...\n"
 	bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
- 	printStep "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots\n"
+ 	printStep "Cloning HyprDots..."
 	bash -c "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null"
 	cd ~/HyprDots/Scripts
 	bash -c "nano ./custom_hypr.lst"
@@ -355,27 +355,25 @@ then
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	printf "\n\n"
  	printMain "Installing" "Config files...\n"
-  	printStep "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak\n"
+  	printStep "Backing up HyprDots userprefs.conf...\n"
 	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 	cd ~/.config
-	printStep "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig\n"
+	printStep "Cloning SchnuBbyconfig...\n"
 	bash -c "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null"
- 	printStep "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf\n"
+ 	printStep "Creating symlink to userprefs.conf...\n"
 	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
 	if [ -d "~/.local/share/lutris" ]; then
 		bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
 	fi
- 	printStep "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris\n"
+ 	printStep "Creating symlink to lutris...\n"
 	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris"
- 	printStep "rm -rf ~/.config/code-flags.conf\n"
+ 	printStep "Removing flags from code-flags.conf...\n"
  	bash -c "rm -rf ~/.config/code-flags.conf"
-  	printStep "touch ~/.config/code-flags.conf\n"
   	bash -c "touch ~/.config/code-flags.conf"
-   	printStep "sed -i 's/{:%I:%M %p}/{:%R 󰃭 %d·%m·%y}/g' ~/.config/waybar/modules/clock.jsonc\n"
+   	printStep "Configuring ~/.config/waybar/modules/clock.jsonc...\n"
  	bash -c "sed -i 's/{:%I:%M %p}/{:%R 󰃭 %d·%m·%y}/g' ~/.config/waybar/modules/clock.jsonc"
-  	printStep "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc\n"
   	bash -c "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc"
-   	printStep "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config\n"
+   	printStep "Configuring ~/.config/swaylock/config...\n"
 	bash -c "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config"
  	#---------------Installing Config files---------------
 
@@ -386,15 +384,12 @@ then
 	bash -c "sudo pacman -Syu &>/dev/null"
 	bash -c "sudo pacman -S wine-staging &>/dev/null"
 	printMain "Installing" "gaming dependencies...\n"
- 	printStep "sudo pacman -S --needed --asdeps giflib lib32-giflib gnutls lib32-gnutls v4l-utils lib32-v4l-utils libpulse \
-	lib32-libpulse alsa-plugins lib32-alsa-plugins alsa-lib lib32-alsa-lib sqlite lib32-sqlite libxcomposite \
-	lib32-libxcomposite ocl-icd lib32-ocl-icd libva lib32-libva gtk3 lib32-gtk3 gst-plugins-base-libs \
-	lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader sdl2 lib32-sdl2 lib32-gamemode\n"
+ 	printStep "Downloading Wine dependencies...\n"
 	bash -c "sudo pacman -S --needed --asdeps giflib lib32-giflib gnutls lib32-gnutls v4l-utils lib32-v4l-utils libpulse \
 	lib32-libpulse alsa-plugins lib32-alsa-plugins alsa-lib lib32-alsa-lib sqlite lib32-sqlite libxcomposite \
 	lib32-libxcomposite ocl-icd lib32-ocl-icd libva lib32-libva gtk3 lib32-gtk3 gst-plugins-base-libs \
 	lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader sdl2 lib32-sdl2 lib32-gamemode &>/dev/null"
- 	printStep "sudo pacman -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader\n"
+ 	printStep "Downloading graphics drivers...\n"
  	bash -c "sudo pacman -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
  	#---------------Installing gaming dependencies---------------
 
@@ -434,29 +429,28 @@ then
 
 	#---------------Setting up localtime---------------
 	printMain "Setting up" "localtime...\n"
- 	printStep "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime\n"
+ 	printStep "Creating symlink to /etc/localtime (Europe/Berlin)...\n"
      	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null"
-      	printStep "hwclock --systohc\n"
+      	printStep "Syncing hardwareclock...\n"
   	bash -c "hwclock --systohc &>/dev/null" 
 	#---------------Setting up localtime---------------
 
 	#---------------Setting up locale---------------
 	printMain "Setting up" "locale...\n"
- 	printStep "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen\n"
+ 	printStep "Configuring /etc/locale.gen (de_DE.UTF-8)...\n"
    	bash -c "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen"	
-	printStep "locale-gen\n"
     	bash -c "locale-gen &>/dev/null"
-     	printStep "echo LANG=de_DE.UTF-8 >> /etc/locale.conf\n"
+     	printStep "Configuring /etc/locale.conf (de_DE.UTF-8)...\n"
     	bash -c "echo LANG=de_DE.UTF-8 >> /etc/locale.conf"
-     	printStep "echo KEYMAP=de-latin1 >> /etc/vconsole.conf\n"
+     	printStep "Configuring /etc/vconsole.conf (de-latin1)...\n"
      	bash -c "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
 	#---------------Setting up locale---------------
 
 	#---------------Setting up GRUB---------------
 	printMain "Setting up" "GRUB...\n"
- 	printStep "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB\n"
+ 	printStep "Installing GRUB to /boot...\n"
        	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null"
-	printStep "grub-mkconfig -o /boot/grub/grub.cfg\n"
+	printStep "Making GRUB config...\n"
 	bash -c "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
 	#---------------Setting up GRUB---------------      
 	if [ "${HOSTNAME}" == "" ]
@@ -484,7 +478,7 @@ then
 	#---------------Enabling services---------------
   	printf "\n"
    	printMain "Enabling" "services...\n"
-	printStep "systemctl enable NetworkManager\n"
+	printStep "Enabling NetworkManager...\n"
  	bash -c "systemctl enable NetworkManager &>/dev/null"
 	#---------------Enabling services---------------
 
