@@ -242,7 +242,7 @@ then
  	bash -c "pacman --noconfirm -S reflector &>/dev/null"
 	printStep "Sorting mirrors...\n"
  	bash -c "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null"
-	printStep "Enabling 5 parallel downloads in pacman...\n"
+	printStep "Enabling 5 parallel downloads for pacman...\n"
  	bash -c "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 	#---------------Setting up pacman---------------
 
