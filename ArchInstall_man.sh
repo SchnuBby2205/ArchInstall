@@ -72,9 +72,9 @@ myPrint "green" "/_/  |_/_/   \___/_/ /_/___/_/ /_/____/\__/\__,_/_/_/   \n\n"
 OPTION=$1
 DISK=$2
 CFDISK=$3
-ROOTPART=$4
-BOOTPART=$5
-SWAPPART=$6
+BOOTPART=$4
+SWAPPART=$5
+ROOTPART=$6
 HOSTNAME=$7
 USER=$8
 
@@ -146,18 +146,6 @@ then
 		bash -c "cfdisk ${DISK}"
 	fi
 	
-	if [ "${ROOTPART}" == "" ]
-	then
-		myPrint "yellow" "\nEnter root partition\n"
-		read ROOTPART
-  	fi
- 
-	if [ "${ROOTPART}" == "" ]
-	then
-		printError "No partition entered -> exit\n"
-		exit 0
-	fi
-	
 	if [ "${BOOTPART}" == "" ]
 	then
 		myPrint "yellow" "\nEnter boot partition\n"
@@ -182,12 +170,24 @@ then
 		exit 0
 	fi
 	
-	myPrint "green" "\nRoot partition: "
-	printf "${WHITE}${ROOTPART}${NC}\n"
-	myPrint "green" "Boot partition: "
+	if [ "${ROOTPART}" == "" ]
+	then
+		myPrint "yellow" "\nEnter root partition\n"
+		read ROOTPART
+  	fi
+ 
+	if [ "${ROOTPART}" == "" ]
+	then
+		printError "No partition entered -> exit\n"
+		exit 0
+	fi
+	
+	myPrint "green" "\nBoot partition: "
 	printf "${WHITE}${BOOTPART}${NC}\n"
 	myPrint "green" "Swap partition: "
-	printf "${WHITE}${SWAPPART}${NC}\n\n"
+	printf "${WHITE}${SWAPPART}${NC}\n"
+	myPrint "green" "Root partition: "
+	printf "${WHITE}${ROOTPART}${NC}\n\n"
 	
  	myPrint "green" "Starting installation in 3..."
   	sleep 1
@@ -212,9 +212,9 @@ then
   	#---------------Formatting Drives---------------	
 	printRunning "Formatting ${WHITE}drives...${NC}"
 	bash -c "mkfs.fat -F 32 ${BOOTPART} &>/dev/null"
-	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
 	bash -c "mkswap ${SWAPPART} &>/dev/null"
 	bash -c "swapon ${SWAPPART} &>/dev/null"
+	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
 	printf "\r"
 	printOK "Formatting ${WHITE}drives...${NC}\n"
 	#---------------Formatting Drives---------------	
@@ -248,7 +248,7 @@ then
 	printf "\r"
 	printOK "Running ${WHITE}base install...${NC}\n"
  	#---------------Running base install---------------
-   	bash -c "arch-chroot /mnt ./${FILENAME} 2 ${HOSTNAME} ${USER}"
+   	bash -c "arch-chroot /mnt ./${FILENAME} 2 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}"
     	bash -c "umount -R /mnt &>/dev/null"
 
   	myPrint "green" "\nInstallation complete! Restart in 3..."
@@ -263,6 +263,68 @@ then
       	bash -c "reboot"
 
 fi
+
+if [ "${OPTION}" == "2" ]
+then
+	#---------------Setting up localtime---------------
+	printRunning "Setting up ${WHITE}localtime...${NC}"
+     	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null"
+  	bash -c "hwclock --systohc &>/dev/null" 
+	printf "\r"
+	printOK "Setting up ${WHITE}localtime...${NC}\n"
+	#---------------Setting up localtime---------------
+
+	#---------------Setting up locale---------------
+	printRunning "Setting up ${WHITE}locale...${NC}"
+   	bash -c "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen"	
+    	bash -c "locale-gen &>/dev/null"
+    	bash -c "echo LANG=de_DE.UTF-8 >> /etc/locale.conf"
+     	bash -c "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
+	printf "\r"
+	printOK "Setting up ${WHITE}locale...${NC}\n"
+	#---------------Setting up locale---------------
+
+	#---------------Setting up GRUB---------------
+	printRunning "Setting up ${WHITE}GRUB...${NC}"
+       	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null"
+	bash -c "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
+	printf "\r"
+	printOK "Setting up ${WHITE}GRUB...${NC}\n"
+	#---------------Setting up GRUB---------------      
+	if [ "${HOSTNAME}" == "" ]
+	then
+		myPrint "yellow" "\nEnter your Hostname: "
+		read HOSTNAME
+  	fi
+      	bash -c "echo ${HOSTNAME} >> /etc/hostname"
+       	
+	myPrint "yellow" "\nEnter your NEW root password\n\n"
+	bash -c "passwd"
+
+	if [ "${USER}" == "" ]
+	then
+		myPrint "yellow" "\nEnter your normal username: "
+		read USER
+	fi
+ 
+	bash -c "useradd -mG wheel ${USER}"
+	myPrint "yellow" "\nEnter your normal user password\n\n"
+	bash -c "passwd ${USER}"	
+
+ 	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
+
+	#---------------Enabling services---------------
+  	printf "\n"
+   	printRunning "Enabling ${WHITE}services...${NC}"
+ 	bash -c "systemctl enable NetworkManager &>/dev/null"
+	printf "\r"
+	printOK "Enabling ${WHITE}services...${NC}\n"
+	#---------------Enabling services---------------
+
+   	bash -c "mv ./${FILENAME} /home/${USER}/"
+    	bash -c "echo ./${FILENAME} 3 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER} >> /home/${USER}/.bashrc"
+ 	#myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
+fi    
 
 if [ "${OPTION}" == "3" ]
 then
@@ -309,6 +371,8 @@ then
 	printf "\r"
  	myPrint "green" "Starting installation in 1...\n\n"
 	sleep 1
+
+ 	bash -c "sed -i 's/${FILENAME} 3 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/g' ~/.bashrc"
  	
 	#---------------Installing HyprDots---------------
   	cd ~/HyprDots/Scripts
@@ -319,8 +383,6 @@ fi
 
 if [ "${OPTION}" == "4" ]
 then
-	USER=$2
- 
  	clearScreen	
 	myPrint "green" "    ____           __        _____                   \n"
 	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"
@@ -382,7 +444,7 @@ then
   	bash -c "Hyde-install"
   
  	sudo bash -c "rm -rf ~/${FILENAME}"
-  	sudo bash -c "sed -i '/\.\/${FILENAME}/d' ~/.bashrc"
+  	sudo bash -c "sed -i '/\.\/${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/d' ~/.bashrc"
 	
 	myPrint "green" "\n\nToDos:\n"
 	#myPrint "yellow" "- Hyde-install\n"
@@ -406,72 +468,18 @@ then
 	-new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json \
 	-new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
 
+  	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"
+   
+  	myPrint "green" "Reboot in 3..."
+  	sleep 1
+	printf "\r"
+  	myPrint "green" "Reboot in 2..."
+  	sleep 1
+	printf "\r"
+ 	myPrint "green" "Reboot in 1...\n\n"
+	sleep 1
+
+      	bash -c "reboot"
 fi
-
-if [ "${OPTION}" == "2" ]
-then
-	HOSTNAME=$2
-	USER=$3
-
-	#---------------Setting up localtime---------------
-	printRunning "Setting up ${WHITE}localtime...${NC}"
-     	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null"
-  	bash -c "hwclock --systohc &>/dev/null" 
-	printf "\r"
-	printOK "Setting up ${WHITE}localtime...${NC}\n"
-	#---------------Setting up localtime---------------
-
-	#---------------Setting up locale---------------
-	printRunning "Setting up ${WHITE}locale...${NC}"
-   	bash -c "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen"	
-    	bash -c "locale-gen &>/dev/null"
-    	bash -c "echo LANG=de_DE.UTF-8 >> /etc/locale.conf"
-     	bash -c "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
-	printf "\r"
-	printOK "Setting up ${WHITE}locale...${NC}\n"
-	#---------------Setting up locale---------------
-
-	#---------------Setting up GRUB---------------
-	printRunning "Setting up ${WHITE}GRUB...${NC}"
-       	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null"
-	bash -c "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
-	printf "\r"
-	printOK "Setting up ${WHITE}GRUB...${NC}\n"
-	#---------------Setting up GRUB---------------      
-	if [ "${HOSTNAME}" == "" ]
-	then
-		myPrint "yellow" "\nEnter your Hostname: "
-		read HOSTNAME
-  	fi
-      	bash -c "echo ${HOSTNAME} >> /etc/hostname"
-       	
-	myPrint "yellow" "\nEnter your NEW root password\n\n"
-	bash -c "passwd"
-
-	if [ "${USER}" == "" ]
-	then
-		myPrint "yellow" "\nEnter your normal username: "
-		read USER
-	fi
- 
-	bash -c "useradd -mG wheel ${USER}"
-	myPrint "yellow" "\nEnter your normal user password\n\n"
-	bash -c "passwd ${USER}"	
-
- 	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
-
-	#---------------Enabling services---------------
-  	printf "\n"
-   	printRunning "Enabling ${WHITE}services...${NC}"
- 	bash -c "systemctl enable NetworkManager &>/dev/null"
-	printf "\r"
-	printOK "Enabling ${WHITE}services...${NC}\n"
-	#---------------Enabling services---------------
-
-   	bash -c "mv ./${FILENAME} /home/${USER}/"
-    	bash -c "echo ./${FILENAME} 3 >> /home/${USER}/.bashrc"
- 	#myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
-fi    
-
 
 exit 0
