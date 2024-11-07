@@ -261,21 +261,88 @@ then
    	bash -c "arch-chroot /mnt ./${FILENAME} 2 ${HOSTNAME} ${USER}"
     	bash -c "umount -R /mnt &>/dev/null"
 
-  	myPrint "green" "\nInstallation complete! Restart in 3..."
+  	myPrint "green" "\nInstallation complete! Reboot in 3..."
   	sleep 1
 	printf "\r"
-  	myPrint "green" "Installation complete! Restart in 2..."
+  	myPrint "green" "Installation complete! Reboot in 2..."
   	sleep 1
 	printf "\r"
- 	myPrint "green" "Installation complete! Restart in 1...\n\n"
+ 	myPrint "green" "Installation complete! Reboot in 1...\n\n"
 	sleep 1
 
       	bash -c "reboot"
 
 fi
 
+if [ "${OPTION}" == "2" ]
+then
+	HOSTNAME=$2
+	USER=$3
+
+	#---------------Setting up localtime---------------
+	printMain "Setting up" "localtime...\n"
+ 	printStep "Creating symlink to /etc/localtime (Europe/Berlin)...\n"
+     	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null"
+      	printStep "Syncing hardwareclock...\n"
+  	bash -c "hwclock --systohc &>/dev/null" 
+	#---------------Setting up localtime---------------
+
+	#---------------Setting up locale---------------
+	printMain "Setting up" "locale...\n"
+ 	printStep "Configuring /etc/locale.gen (de_DE.UTF-8)...\n"
+   	bash -c "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen"	
+    	bash -c "locale-gen &>/dev/null"
+     	printStep "Configuring /etc/locale.conf (de_DE.UTF-8)...\n"
+    	bash -c "echo LANG=de_DE.UTF-8 >> /etc/locale.conf"
+     	printStep "Configuring /etc/vconsole.conf (de-latin1)...\n"
+     	bash -c "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
+	#---------------Setting up locale---------------
+
+	#---------------Setting up GRUB---------------
+	printMain "Setting up" "GRUB...\n"
+ 	printStep "Installing GRUB to /boot...\n"
+       	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null"
+	printStep "Making GRUB config...\n"
+	bash -c "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
+	#---------------Setting up GRUB---------------      
+	if [ "${HOSTNAME}" == "" ]
+	then
+		myPrint "yellow" "\nEnter your Hostname: "
+		read HOSTNAME
+  	fi
+      	bash -c "echo ${HOSTNAME} >> /etc/hostname"
+       	
+	myPrint "yellow" "\nEnter your NEW root password\n\n"
+	bash -c "passwd"
+
+	if [ "${USER}" == "" ]
+	then
+		myPrint "yellow" "\nEnter your normal username: "
+		read USER
+	fi
+ 
+	bash -c "useradd -mG wheel ${USER}"
+	myPrint "yellow" "\nEnter your normal user password\n\n"
+	bash -c "passwd ${USER}"	
+
+ 	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
+
+	#---------------Enabling services---------------
+  	printf "\n"
+   	printMain "Enabling" "services...\n"
+	printStep "Enabling NetworkManager...\n"
+ 	bash -c "systemctl enable NetworkManager &>/dev/null"
+	#---------------Enabling services---------------
+
+   	bash -c "mv ./${FILENAME} /home/${USER}/"
+    	bash -c "echo ./${FILENAME} 3 ${USER} >> /home/${USER}/.bashrc"
+ 	#myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
+fi    
+
 if [ "${OPTION}" == "3" ]
 then
+	USER=$2
+
 	clearScreen		
 	myPrint "green" "    ____           __        _____             \n"
 	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _ \n"
@@ -318,6 +385,8 @@ then
 	printf "\r"
  	myPrint "green" "Starting installation in 1...\n\n"
 	sleep 1
+
+ 	bash -c "sed -i 's/${FILENAME} 3 ${USER}/${FILENAME} 4 ${USER}/g' ~/.bashrc"
  	
 	#---------------Installing HyprDots---------------
   	cd ~/HyprDots/Scripts
@@ -396,12 +465,12 @@ then
   	bash -c "Hyde-install"
   
  	sudo bash -c "rm -rf ~/${FILENAME}"
-  	sudo bash -c "sed -i '/\.\/${FILENAME}/d' ~/.bashrc"
+  	sudo bash -c "sed -i '/\.\/${FILENAME} 4 ${USER}/d' ~/.bashrc"
 	
 	myPrint "green" "\n\nToDos:\n"
+	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
 	#myPrint "yellow" "- Hyde-install\n"
 	#myPrint "yellow" "- Install wine Drivers and Dependencies\n"
-	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
 
 	myPrint "green" "Hints:\n"
 	myPrint "yellow" "- kdwalletmanager (set empty password)\n"
@@ -411,8 +480,6 @@ then
 	myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
  	myPrint "yellow" "  (if you want to use git from the terminal.)\n\n"
 
- 	myPrint "green" "You can reboot the System now!\n\n"
-
   	#-new-tab -url https://github.com/GloriousEggroll/wine-ge-custom \
    	#-new-tab -url https://github.com/lutris/docs/blob/master/InstallingDrivers.md \
     	#-new-tab -url https://github.com/lutris/docs/blob/master/WineDependencies.md \
@@ -420,72 +487,18 @@ then
 	-new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json \
 	-new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
 
+  	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"
+   
+  	myPrint "green" "Reboot in 3..."
+  	sleep 1
+	printf "\r"
+  	myPrint "green" "Reboot in 2..."
+  	sleep 1
+	printf "\r"
+ 	myPrint "green" "Reboot in 1...\n\n"
+	sleep 1
+
+      	bash -c "reboot"
 fi
-
-if [ "${OPTION}" == "2" ]
-then
-	HOSTNAME=$2
-	USER=$3
-
-	#---------------Setting up localtime---------------
-	printMain "Setting up" "localtime...\n"
- 	printStep "Creating symlink to /etc/localtime (Europe/Berlin)...\n"
-     	bash -c "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null"
-      	printStep "Syncing hardwareclock...\n"
-  	bash -c "hwclock --systohc &>/dev/null" 
-	#---------------Setting up localtime---------------
-
-	#---------------Setting up locale---------------
-	printMain "Setting up" "locale...\n"
- 	printStep "Configuring /etc/locale.gen (de_DE.UTF-8)...\n"
-   	bash -c "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen"	
-    	bash -c "locale-gen &>/dev/null"
-     	printStep "Configuring /etc/locale.conf (de_DE.UTF-8)...\n"
-    	bash -c "echo LANG=de_DE.UTF-8 >> /etc/locale.conf"
-     	printStep "Configuring /etc/vconsole.conf (de-latin1)...\n"
-     	bash -c "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
-	#---------------Setting up locale---------------
-
-	#---------------Setting up GRUB---------------
-	printMain "Setting up" "GRUB...\n"
- 	printStep "Installing GRUB to /boot...\n"
-       	bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null"
-	printStep "Making GRUB config...\n"
-	bash -c "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
-	#---------------Setting up GRUB---------------      
-	if [ "${HOSTNAME}" == "" ]
-	then
-		myPrint "yellow" "\nEnter your Hostname: "
-		read HOSTNAME
-  	fi
-      	bash -c "echo ${HOSTNAME} >> /etc/hostname"
-       	
-	myPrint "yellow" "\nEnter your NEW root password\n\n"
-	bash -c "passwd"
-
-	if [ "${USER}" == "" ]
-	then
-		myPrint "yellow" "\nEnter your normal username: "
-		read USER
-	fi
- 
-	bash -c "useradd -mG wheel ${USER}"
-	myPrint "yellow" "\nEnter your normal user password\n\n"
-	bash -c "passwd ${USER}"	
-
- 	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
-
-	#---------------Enabling services---------------
-  	printf "\n"
-   	printMain "Enabling" "services...\n"
-	printStep "Enabling NetworkManager...\n"
- 	bash -c "systemctl enable NetworkManager &>/dev/null"
-	#---------------Enabling services---------------
-
-   	bash -c "mv ./${FILENAME} /home/${USER}/"
-    	bash -c "echo ./${FILENAME} 3 >> /home/${USER}/.bashrc"
- 	#myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
-fi    
-
 
 exit 0
