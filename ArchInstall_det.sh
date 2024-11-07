@@ -378,8 +378,11 @@ then
  	myPrint "green" "Starting installation in 1...\n\n"
 	sleep 1
 
- 	bash -c "sed -i 's/${FILENAME} 3 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/g' ~/.bashrc"
- 	
+ 	#bash -c "sed -i 's/${FILENAME} 3 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/g' ~/.bashrc"
+ 	bash -c "sed -i '/${FILENAME}/d' ~/.bashrc"
+		bash -c "echo kitty ./${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER} >> /home/${USER}/.config/hypr/userprefs.conf"
+		
+		
 	#---------------Installing HyprDots---------------
   	cd ~/HyprDots/Scripts
 	bash -c "./install.sh -drs"
