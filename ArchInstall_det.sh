@@ -418,6 +418,7 @@ then
 	printf "\n\n"
  	printMain "Installing" "Config files...\n"
   	printStep "Backing up HyprDots userprefs.conf...\n"
+			bash -c "sed -i '/${FILENAME}/d' /home/${USER}/.config/hypr/userprefs.conf"
 	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 	cd ~/.config
 	printStep "Cloning SchnuBbyconfig...\n"
