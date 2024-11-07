@@ -11,9 +11,6 @@ RUNNING="[${YELLOW}  RUNNING ${NC}]"
 MYOK="[${GREEN}    OK    ${NC}]"
 ERROR="[${RED}  ERROR   ${NC}]"
 
-#=>
-#->
-
 # Partitionen
 DISK=""
 CFDISK="n"
@@ -77,9 +74,9 @@ myPrint "green" "/_/  |_/_/   \___/_/ /_/___/_/ /_/____/\__/\__,_/_/_/   \n\n"
 OPTION=$1
 DISK=$2
 CFDISK=$3
-ROOTPART=$4
-BOOTPART=$5
-SWAPPART=$6
+BOOTPART=$4
+SWAPPART=$5
+ROOTPART=$6
 HOSTNAME=$7
 USER=$8
 
@@ -151,18 +148,6 @@ then
 		bash -c "cfdisk ${DISK}"
 	fi
 	
-	if [ "${ROOTPART}" == "" ]
-	then
-		myPrint "yellow" "\nEnter root partition\n"
-		read ROOTPART
-  	fi
- 
-	if [ "${ROOTPART}" == "" ]
-	then
-		printError "No partition entered -> exit\n"
-		exit 0
-	fi
-	
 	if [ "${BOOTPART}" == "" ]
 	then
 		myPrint "yellow" "\nEnter boot partition\n"
@@ -187,12 +172,24 @@ then
 		exit 0
 	fi
 	
-	myPrint "green" "\nRoot partition: "
-	printf "${WHITE}${ROOTPART}${NC}\n"
-	myPrint "green" "Boot partition: "
+	if [ "${ROOTPART}" == "" ]
+	then
+		myPrint "yellow" "\nEnter root partition\n"
+		read ROOTPART
+  	fi
+ 
+	if [ "${ROOTPART}" == "" ]
+	then
+		printError "No partition entered -> exit\n"
+		exit 0
+	fi
+
+	myPrint "green" "\nBoot partition: "
 	printf "${WHITE}${BOOTPART}${NC}\n"
 	myPrint "green" "Swap partition: "
-	printf "${WHITE}${SWAPPART}${NC}\n\n"
+	printf "${WHITE}${SWAPPART}${NC}\n"
+ 	myPrint "green" "Root partition: "
+	printf "${WHITE}${ROOTPART}${NC}\n\n"
 	
  	myPrint "green" "Starting installation in 3..."
   	sleep 1
@@ -218,12 +215,12 @@ then
  	printMain "Formatting" "drives...\n"
  	printStep "Farmatting boot partition ${BOOTPART}...\n"
  	bash -c "mkfs.fat -F 32 ${BOOTPART} &>/dev/null"
- 	printStep "Formatting root partition ${ROOTPART}...\n"
-	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
  	printStep "Enabling swap ${SWAPPART}...\n"
  	bash -c "mkswap ${SWAPPART} &>/dev/null"
  	printStep "Turning swap ${SWAPPART} on...\n"
  	bash -c "swapon ${SWAPPART} &>/dev/null"
+ 	printStep "Formatting root partition ${ROOTPART}...\n"
+	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
 	#---------------Formatting Drives---------------	
 	
 	#---------------Mounting partitions---------------
@@ -258,7 +255,7 @@ then
     	bash -c "cp ./${FILENAME} /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
  	#---------------Running base install---------------
-   	bash -c "arch-chroot /mnt ./${FILENAME} 2 ${HOSTNAME} ${USER}"
+   	bash -c "arch-chroot /mnt ./${FILENAME} 2 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}"
     	bash -c "umount -R /mnt &>/dev/null"
 
   	myPrint "green" "\nInstallation complete! Reboot in 3..."
@@ -276,9 +273,6 @@ fi
 
 if [ "${OPTION}" == "2" ]
 then
-	HOSTNAME=$2
-	USER=$3
-
 	#---------------Setting up localtime---------------
 	printMain "Setting up" "localtime...\n"
  	printStep "Creating symlink to /etc/localtime (Europe/Berlin)...\n"
@@ -335,14 +329,12 @@ then
 	#---------------Enabling services---------------
 
    	bash -c "mv ./${FILENAME} /home/${USER}/"
-    	bash -c "echo ./${FILENAME} 3 ${USER} >> /home/${USER}/.bashrc"
+    	bash -c "echo ./${FILENAME} 3 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER} >> /home/${USER}/.bashrc"
  	#myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
 fi    
 
 if [ "${OPTION}" == "3" ]
 then
-	USER=$2
-
 	clearScreen		
 	myPrint "green" "    ____           __        _____             \n"
 	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _ \n"
@@ -386,7 +378,7 @@ then
  	myPrint "green" "Starting installation in 1...\n\n"
 	sleep 1
 
- 	bash -c "sed -i 's/${FILENAME} 3 ${USER}/${FILENAME} 4 ${USER}/g' ~/.bashrc"
+ 	bash -c "sed -i 's/${FILENAME} 3 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/g' ~/.bashrc"
  	
 	#---------------Installing HyprDots---------------
   	cd ~/HyprDots/Scripts
@@ -397,8 +389,6 @@ fi
 
 if [ "${OPTION}" == "4" ]
 then
-	USER=$2
- 
  	clearScreen	
 	myPrint "green" "    ____           __        _____                   \n"
 	myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"
@@ -465,7 +455,7 @@ then
   	bash -c "Hyde-install"
   
  	sudo bash -c "rm -rf ~/${FILENAME}"
-  	sudo bash -c "sed -i '/\.\/${FILENAME} 4 ${USER}/d' ~/.bashrc"
+  	sudo bash -c "sed -i '/\.\/${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/d' ~/.bashrc"
 	
 	myPrint "green" "\n\nToDos:\n"
 	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
