@@ -22,4 +22,5 @@ curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall
   - rootpartition nvme0n1p3
   - Hostname = ArchLinux
   - Non-root-username = schnubby
+
 curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall_det.sh -o ./ArchInstall.sh && chmod +x ./ArchInstall.sh && ./ArchInstall.sh 1 /dev/nvme0n1 n /dev/nvme0n1p1 /dev/nvme0n1p2 /dev/nvme0n1p3 ArchLinux schnubby
