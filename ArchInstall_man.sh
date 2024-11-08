@@ -372,7 +372,9 @@ then
  	myPrint "green" "Starting installation in 1...\n\n"
 	sleep 1
 
- 	bash -c "sed -i 's/${FILENAME} 3 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/g' ~/.bashrc"
+ 	#bash -c "sed -i 's/${FILENAME} 3 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/g' ~/.bashrc"
+ 	bash -c "sed -i '/${FILENAME}/d' ~/.bashrc"
+	bash -c "echo exec-once=kitty ./${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER} >> /home/${USER}/.config/hypr/userprefs.conf"
  	
 	#---------------Installing HyprDots---------------
   	cd ~/HyprDots/Scripts
@@ -408,7 +410,8 @@ then
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	printf "\n\n"
  	printRunning "Installing ${WHITE}Config files...${NC}"
-	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
+	bash -c "sed -i '/${FILENAME}/d' /home/${USER}/.config/hypr/userprefs.conf"	
+ 	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 	cd ~/.config
 	bash -c "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null"
 	bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
