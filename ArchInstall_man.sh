@@ -374,7 +374,7 @@ then
 
  	#bash -c "sed -i 's/${FILENAME} 3 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/g' ~/.bashrc"
  	bash -c "sed -i '/${FILENAME}/d' ~/.bashrc"
-	bash -c "echo exec-once=kitty ./${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER} >> /home/${USER}/.config/hypr/userprefs.conf"
+	bash -c "echo exec-once=kitty ./${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER} >> /home/${USER}/HyprDots/Configs/.config/hypr/userprefs.conf"
  	
 	#---------------Installing HyprDots---------------
   	cd ~/HyprDots/Scripts
