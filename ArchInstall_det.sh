@@ -33,6 +33,10 @@ myPrint() {
 	then
 		printf "${YELLOW}${message}${NC}"
 	fi
+ 	if [ "${color}" == "white" ]
+	then
+		printf "${WHITE}${message}${NC}"
+	fi
 }
 
 printMain() {
@@ -81,6 +85,34 @@ done
 #root=$6
 #hostname=$7
 #user=$8
+
+if [ "${help}" != "" ]
+then
+	myPrint "white" "You can specify script arguments, instead of entering them through the installer - those are:\n\n"
+	myPrint "white" "--option:\t "
+ 	printf "which option to run.\n"
+ 	myPrint "white" "--disk:\t "
+  	printf "which disk to use for cfdisk.\n"
+  	myPrint "white" "--cfdisk:\t "
+   	printf "run cfdisk?\n"
+   	myPrint "white" "--boot:\t "
+    	printf "bootpartition.\n"
+    	myPrint "white" "--swap:\t "
+     	printf "swappartition.\n"
+     	myPrint "white" "--root:\t "
+      	printf "rootpartition.\n"
+	myPrint "white" "--hostname:\t "
+ 	printf "hostname for the OS.\n"
+ 	myPrint "white" "--user:\t "
+  	printf "username for the normal user.\n"
+  	myPrint "white" "--kernel:\t "
+   	printf "which kernel to install.\n"
+   	myPrint "white" "--cpu:\t "
+    	printf "which CPU to install (intel-ucode // amd-ucode).\n"
+    	myPrint "white" "--gpu:\t "
+     	printf "which GPU to install (amd // nvidia).\n"
+ 	exit 0
+fi
 
 if [ "${cpu}" == "" ]
 then
