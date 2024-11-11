@@ -127,19 +127,19 @@ then
 	
 	bash -c "lsblk"
 	
-	if [ "${disk}" == "" ]
+	if [ "${disk}" == "" ] && [ "${cfdisk}" == "y" ] || [ "${disk}" == "" ] && [ "${cfdisk}" == "Y" ]
 	then
 		myPrint "yellow" "\nEnter drive\n"
 		read disk
   	fi
 	
-	if [ "${disk}" == "" ]
+	if [ "${disk}" == "" ] && [ "${cfdisk}" == "y" ] || [ "${disk}" == "" ] && [ "${cfdisk}" == "Y" ]
 	then
 		printError "No drive entered -> exit\n"
 		exit 0
 	fi
 	
-	if [ "${cfdisk}" == "" ]
+	if [ "${cfdisk}" == "" ] && [ "${disk}" != "" ]
 	then
 		myPrint "yellow" "\nStart cfdisk (y/N) ?\n"
 		read cfdisk
