@@ -333,7 +333,7 @@ then
 
    	bash -c "mv ./${FILENAME} /home/${user}/"
     	#bash -c "echo ./${FILENAME} 3 ${disk} ${cfdisk} ${bootpart} ${swappart} ${rootpart} ${hostname} ${user} >> /home/${user}/.bashrc"
-     	bash -c "echo ./${FILENAME} --option 3 --hostname ${hostname} --user ${user} >> /home/${user}/.bashrc"
+     	bash -c "echo ./${FILENAME} --option 3 --user ${user} >> /home/${user}/.bashrc"
  	#myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
 fi    
 
