@@ -442,9 +442,9 @@ then
 
  	#---------------Installing gaming dependencies---------------
   	#bash -c "yay arch gaming meta"
-   	bash -c 'echo y | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" arch gaming meta'
+   	bash -c 'yes | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" arch gaming meta'
  	#bash -c "yay -S dxvk-bin"
-  	bash -c 'echo y | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" dxvk-bin'
+  	bash -c 'yes | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" dxvk-bin'
   	#bash -c "yay -S wine-ge-custom"
 	bash -c "sudo pacman -Syu &>/dev/null"
 	bash -c "sudo pacman  --noconfirm -S wine-staging &>/dev/null"
