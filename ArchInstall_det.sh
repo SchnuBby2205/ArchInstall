@@ -11,13 +11,6 @@ RUNNING="[${YELLOW}  RUNNING ${NC}]"
 MYOK="[${GREEN}    OK    ${NC}]"
 ERROR="[${RED}  ERROR   ${NC}]"
 
-# Partitionen
-DISK=""
-CFDISK="n"
-BOOTPART=""
-ROOTPART=""
-SWAPPART=""
-
 FILENAME=$(basename "$0")
 
 # Functions
@@ -71,16 +64,25 @@ myPrint "green" "  / /| | / ___/ ___/ __ \ / // __ \/ ___/ __/ __ \`/ / / \n"
 myPrint "green" " / ___ |/ /  / /__/ / / // // / / (__  ) /_/ /_/ / / /  \n"
 myPrint "green" "/_/  |_/_/   \___/_/ /_/___/_/ /_/____/\__/\__,_/_/_/   \n\n"
 
-OPTION=$1
-DISK=$2
-CFDISK=$3
-BOOTPART=$4
-SWAPPART=$5
-ROOTPART=$6
-HOSTNAME=$7
-USER=$8
+while [ $# -gt 0 ]; do
+    if [[ $1 == "--"* ]]; then
+        v="${1/--/}"
+        declare "$v"="$2"
+        shift
+    fi
+    shift
+done
 
-if [ "${OPTION}" == "" ]
+#option=$1
+#disk=$2
+#cfdisk=$3
+#bootpart=$4
+#swappart=$5
+#rootpart=$6
+#hostname=$7
+#user=$8
+
+if [ "${option}" == "" ]
 then
 	printf "["
 	myPrint "yellow" "1"
@@ -102,15 +104,15 @@ then
 	printf "]: Install "
 	myPrint "yellow" "Config files\n\n"
 	
-	read OPTION
+	read option
  fi
 
-if [ "${OPTION}" == "" ]
+if [ "${option}" == "" ]
 then
 	exit 0
 fi
 
-if [ "${OPTION}" == "1" ]
+if [ "${option}" == "1" ]
 then
 	clearScreen	
 	myPrint "green" "    ____           __        _____            \n"
@@ -125,71 +127,71 @@ then
 	
 	bash -c "lsblk"
 	
-	if [ "${DISK}" == "" ]
+	if [ "${disk}" == "" ]
 	then
 		myPrint "yellow" "\nEnter drive\n"
-		read DISK
+		read disk
   	fi
 	
-	if [ "${DISK}" == "" ]
+	if [ "${disk}" == "" ]
 	then
 		printError "No drive entered -> exit\n"
 		exit 0
 	fi
 	
-	if [ "${CFDISK}" == "" ]
+	if [ "${cfdisk}" == "" ]
 	then
 		myPrint "yellow" "\nStart cfdisk (y/N) ?\n"
-		read CFDISK
+		read cfdisk
   	fi
 	
-	if [ "${CFDISK}" == "y" ] || [ "${CFDISK}" == "Y" ]
+	if [ "${cfdisk}" == "y" ] || [ "${cfdisk}" == "Y" ]
 	then
-		bash -c "cfdisk ${DISK}"
+		bash -c "cfdisk ${disk}"
 	fi
 	
-	if [ "${BOOTPART}" == "" ]
+	if [ "${bootpart}" == "" ]
 	then
 		myPrint "yellow" "\nEnter boot partition\n"
-		read BOOTPART
+		read bootpart
   	fi
  
-	if [ "${BOOTPART}" == "" ]
+	if [ "${bootpart}" == "" ]
 	then
 		printError "No partition entered -> exit\n"
 		exit 0
 	fi
 	
-	if [ "${SWAPPART}" == "" ]
+	if [ "${swappart}" == "" ]
 	then
 		myPrint "yellow" "\nEnter swap partition\n"
-		read SWAPPART
+		read swappart
   	fi
  
-	if [ "${SWAPPART}" == "" ]
+	if [ "${swappart}" == "" ]
 	then
 		printError "No partition entered -> exit\n"
 		exit 0
 	fi
 	
-	if [ "${ROOTPART}" == "" ]
+	if [ "${rootpart}" == "" ]
 	then
 		myPrint "yellow" "\nEnter root partition\n"
-		read ROOTPART
+		read rootpart
   	fi
  
-	if [ "${ROOTPART}" == "" ]
+	if [ "${rootpart}" == "" ]
 	then
 		printError "No partition entered -> exit\n"
 		exit 0
 	fi
 
 	myPrint "green" "\nBoot partition: "
-	printf "${WHITE}${BOOTPART}${NC}\n"
+	printf "${WHITE}${bootpart}${NC}\n"
 	myPrint "green" "Swap partition: "
-	printf "${WHITE}${SWAPPART}${NC}\n"
+	printf "${WHITE}${swappart}${NC}\n"
  	myPrint "green" "Root partition: "
-	printf "${WHITE}${ROOTPART}${NC}\n\n"
+	printf "${WHITE}${rootpart}${NC}\n\n"
 	
  	myPrint "green" "Starting installation in 3..."
   	sleep 1
@@ -213,22 +215,22 @@ then
 
   	#---------------Formatting Drives---------------		
  	printMain "Formatting" "drives...\n"
- 	printStep "Farmatting boot partition ${BOOTPART}...\n"
- 	bash -c "mkfs.fat -F 32 ${BOOTPART} &>/dev/null"
- 	printStep "Enabling swap ${SWAPPART}...\n"
- 	bash -c "mkswap ${SWAPPART} &>/dev/null"
- 	printStep "Turning swap ${SWAPPART} on...\n"
- 	bash -c "swapon ${SWAPPART} &>/dev/null"
- 	printStep "Formatting root partition ${ROOTPART}...\n"
-	bash -c "mkfs.ext4 ${ROOTPART} &>/dev/null"
+ 	printStep "Farmatting boot partition ${bootpart}...\n"
+ 	bash -c "mkfs.fat -F 32 ${bootpart} &>/dev/null"
+ 	printStep "Enabling swap ${swappart}...\n"
+ 	bash -c "mkswap ${swappart} &>/dev/null"
+ 	printStep "Turning swap ${swappart} on...\n"
+ 	bash -c "swapon ${swappart} &>/dev/null"
+ 	printStep "Formatting root partition ${rootpart}...\n"
+	bash -c "mkfs.ext4 ${rootpart} &>/dev/null"
 	#---------------Formatting Drives---------------	
 	
 	#---------------Mounting partitions---------------
 	printMain "Mounting" "partitions...\n"
- 	printStep "mounting ${ROOTPART} to /mnt...\n"
- 	bash -c "mount --mkdir ${ROOTPART} /mnt"
-	printStep "mounting ${BOOTPART} to /mnt/boot...\n"
-	bash -c "mount --mkdir ${BOOTPART} /mnt/boot"
+ 	printStep "mounting ${rootpart} to /mnt...\n"
+ 	bash -c "mount --mkdir ${rootpart} /mnt"
+	printStep "mounting ${bootpart} to /mnt/boot...\n"
+	bash -c "mount --mkdir ${bootpart} /mnt/boot"
 	#---------------Mounting partitions---------------
 
 	#---------------Setting up pacman---------------
@@ -255,7 +257,8 @@ then
     	bash -c "cp ./${FILENAME} /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
  	#---------------Running base install---------------
-   	bash -c "arch-chroot /mnt ./${FILENAME} 2 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}"
+   	#bash -c "arch-chroot /mnt ./${FILENAME} 2 ${disk} ${cfdisk} ${bootpart} ${swappart} ${rootpart} ${hostname} ${user}"
+    	bash -c "arch-chroot /mnt ./${FILENAME} --option 2 --hostname ${hostname} --user ${user}"
     	bash -c "umount -R /mnt &>/dev/null"
 
   	myPrint "green" "\nInstallation complete! Reboot in 3..."
@@ -271,7 +274,7 @@ then
 
 fi
 
-if [ "${OPTION}" == "2" ]
+if [ "${option}" == "2" ]
 then
 	#---------------Setting up localtime---------------
 	printMain "Setting up" "localtime...\n"
@@ -299,25 +302,25 @@ then
 	printStep "Making GRUB config...\n"
 	bash -c "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
 	#---------------Setting up GRUB---------------      
-	if [ "${HOSTNAME}" == "" ]
+	if [ "${hostname}" == "" ]
 	then
 		myPrint "yellow" "\nEnter your Hostname: "
-		read HOSTNAME
+		read hostname
   	fi
-      	bash -c "echo ${HOSTNAME} >> /etc/hostname"
+      	bash -c "echo ${hostname} >> /etc/hostname"
        	
 	myPrint "yellow" "\nEnter your NEW root password\n\n"
 	bash -c "passwd"
 
-	if [ "${USER}" == "" ]
+	if [ "${user}" == "" ]
 	then
 		myPrint "yellow" "\nEnter your normal username: "
-		read USER
+		read user
 	fi
  
-	bash -c "useradd -mG wheel ${USER}"
+	bash -c "useradd -mG wheel ${user}"
 	myPrint "yellow" "\nEnter your normal user password\n\n"
-	bash -c "passwd ${USER}"	
+	bash -c "passwd ${user}"	
 
  	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
 
@@ -328,12 +331,13 @@ then
  	bash -c "systemctl enable NetworkManager &>/dev/null"
 	#---------------Enabling services---------------
 
-   	bash -c "mv ./${FILENAME} /home/${USER}/"
-    	bash -c "echo ./${FILENAME} 3 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER} >> /home/${USER}/.bashrc"
+   	bash -c "mv ./${FILENAME} /home/${user}/"
+    	#bash -c "echo ./${FILENAME} 3 ${disk} ${cfdisk} ${bootpart} ${swappart} ${rootpart} ${hostname} ${user} >> /home/${user}/.bashrc"
+     	bash -c "echo ./${FILENAME} --option 3 --hostname ${hostname} --user ${user} >> /home/${user}/.bashrc"
  	#myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
 fi    
 
-if [ "${OPTION}" == "3" ]
+if [ "${option}" == "3" ]
 then
 	clearScreen		
 	myPrint "green" "    ____           __        _____             \n"
@@ -378,9 +382,9 @@ then
  	myPrint "green" "Starting installation in 1...\n\n"
 	sleep 1
 
- 	#bash -c "sed -i 's/${FILENAME} 3 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/g' ~/.bashrc"
+ 	#bash -c "sed -i 's/${FILENAME} 3 ${disk} ${cfdisk} ${bootpart} ${swappart} ${rootpart} ${hostname} ${user}/${FILENAME} 4 ${disk} ${cfdisk} ${bootpart} ${swappart} ${rootpart} ${hostname} ${user}/g' ~/.bashrc"
  	bash -c "sed -i '/${FILENAME}/d' ~/.bashrc"
-	bash -c "echo exec-once=kitty ./${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER} >> /home/${USER}/HyprDots/Configs/.config/hypr/userprefs.conf"
+	bash -c "echo exec-once=kitty ./${FILENAME} --option 4 --user ${user} >> /home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"
 		
 		
 	#---------------Installing HyprDots---------------
@@ -390,7 +394,7 @@ then
 
 fi
 
-if [ "${OPTION}" == "4" ]
+if [ "${option}" == "4" ]
 then
  	clearScreen	
 	myPrint "green" "    ____           __        _____                   \n"
@@ -405,20 +409,20 @@ then
 	myPrint "green" "\____/\____/_/ /_/_/ /_/\__, /  /_/ /_/_/\___/____/  \n"
 	myPrint "green" "                       /____/                        \n\n"
 
- 	if [ "${USER}" == "" ]
+ 	if [ "${user}" == "" ]
 	then
 		myPrint "yellow" "Enter your normal username: "
-		read USER
+		read user
 	fi
 	
 	#---------------Installing Config files---------------
-	sudo bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${USER}' >> /etc/sddm.conf.d/sddm.conf"
+	sudo bash -c "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/sddm.conf"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	sudo bash -c "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 	printf "\n\n"
  	printMain "Installing" "Config files...\n"
   	printStep "Backing up HyprDots userprefs.conf...\n"
-			bash -c "sed -i '/${FILENAME}/d' /home/${USER}/.config/hypr/userprefs.conf"
+	bash -c "sed -i '/${FILENAME}/d' /home/${user}/.config/hypr/userprefs.conf"
 	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 	cd ~/.config
 	printStep "Cloning SchnuBbyconfig...\n"
@@ -461,7 +465,7 @@ then
   	bash -c "Hyde-install"
   
  	sudo bash -c "rm -rf ~/${FILENAME}"
-  	sudo bash -c "sed -i '/\.\/${FILENAME} 4 ${DISK} ${CFDISK} ${BOOTPART} ${SWAPPART} ${ROOTPART} ${HOSTNAME} ${USER}/d' ~/.bashrc"
+  	#sudo bash -c "sed -i '/\.\/${FILENAME} --option 4 --user ${user}/d' ~/.bashrc"
 	
 	myPrint "green" "\n\nToDos:\n"
 	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
