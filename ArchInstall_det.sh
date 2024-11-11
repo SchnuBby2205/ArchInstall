@@ -82,6 +82,21 @@ done
 #hostname=$7
 #user=$8
 
+if [ "${cpu}" == "" ]
+then
+	cpu="intel-ucode"
+fi
+
+if [ "${kernel}" == "" ]
+then
+	kernel="linux-lts"
+fi
+
+if [ "${gpu}" == "" ]
+then
+	gpu="amd"
+fi
+
 if [ "${option}" == "" ]
 then
 	printf "["
@@ -250,7 +265,7 @@ then
  	#---------------Running base install---------------
 	printMain "Running" "base install...\n"
 	printStep "Running pacstrap...\n"
- 	bash -c "pacstrap -K /mnt base base-devel linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager lutris &>/dev/null"
+ 	bash -c "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager lutris &>/dev/null"
   	printStep "Generating fstab...\n"
    	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
    	printStep "Copying script ${scriptname} to /mnt...\n"
@@ -258,7 +273,7 @@ then
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
  	#---------------Running base install---------------
    	#bash -c "arch-chroot /mnt ./${scriptname} 2 ${disk} ${cfdisk} ${boot} ${swap} ${root} ${hostname} ${user}"
-    	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user}"
+    	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu}"
     	bash -c "umount -R /mnt &>/dev/null"
 
   	myPrint "green" "\nInstallation complete! Reboot in 3..."
@@ -333,7 +348,7 @@ then
 
    	bash -c "mv ./${scriptname} /home/${user}/"
     	#bash -c "echo ./${scriptname} 3 ${disk} ${cfdisk} ${boot} ${swap} ${root} ${hostname} ${user} >> /home/${user}/.bashrc"
-     	bash -c "echo ./${scriptname} --option 3 --user ${user} >> /home/${user}/.bashrc"
+     	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} >> /home/${user}/.bashrc"
  	#myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
 fi    
 
@@ -384,7 +399,7 @@ then
 
  	#bash -c "sed -i 's/${scriptname} 3 ${disk} ${cfdisk} ${boot} ${swap} ${root} ${hostname} ${user}/${scriptname} 4 ${disk} ${cfdisk} ${boot} ${swap} ${root} ${hostname} ${user}/g' ~/.bashrc"
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
-	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} >> /home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"
+	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"
 		
 		
 	#---------------Installing HyprDots---------------
@@ -459,7 +474,14 @@ then
 	lib32-libxcomposite ocl-icd lib32-ocl-icd libva lib32-libva gtk3 lib32-gtk3 gst-plugins-base-libs \
 	lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader sdl2 lib32-sdl2 lib32-gamemode &>/dev/null"
  	printStep "Downloading graphics drivers...\n"
- 	bash -c "sudo pacman  --noconfirm -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
+ 	if [ "${gpu}" == "amd" ]
+	then
+ 		bash -c "sudo pacman  --noconfirm -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
+   	fi
+ 	if [ "${gpu}" == "nvidia" ]
+	then
+  		bash -c "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
+    	fi
  	#---------------Installing gaming dependencies---------------
 
   	bash -c "Hyde-install"
