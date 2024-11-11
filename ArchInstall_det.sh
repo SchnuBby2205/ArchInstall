@@ -86,7 +86,7 @@ done
 #hostname=$7
 #user=$8
 
-if [ "${help}" != "" ]
+if [ -z ${help+x} ]
 then
 	myPrint "white" "You can specify script arguments, instead of entering them through the installer - those are:\n\n"
 	myPrint "white" "\t--option:\t "
