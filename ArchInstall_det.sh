@@ -11,7 +11,7 @@ RUNNING="[${YELLOW}  RUNNING ${NC}]"
 MYOK="[${GREEN}    OK    ${NC}]"
 ERROR="[${RED}  ERROR   ${NC}]"
 
-filename=$(basename "$0")
+scriptname=$(basename "$0")
 
 # Functions
 clearScreen() {
@@ -76,9 +76,9 @@ done
 #option=$1
 #disk=$2
 #cfdisk=$3
-#bootpart=$4
-#swappart=$5
-#rootpart=$6
+#boot=$4
+#swap=$5
+#root=$6
 #hostname=$7
 #user=$8
 
@@ -150,48 +150,48 @@ then
 		bash -c "cfdisk ${disk}"
 	fi
 	
-	if [ "${bootpart}" == "" ]
+	if [ "${boot}" == "" ]
 	then
 		myPrint "yellow" "\nEnter boot partition\n"
-		read bootpart
+		read boot
   	fi
  
-	if [ "${bootpart}" == "" ]
+	if [ "${boot}" == "" ]
 	then
 		printError "No partition entered -> exit\n"
 		exit 0
 	fi
 	
-	if [ "${swappart}" == "" ]
+	if [ "${swap}" == "" ]
 	then
 		myPrint "yellow" "\nEnter swap partition\n"
-		read swappart
+		read swap
   	fi
  
-	if [ "${swappart}" == "" ]
+	if [ "${swap}" == "" ]
 	then
 		printError "No partition entered -> exit\n"
 		exit 0
 	fi
 	
-	if [ "${rootpart}" == "" ]
+	if [ "${root}" == "" ]
 	then
 		myPrint "yellow" "\nEnter root partition\n"
-		read rootpart
+		read root
   	fi
  
-	if [ "${rootpart}" == "" ]
+	if [ "${root}" == "" ]
 	then
 		printError "No partition entered -> exit\n"
 		exit 0
 	fi
 
 	myPrint "green" "\nBoot partition: "
-	printf "${WHITE}${bootpart}${NC}\n"
+	printf "${WHITE}${boot}${NC}\n"
 	myPrint "green" "Swap partition: "
-	printf "${WHITE}${swappart}${NC}\n"
+	printf "${WHITE}${swap}${NC}\n"
  	myPrint "green" "Root partition: "
-	printf "${WHITE}${rootpart}${NC}\n\n"
+	printf "${WHITE}${root}${NC}\n\n"
 	
  	myPrint "green" "Starting installation in 3..."
   	sleep 1
@@ -215,22 +215,22 @@ then
 
   	#---------------Formatting Drives---------------		
  	printMain "Formatting" "drives...\n"
- 	printStep "Farmatting boot partition ${bootpart}...\n"
- 	bash -c "mkfs.fat -F 32 ${bootpart} &>/dev/null"
- 	printStep "Enabling swap ${swappart}...\n"
- 	bash -c "mkswap ${swappart} &>/dev/null"
- 	printStep "Turning swap ${swappart} on...\n"
- 	bash -c "swapon ${swappart} &>/dev/null"
- 	printStep "Formatting root partition ${rootpart}...\n"
-	bash -c "mkfs.ext4 ${rootpart} &>/dev/null"
+ 	printStep "Farmatting boot partition ${boot}...\n"
+ 	bash -c "mkfs.fat -F 32 ${boot} &>/dev/null"
+ 	printStep "Enabling swap ${swap}...\n"
+ 	bash -c "mkswap ${swap} &>/dev/null"
+ 	printStep "Turning swap ${swap} on...\n"
+ 	bash -c "swapon ${swap} &>/dev/null"
+ 	printStep "Formatting root partition ${root}...\n"
+	bash -c "mkfs.ext4 ${root} &>/dev/null"
 	#---------------Formatting Drives---------------	
 	
 	#---------------Mounting partitions---------------
 	printMain "Mounting" "partitions...\n"
- 	printStep "mounting ${rootpart} to /mnt...\n"
- 	bash -c "mount --mkdir ${rootpart} /mnt"
-	printStep "mounting ${bootpart} to /mnt/boot...\n"
-	bash -c "mount --mkdir ${bootpart} /mnt/boot"
+ 	printStep "mounting ${root} to /mnt...\n"
+ 	bash -c "mount --mkdir ${root} /mnt"
+	printStep "mounting ${boot} to /mnt/boot...\n"
+	bash -c "mount --mkdir ${boot} /mnt/boot"
 	#---------------Mounting partitions---------------
 
 	#---------------Setting up pacman---------------
@@ -253,12 +253,12 @@ then
  	bash -c "pacstrap -K /mnt base base-devel linux-lts linux-firmware intel-ucode efibootmgr grub sudo git networkmanager lutris &>/dev/null"
   	printStep "Generating fstab...\n"
    	bash -c "genfstab -U /mnt >> /mnt/etc/fstab"
-   	printStep "Copying script ${filename} to /mnt...\n"
-    	bash -c "cp ./${filename} /mnt"
+   	printStep "Copying script ${scriptname} to /mnt...\n"
+    	bash -c "cp ./${scriptname} /mnt"
 	#myPrint "green" "\n\nRun ./ArchInstall option 2\n\n"
  	#---------------Running base install---------------
-   	#bash -c "arch-chroot /mnt ./${filename} 2 ${disk} ${cfdisk} ${bootpart} ${swappart} ${rootpart} ${hostname} ${user}"
-    	bash -c "arch-chroot /mnt ./${filename} --option 2 --hostname ${hostname} --user ${user}"
+   	#bash -c "arch-chroot /mnt ./${scriptname} 2 ${disk} ${cfdisk} ${boot} ${swap} ${root} ${hostname} ${user}"
+    	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user}"
     	bash -c "umount -R /mnt &>/dev/null"
 
   	myPrint "green" "\nInstallation complete! Reboot in 3..."
@@ -331,9 +331,9 @@ then
  	bash -c "systemctl enable NetworkManager &>/dev/null"
 	#---------------Enabling services---------------
 
-   	bash -c "mv ./${filename} /home/${user}/"
-    	#bash -c "echo ./${filename} 3 ${disk} ${cfdisk} ${bootpart} ${swappart} ${rootpart} ${hostname} ${user} >> /home/${user}/.bashrc"
-     	bash -c "echo ./${filename} --option 3 --user ${user} >> /home/${user}/.bashrc"
+   	bash -c "mv ./${scriptname} /home/${user}/"
+    	#bash -c "echo ./${scriptname} 3 ${disk} ${cfdisk} ${boot} ${swap} ${root} ${hostname} ${user} >> /home/${user}/.bashrc"
+     	bash -c "echo ./${scriptname} --option 3 --user ${user} >> /home/${user}/.bashrc"
  	#myPrint "green" "\n\nInstallation complete! run exit, umount -R /mnt then reboot!\n\n"
 fi    
 
@@ -382,9 +382,9 @@ then
  	myPrint "green" "Starting installation in 1...\n\n"
 	sleep 1
 
- 	#bash -c "sed -i 's/${filename} 3 ${disk} ${cfdisk} ${bootpart} ${swappart} ${rootpart} ${hostname} ${user}/${filename} 4 ${disk} ${cfdisk} ${bootpart} ${swappart} ${rootpart} ${hostname} ${user}/g' ~/.bashrc"
- 	bash -c "sed -i '/${filename}/d' ~/.bashrc"
-	bash -c "echo exec-once=kitty ./${filename} --option 4 --user ${user} >> /home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"
+ 	#bash -c "sed -i 's/${scriptname} 3 ${disk} ${cfdisk} ${boot} ${swap} ${root} ${hostname} ${user}/${scriptname} 4 ${disk} ${cfdisk} ${boot} ${swap} ${root} ${hostname} ${user}/g' ~/.bashrc"
+ 	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
+	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} >> /home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"
 		
 		
 	#---------------Installing HyprDots---------------
@@ -422,7 +422,7 @@ then
 	printf "\n\n"
  	printMain "Installing" "Config files...\n"
   	printStep "Backing up HyprDots userprefs.conf...\n"
-	bash -c "sed -i '/${filename}/d' /home/${user}/.config/hypr/userprefs.conf"
+	bash -c "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf"
 	bash -c "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 	cd ~/.config
 	printStep "Cloning SchnuBbyconfig...\n"
@@ -464,8 +464,8 @@ then
 
   	bash -c "Hyde-install"
   
- 	sudo bash -c "rm -rf ~/${filename}"
-  	#sudo bash -c "sed -i '/\.\/${filename} --option 4 --user ${user}/d' ~/.bashrc"
+ 	sudo bash -c "rm -rf ~/${scriptname}"
+  	#sudo bash -c "sed -i '/\.\/${scriptname} --option 4 --user ${user}/d' ~/.bashrc"
 	
 	myPrint "green" "\n\nToDos:\n"
 	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
