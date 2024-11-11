@@ -86,33 +86,33 @@ done
 #hostname=$7
 #user=$8
 
-if [ -z ${help+x} ]
-then
-	myPrint "white" "You can specify script arguments, instead of entering them through the installer - those are:\n\n"
-	myPrint "white" "\t--option:\t "
- 	printf "which option to run.\n"
- 	myPrint "white" "\t--disk:\t\t "
-  	printf "which disk to use for cfdisk.\n"
-  	myPrint "white" "\t--cfdisk:\t "
-   	printf "run cfdisk?\n"
-   	myPrint "white" "\t--boot:\t\t "
-    	printf "bootpartition.\n"
-    	myPrint "white" "\t--swap:\t\t "
-     	printf "swappartition.\n"
-     	myPrint "white" "\t--root:\t\t "
-      	printf "rootpartition.\n"
-	myPrint "white" "\t--hostname:\t "
- 	printf "hostname for the OS.\n"
- 	myPrint "white" "\t--user:\t\t "
-  	printf "username for the normal user.\n"
-  	myPrint "white" "\t--kernel:\t "
-   	printf "which kernel to install.\n"
-   	myPrint "white" "\t--cpu:\t\t "
-    	printf "which CPU to install (intel-ucode // amd-ucode).\n"
-    	myPrint "white" "\t--gpu:\t\t "
-     	printf "which GPU to install (amd // nvidia).\n"
- 	exit 0
-fi
+#if [ -z ${help+x} ]
+#then
+#	myPrint "white" "You can specify script arguments, instead of entering them through the installer - those are:\n\n"
+#	myPrint "white" "\t--option:\t "
+# 	printf "which option to run.\n"
+# 	myPrint "white" "\t--disk:\t\t "
+#  	printf "which disk to use for cfdisk.\n"
+#  	myPrint "white" "\t--cfdisk:\t "
+#   	printf "run cfdisk?\n"
+#   	myPrint "white" "\t--boot:\t\t "
+#    	printf "bootpartition.\n"
+#    	myPrint "white" "\t--swap:\t\t "
+#     	printf "swappartition.\n"
+#     	myPrint "white" "\t--root:\t\t "
+#      	printf "rootpartition.\n"
+#	myPrint "white" "\t--hostname:\t "
+# 	printf "hostname for the OS.\n"
+# 	myPrint "white" "\t--user:\t\t "
+#  	printf "username for the normal user.\n"
+#  	myPrint "white" "\t--kernel:\t "
+#   	printf "which kernel to install.\n"
+#   	myPrint "white" "\t--cpu:\t\t "
+#    	printf "which CPU to install (intel-ucode // amd-ucode).\n"
+#    	myPrint "white" "\t--gpu:\t\t "
+#     	printf "which GPU to install (amd // nvidia).\n"
+# 	exit 0
+#fi
 
 if [ "${cpu}" == "" ]
 then
