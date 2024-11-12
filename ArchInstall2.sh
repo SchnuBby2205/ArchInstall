@@ -377,7 +377,7 @@ then
 	# Hier Pacman Mirrors abgleichen
 
 	printMain "Setting up" "HyprDots..."
-		runcmds "Downloading // Configuring" "sources..." ("sudo pacman --noconfirm -S nano &>/dev/null" "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null" "nano ./custom_hypr.lst" "nano ./.extra/custom_flat.lst" "sudo pacman --noconfirm -Runs nano &>/dev/null")
+		runcmds "Downloading // Configuring" "sources..." ("sudo pacman --noconfirm -S nano &>/dev/null" "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null" "nano ./custom_hypr.lst" "nano ./.extra/custom_flat.lst" "sudo pacman --noconfirm -Runs nano &>/dev/null") 0
 	printMainOK "Setting up" "HyprDots..."
 
 	printCountDown 3 "Starting installation in"
