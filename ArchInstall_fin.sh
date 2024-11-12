@@ -133,18 +133,18 @@ run() {
 	_modes=$1
 	_steps=$2
 	_cmds=$3
-	for i in "${!cmds[@]}"; do
-	printStep "${modes[i]}" "${steps[i]}"
-	bash -c "${cmds[i]}"
-	printStepOK "${modes[i]}" "${steps[i]}"
+	for i in "${!_cmds[@]}"; do
+		printStep "${_modes[i]}" "${_steps[i]}"
+		bash -c "${_cmds[i]}"
+		printStepOK "${_modes[i]}" "${_steps[i]}"
 	done
 }
 printHelp() {
-	Banner "install"
-	myPrint "white" "You can specify script arguments, instead of entering them through the installer - those are:\n\n"
-	myPrint "white" "\t--option:\t "
- 	printf "which option to run.\n"
- 	myPrint "white" "\t--disk:\t\t "
+  Banner "install"
+  myPrint "white" "You can specify script arguments, instead of entering them through the installer - those are:\n\n"
+  myPrint "white" "\t--option:\t "
+  printf "which option to run.\n"
+  myPrint "white" "\t--disk:\t\t "
   printf "which disk to use for cfdisk.\n"
   myPrint "white" "\t--cfdisk:\t "
   printf "run cfdisk?\n"
@@ -154,9 +154,9 @@ printHelp() {
   printf "swappartition.\n"
   myPrint "white" "\t--root:\t\t "
   printf "rootpartition.\n"
-	myPrint "white" "\t--hostname:\t "
- 	printf "hostname for the OS.\n"
- 	myPrint "white" "\t--user:\t\t "
+  myPrint "white" "\t--hostname:\t "
+  printf "hostname for the OS.\n"
+  myPrint "white" "\t--user:\t\t "
   printf "username for the normal user.\n"
   myPrint "white" "\t--kernel:\t "
   printf "which kernel to install.\n"
