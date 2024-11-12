@@ -130,13 +130,12 @@ printError() {
 	printf "${ERROR}   ${message}"
 }
 printCountDown() {
-	time=$1
-	message="$2"
-	myPrint "green" "\n${message} ${time}..."
+	local time=("$1")
+	myPrint "green" "\n${2} ${time}..."
 	for ((i=1; i<time; i++))
 	do
 		sleep 1
-		myPrint "green" "\r${message} ${time-i}..."		
+		myPrint "green" "\r${2} $((time-i))..."		
 	done
 	sleep 1
 }
