@@ -315,7 +315,7 @@ then
 	modes=("Formatting" "Enabling" "Turning on" "Formatting")
 	steps=("boot partition ${boot}..." "swap ${swap}..." "swap ${swap}..." "root partition ${root}...")
 	cmds=("mkfs.fat -F 32 ${boot} &>/dev/null" "mkswap ${swap} &>/dev/null" "swapon ${swap} &>/dev/null" "mkfs.ext4 ${root} &>/dev/null")
-	run $modes $steps $cmds
+	run ${modes} ${steps} ${cmds}
 	printMainOK "Formatting" "drives..."
 	#---------------Formatting Drives---------------		
 	
