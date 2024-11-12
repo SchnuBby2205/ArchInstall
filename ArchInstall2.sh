@@ -116,14 +116,14 @@ printMainOK() {
 printStep() {
 	mode="$1"
 	message="$2"
-	printf "\t${RUNNING}   ${WHITE}${mode}${NC} ${message}"
+	printf "${RUNNING}   ${WHITE}${mode}${NC} ${message}"
 	MOVE=${MOVE}${UP}
 	MOVEBACK=${MOVEBACK}${DOWN}
 }
 printStepOK() {
 	mode="$1"
 	message="$2"
-	printf "\r\t${MYOK}   ${WHITE}${mode}${NC} ${message}\n"
+	printf "\r${MYOK}   ${WHITE}${mode}${NC} ${message}\n"
 }
 printError() {
 	message="$1"
