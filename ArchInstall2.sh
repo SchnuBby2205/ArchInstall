@@ -319,7 +319,7 @@ then
 	Banner "arch"
 
 	printMain "Installing" "base system..."
-		runcmds "Formatting" "drives..." "${"mkfs.fat -F 32 ${boot} &>/dev/null" "mkswap ${swap} &>/dev/null" "swapon ${swap} &>/dev/null" "mkfs.ext4 ${root} &>/dev/null"}" 0
+		runcmds "Formatting" "drives..." '${"mkfs.fat -F 32 ${boot} &>/dev/null" "mkswap ${swap} &>/dev/null" "swapon ${swap} &>/dev/null" "mkfs.ext4 ${root} &>/dev/null"}' 0
 		runcmds "Mounting" "partitions..." "${"mount --mkdir ${root} /mnt" "mount --mkdir ${boot} /mnt/boot"}" 0
 		runcmds "Setting up" "pacman..." "${"pacman -Syy &>/dev/null" "pacman --noconfirm -S reflector &>/dev/null" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"}" 0
 		runcmds "Running" "pacstrap..." "${"pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager lutris &>/dev/null" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"}" 0
