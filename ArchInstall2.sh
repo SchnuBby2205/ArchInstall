@@ -373,11 +373,11 @@ fi
 
 if [ "${option}" == "3" ]
 then
-	Banner "hypr"
-	bash -c "sudo pacman -Syy &>/dev/null"
-
 	# Hier Pacman Mirrors abgleichen
+	bash -c "sudo pacman -Syy &>/dev/null"
  	bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
+
+ 	Banner "hypr"
 
 	printMain "Setting up" "HyprDots..."
 	runcmds 0 "Downloading // Configuring" "sources..." "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null" "nano ./custom_hypr.lst" "nano ./.extra/custom_flat.lst" "sudo pacman --noconfirm -Runs nano &>/dev/null"
