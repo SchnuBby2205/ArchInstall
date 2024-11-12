@@ -336,10 +336,10 @@ fi
 if [ "${option}" == "2" ]
 then
 	printMain "Configuring" "arch-chroot..."
-		runcmds "Setting" "localtime..." ("ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null" "hwclock --systohc &>/dev/null" ) 0
-		runcmds "Setting up" "locales..." ("sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen" "locale-gen &>/dev/null" "echo LANG=de_DE.UTF-8 >> /etc/locale.conf" "echo KEYMAP=de-latin1 >> /etc/vconsole.conf") 0
-		runcmds "Setting up" "GRUB..." ("grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null" "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null") 0
-		runcmds "Enabling" "services..." ("systemctl enable NetworkManager &>/dev/null") 0
+		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null" "hwclock --systohc &>/dev/null"
+		runcmds 0 "Setting up" "locales..." "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen" "locale-gen &>/dev/null" "echo LANG=de_DE.UTF-8 >> /etc/locale.conf" "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
+		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null" "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
+		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager &>/dev/null"
 	printMainOK "Configuring" "arch-chroot..."
 
 	if [ "${hostname}" == "" ]
@@ -376,7 +376,7 @@ then
 	# Hier Pacman Mirrors abgleichen
 
 	printMain "Setting up" "HyprDots..."
-		runcmds "Downloading // Configuring" "sources..." ("sudo pacman --noconfirm -S nano &>/dev/null" "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null" "nano ./custom_hypr.lst" "nano ./.extra/custom_flat.lst" "sudo pacman --noconfirm -Runs nano &>/dev/null") 0
+	runcmds 0 "Downloading // Configuring" "sources..." "sudo pacman --noconfirm -S nano &>/dev/null" "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null" "nano ./custom_hypr.lst" "nano ./.extra/custom_flat.lst" "sudo pacman --noconfirm -Runs nano &>/dev/null"
 	printMainOK "Setting up" "HyprDots..."
 
 	printCountDown 3 "Starting installation in"
@@ -400,28 +400,28 @@ then
 	fi
 	
 	printMain "Installing" "Config files..."
-		runcmds "Setting" "autologin..." ("sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/sddm.conf") 1
-		runcmds "Configuring" "fstab..." ("sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab") 1
-		runcmds "Backing up" "HyprDots userprefs.conf..." ("sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf" "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak") 0
+		runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/sddm.conf"
+		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
+		runcmds 0 "Backing up" "HyprDots userprefs.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf" "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 		cd ~/.config
-		runcmds "Cloning" "SchnuBbyconfig..." ("git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null") 0
-		runcmds "Creating symlink to" "userprefs.conf..." ("ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf")	0
+		runcmds 0 "Cloning" "SchnuBbyconfig..." "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null"
+		runcmds 0 "Creating symlink to" "userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
 		if [ -d "~/.local/share/lutris" ]; then
 			bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
 		fi 	
-		runcmds "Creating symlink to" "lutris..." ("ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris") 0 	
-		runcmds "Removing flags from" "code-flags.conf..." ("rm -rf ~/.config/code-flags.conf" "touch ~/.config/code-flags.conf") 0   	
-		runcmds "Configuring" "~/.config/waybar/modules/clock.jsonc..." ("sed -i 's/{:%I:%M %p}/{:%R 󰃭 %d·%m·%y}/g' ~/.config/waybar/modules/clock.jsonc" "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc") 0   	
-		runcmds "Configuring" "~/.config/swaylock/config..." ("sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config") 0
-		runcmds "Installing" "gaming dependencies..." ('yes | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" arch gaming meta' 'yes | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" dxvk-bin') 0
-		runcmds "Downloading" "Wine dependencies..." ("sudo pacman -Syu &>/dev/null" "sudo pacman  --noconfirm -S wine-staging &>/dev/null" "sudo pacman  --noconfirm -S --needed --asdeps giflib lib32-giflib gnutls lib32-gnutls v4l-utils lib32-v4l-utils libpulse lib32-libpulse alsa-plugins lib32-alsa-plugins alsa-lib lib32-alsa-lib sqlite lib32-sqlite libxcomposite lib32-libxcomposite ocl-icd lib32-ocl-icd libva lib32-libva gtk3 lib32-gtk3 gst-plugins-base-libs lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader sdl2 lib32-sdl2 lib32-gamemode &>/dev/null") 0
+		runcmds 0 "Creating symlink to" "lutris..." "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris" 	
+		runcmds 0 "Removing flags from" "code-flags.conf..." "rm -rf ~/.config/code-flags.conf" "touch ~/.config/code-flags.conf"   	
+		runcmds 0 "Configuring" "~/.config/waybar/modules/clock.jsonc..." "sed -i 's/{:%I:%M %p}/{:%R 󰃭 %d·%m·%y}/g' ~/.config/waybar/modules/clock.jsonc" "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc"
+		runcmds 0 "Configuring" "~/.config/swaylock/config..." "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config"
+		runcmds 0 "Installing" "gaming dependencies..." 'yes | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" arch gaming meta' 'yes | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" dxvk-bin'
+		runcmds 0 "Downloading" "Wine dependencies..." "sudo pacman -Syu &>/dev/null" "sudo pacman  --noconfirm -S wine-staging &>/dev/null" "sudo pacman  --noconfirm -S --needed --asdeps giflib lib32-giflib gnutls lib32-gnutls v4l-utils lib32-v4l-utils libpulse lib32-libpulse alsa-plugins lib32-alsa-plugins alsa-lib lib32-alsa-lib sqlite lib32-sqlite libxcomposite lib32-libxcomposite ocl-icd lib32-ocl-icd libva lib32-libva gtk3 lib32-gtk3 gst-plugins-base-libs lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader sdl2 lib32-sdl2 lib32-gamemode &>/dev/null"
 		if [ "${gpu}" == "amd" ]
 		then
-			runcmds "Downloading" "graphics drivers..." ("sudo pacman  --noconfirm -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null") 0
+			runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
 		fi
 		if [ "${gpu}" == "nvidia" ]
 		then
-			runcmds "Downloading" "graphics drivers..." ("sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null") 0
+			runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
 		fi
  	printMainOK "Installing" "Config files..."
 
