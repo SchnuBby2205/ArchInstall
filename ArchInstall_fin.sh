@@ -130,14 +130,10 @@ printError() {
 	printf "${ERROR}   ${message}"
 }
 run() {
-	_modes=$1
-	_steps=$2
-	_cmds=$3
-	for i in "${!_cmds[@]}"; do
-		printStep "${_modes[i]}" "${_steps[i]}"
-		printf 	"${_cmds[i]}"
-	  bash -c "${_cmds[i]}"
-		printStepOK "${_modes[i]}" "${_steps[i]}"
+	for i in "${!cmds[@]}"; do
+		printStep "${modes[i]}" "${steps[i]}"
+	  bash -c "${cmds[i]}"
+		printStepOK "${modes[i]}" "${steps[i]}"
 	done
 }
 printHelp() {
