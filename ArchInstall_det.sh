@@ -56,6 +56,18 @@ printError() {
 }
 
 printHelp() {
+	clearScreen
+	myPrint "green" "   _____      __                ____  __                \n"
+	myPrint "green" "  / ___/_____/ /_  ____  __  __/ __ )/ /_  __  __       \n"
+	myPrint "green" "  \__ \/ ___/ __ \/ __ \/ / / / __  / __ \/ / / /       \n"
+	myPrint "green" " ___/ / /__/ / / / / / / /_/ / /_/ / /_/ / /_/ /        \n"
+	myPrint "green" "/____/\___/_/ /_/_/ /_/\__,_/_____/_.___/\__, /         \n"
+	myPrint "green" "    ___              __    ____         /____/      ____\n"
+	myPrint "green" "   /   |  __________/ /_  /  _/___  _____/ /_____ _/ / /\n"
+	myPrint "green" "  / /| | / ___/ ___/ __ \ / // __ \/ ___/ __/ __ \`/ / / \n"
+	myPrint "green" " / ___ |/ /  / /__/ / / // // / / (__  ) /_/ /_/ / / /  \n"
+	myPrint "green" "/_/  |_/_/   \___/_/ /_/___/_/ /_/____/\__/\__,_/_/_/   \n\n"
+
 	myPrint "white" "You can specify script arguments, instead of entering them through the installer - those are:\n\n"
 	myPrint "white" "\t--option:\t "
  	printf "which option to run.\n"
@@ -77,8 +89,8 @@ printHelp() {
    	printf "which kernel to install.\n"
    	myPrint "white" "\t--cpu:\t\t "
     	printf "which CPU to install (intel-ucode // amd-ucode).\n"
-    	myPrint "white" "\t--gpu:\t\t "
-     	printf "which GPU to install (amd // nvidia).\n"
+   	myPrint "white" "\t--gpu:\t\t "
+     	printf "which GPU to install (amd // nvidia).\n\n"
  	exit 0
 }
 
@@ -98,10 +110,10 @@ myPrint "green" "/_/  |_/_/   \___/_/ /_/___/_/ /_/____/\__/\__,_/_/_/   \n\n"
 while [ $# -gt 0 ]; do
     if [[ $1 == "--"* ]]; then
 	v="${1/--/}"
-        if [ v == "help" ] then
+        if [[ "${v}" == "help" ]]; then
 		printHelp
 	fi
-	declare "$v"="$2"
+ 	declare "$v"="$2"
         shift
     fi
     shift
