@@ -311,7 +311,7 @@ then
 	myPrint "green" "Swap partition: "
 	printf "${WHITE}${swap}${NC}\n"
  	myPrint "green" "Root partition: "
-	printf "${WHITE}${root}${NC}\n\n"
+	printf "${WHITE}${root}${NC}\n"
 
 	printCountDown 3 "Starting installation in"
 	printf "\n"
