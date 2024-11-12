@@ -324,8 +324,11 @@ then
 		runcmds 0 "Mounting" "partitions..." "mount --mkdir ${root} /mnt" "mount --mkdir ${boot} /mnt/boot"
 		runcmds 0 "Setting up" "pacman..." "pacman -Syy &>/dev/null" "pacman --noconfirm -S reflector &>/dev/null" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager lutris &>/dev/null" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
-  		runcmds 0 "Running" "arch-chroot..." "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu}" "umount -R /mnt &>/dev/null"
 	printMainOK "Installing" "base system..."
+ 	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu}"
+  	bash -c "umount -R /mnt &>/dev/null"
+ 
+ 	#runcmds 0 "Running" "arch-chroot..." "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu}" "umount -R /mnt &>/dev/null"
 
 	printCountDown 3 "Installation complete! Reboot in"
 
