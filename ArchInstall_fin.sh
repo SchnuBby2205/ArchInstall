@@ -366,7 +366,7 @@ then
 	#---------------Setting up localtime---------------
 	printMain "Setting up" "localtime..."
 	modes=("Creating" "Syncing")
-	steps=("symlink to /etc/localtime (Europe/Berlin)..." hardwareclock...)
+	steps=("symlink to /etc/localtime (Europe/Berlin)..." "hardwareclock...")
 	cmds=("ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null" "hwclock --systohc &>/dev/null" )
 	run $modes $steps $cmds
 	printMainOK "Setting up" "localtime..."
