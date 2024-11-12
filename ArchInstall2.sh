@@ -374,7 +374,7 @@ fi
 if [ "${option}" == "3" ]
 then
 	Banner "hypr"
-	bash -c "pacman -Syy &>/dev/null"
+	bash -c "sudo pacman -Syy &>/dev/null"
 
 	# Hier Pacman Mirrors abgleichen
 
