@@ -311,7 +311,7 @@ then
 	modes=("Formatting" "Enabling" "Turning on" "Formatting")
 	steps=("boot partition ${boot}..." "swap ${swap}..." "swap ${swap}..." "root partition ${root}...")
 	cmds=("mkfs.fat -F 32 ${boot} &>/dev/null" "mkswap ${swap} &>/dev/null" "swapon ${swap} &>/dev/null" "mkfs.ext4 ${root} &>/dev/null")
-	run ${modes} ${steps} ${cmds}
+	run
 	printMainOK "Formatting" "drives..."
 	#---------------Formatting Drives---------------		
 	
@@ -320,7 +320,7 @@ then
 	modes=("Mounting" "Mounting")
 	steps=("${root} to /mnt..." "${boot} to /mnt/boot...")
 	cmds=("mount --mkdir ${root} /mnt" "mount --mkdir ${boot} /mnt/boot")
-	run $modes $steps $cmds
+	run
 	printMainOK "Mounting" "partitions..."
 	#---------------Mounting partitions---------------
 
@@ -329,7 +329,7 @@ then
 	modes=("Updating" "Downloading" "Sorting" "Enabling")
 	steps=("package database..." "reflector..." "mirrors..." "5 parallel downloads for pacman...")
 	cmds=("pacman -Syy &>/dev/null" "pacman --noconfirm -S reflector &>/dev/null" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf")
-	run $modes $steps $cmds
+	run
 	printMainOK "Setting up" "pacman..."
 	#---------------Setting up pacman---------------
 
@@ -338,7 +338,7 @@ then
 	modes=("Running" "Generating" "Copying")
 	steps=("pacstrap..." "fstab..." "script ${scriptname} to /mnt...")
 	cmds=("pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager lutris &>/dev/null" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt")
-	run $modes $steps $cmds
+	run
 	printMainOK "Running" "base install..."
  	#---------------Running base install---------------
 
@@ -365,7 +365,7 @@ then
 	modes=("Creating" "Syncing")
 	steps=("symlink to /etc/localtime (Europe/Berlin)..." "hardwareclock...")
 	cmds=("ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null" "hwclock --systohc &>/dev/null" )
-	run $modes $steps $cmds
+	run
 	printMainOK "Setting up" "localtime..."
 	#---------------Setting up localtime---------------
 
@@ -374,7 +374,7 @@ then
 	modes=("Configuring" "Generating" "Configuring" "Configuring")
 	steps=("/etc/locale.gen (de_DE.UTF-8)..." "locales..." "/etc/locale.conf (de_DE.UTF-8)..." "/etc/vconsole.conf (de-latin1)...")
 	cmds=("sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen" "locale-gen &>/dev/null" "echo LANG=de_DE.UTF-8 >> /etc/locale.conf" "echo KEYMAP=de-latin1 >> /etc/vconsole.conf")
-	run $modes $steps $cmds
+	run
 	printMainOK "Setting up" "locales..."
 	#---------------Setting up locale---------------
 
@@ -383,7 +383,7 @@ then
 	modes=("Installing" "Making")
 	steps=("GRUB to /boot..." "GRUB config...")
 	cmds=("grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null" "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null")
-	run $modes $steps $cmds
+	run
 	printMainOK "Setting up" "GRUB..."
 	#---------------Setting up GRUB---------------
 
@@ -414,7 +414,7 @@ then
 	modes=("Enabling")
 	steps=("NetworkManager...")
 	cmds=("systemctl enable NetworkManager &>/dev/null")
-	run $modes $steps $cmds
+	run
   printMainOK "Enabling" "services..."
 	#---------------Enabling services---------------
 
@@ -442,7 +442,7 @@ then
 	modes=("Downloading" "Cloning" "Configuring" "Configuring" "Removing")
 	steps=("nano..." "HyprDots..." "custom_hypr..." "custom_flat..." "nano...")
 	cmds=("sudo pacman --noconfirm -S nano &>/dev/null" "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null" "nano ./custom_hypr.lst" "nano ./.extra/custom_flat.lst" "sudo pacman --noconfirm -Runs nano &>/dev/null")
-	run $modes $steps $cmds
+	run
 	printMainOK "Setting up" "HyprDots..."
 	#---------------Setting up HyprDots---------------
 
@@ -524,7 +524,7 @@ then
 	modes=("Downloading" "Downloading")
 	steps=("arch gaming meta" "dxvk-bin")
 	cmds=('yes | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" arch gaming meta' 'yes | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" dxvk-bin')
-	run $modes $steps $cmds
+	run
  	printStep "Downloading" "Wine dependencies..."
 	bash -c "sudo pacman -Syu &>/dev/null"
 	bash -c "sudo pacman  --noconfirm -S wine-staging &>/dev/null"
