@@ -135,7 +135,8 @@ run() {
 	_cmds=$3
 	for i in "${!_cmds[@]}"; do
 		printStep "${_modes[i]}" "${_steps[i]}"
-		bash -c "${_cmds[i]}"
+		printf 	"${_cmds[i]}"
+	  bash -c "${_cmds[i]}"
 		printStepOK "${_modes[i]}" "${_steps[i]}"
 	done
 }
