@@ -101,17 +101,23 @@ printStep() {
 }
 printStepOK() {
 	if [[ "${1}" == 1 ]]; then
-		MOVE=${MOVE}${CL}
-		printf "${MOVE}${MYOK}   ${WHITE}${2}${NC} ${3}"
+		MOVE=${MOVE}
+		printf "${MOVE}${MYOK}"
 		MOVE=""
 		printf "${MOVEBACK}\r"
 		MOVEBACK=""
  	else
-		printf "\r${MYOK}   ${WHITE}${2}${NC} ${3}\n"
+		printf "\r${MYOK}\n"
  	fi
 }
 printError() {
-	printf "${ERROR}   ${1}"
+	printf "\r${ERROR}\n"
+	MOVE=${MOVE}
+	printf "${MOVE}\r${ERROR}"
+	MOVE=""
+	printf "${MOVEBACK}\r"
+	MOVEBACK=""
+	exit 1
 }
 printCountDown() {
 	local time=("$1")
@@ -166,12 +172,12 @@ runcmds() {
 	printStep 0 "${mode}" "${message}"
  	for el in "$@"; do
 		if [[ $sudo == 1 ]]; then 
-			sudo bash -c "$el"
+			sudo bash -c "$el" || printError
 		else
-			bash -c "$el"
+			bash -c "$el" || printError
 		fi
   	done
-	printStepOK 0 "${mode}" "${message}"
+	printStepOK 0
 }
 while [ $# -gt 0 ]; do
     if [[ $1 == "--"* ]]; then
