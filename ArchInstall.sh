@@ -332,11 +332,15 @@ if [[ "${option}" == "2" ]]; then
 fi    
 if [[ "${option}" == "3" ]]; then
 	# Hier Pacman Mirrors abgleichen
-	bash -c "sudo pacman -Syy &>/dev/null"
+ 	if [[ "${user}" == "" ]]; then
+		myPrint "yellow" "Enter your normal username: "
+		read user
+	fi	
+ 	bash -c "sudo pacman -Syy &>/dev/null"
  	bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
  	Banner "hypr"
 	printStep 1 "Setting up" "HyprDots..."
-		runcmds 0 "Downloading // Configuring" "sources..." "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null" "nano ./custom_hypr.lst" "nano ./.extra/custom_flat.lst" "sudo pacman --noconfirm -Runs nano &>/dev/null"
+		runcmds 0 "Downloading // Configuring" "sources..." "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null" "nano ./HyprDots/Scripts/custom_hypr.lst" "nano ./HyprDots/Scripts/.extra/custom_flat.lst" "sudo pacman --noconfirm -Runs nano &>/dev/null"
 	printStepOK 1
 	printCountDown 3 "Starting installation in"
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
