@@ -145,12 +145,18 @@ printHelp() {
  	myPrint "white" "\t--user:\t\t "
   	printf "username for the normal user.\n"
   	myPrint "white" "\t--kernel:\t "
-   	printf "which kernel to install.\n"
+   	printf "which kernel to install (default: linux-lts).\n"
    	myPrint "white" "\t--cpu:\t\t "
-    	printf "which CPU to install (intel-ucode // amd-ucode).\n"
+    	printf "which CPU to install (intel-ucode // amd-ucode) (default: intel-ucode).\n"
    	myPrint "white" "\t--gpu:\t\t "
-    	printf "which GPU to install (amd // nvidia).\n\n"
- 	exit 0
+    	printf "which GPU to install (amd // nvidia) (default: amd).\n"
+   	myPrint "white" "\t--timezone:\t\t "
+    	printf "which timezone to use (default: Europe/Berlin).\n"
+   	myPrint "white" "\t--locale:\t\t "
+    	printf "which locale to user (default: de_DE.UTF-8\n"
+   	myPrint "white" "\t--keymap:\t\t "
+    	printf "which keymap to user (default: de-latin1).\n\n"
+  	exit 0
 }
 runcmds() {
 	local sudo=("$1")
@@ -186,6 +192,15 @@ if [[ "${kernel}" == "" ]]; then
 fi
 if [[ "${gpu}" == "" ]]; then
 	gpu="amd"
+fi
+if [[ "${timezone}" == "" ]]; then
+	timezone="Europe/Berlin"
+fi
+if [[ "${locale}" == "" ]]; then
+	locale="de_DE.UTF-8"
+fi
+if [[ "${keymap}" == "" ]]; then
+	keymap="de-latin1"
 fi
 if [[ "${option}" == "" ]]; then
 	Banner "install"
@@ -282,8 +297,8 @@ if [[ "${option}" == "1" ]]; then
 fi
 if [[ "${option}" == "2" ]]; then
 	printStep 1 "Configuring" "arch-chroot..."
-		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null" "hwclock --systohc &>/dev/null"
-		runcmds 0 "Setting up" "locales..." "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen" "locale-gen &>/dev/null" "echo LANG=de_DE.UTF-8 >> /etc/locale.conf" "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
+		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime &>/dev/null" "hwclock --systohc &>/dev/null"
+		runcmds 0 "Setting up" "locales..." "sed -e '/${locale}/s/^#*//' -i /etc/locale.gen" "locale-gen &>/dev/null" "echo LANG=${locale} >> /etc/locale.conf" "echo KEYMAP=${keymap} >> /etc/vconsole.conf"
 		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null" "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
 		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager &>/dev/null"
 	printStepOK 1 "Configuring" "arch-chroot..."
