@@ -26,4 +26,4 @@ curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall
 
 Add --cfdisk y and --disk /dev/nvme0n1 to partition the disk beforehand.
 
-If necessary arguments are missing. Or no arguments supplied at all, the script will start with an interactive menu.
+If necessary arguments are missing. Or no arguments supplied at all, the script will ask for them with an interactive menu.
