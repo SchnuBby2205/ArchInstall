@@ -340,8 +340,11 @@ if [[ "${option}" == "3" ]]; then
  	bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
  	Banner "hypr"
 	printStep 1 "Setting up" "HyprDots..."
-		runcmds 0 "Downloading // Configuring" "sources..." "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null" "nano ./HyprDots/Scripts/custom_hypr.lst" "nano ./HyprDots/Scripts/.extra/custom_flat.lst" "sudo pacman --noconfirm -Runs nano &>/dev/null"
+		runcmds 0 "Downloading // Configuring" "sources..." "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null"
 	printStepOK 1
+ 	bash -c "nano ./HyprDots/Scripts/custom_hypr.lst" 
+  	bash -c "nano ./HyprDots/Scripts/.extra/custom_flat.lst"
+   	bash -c "sudo pacman --noconfirm -Runs nano &>/dev/null"
 	printCountDown 3 "Starting installation in"
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
 	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"		
