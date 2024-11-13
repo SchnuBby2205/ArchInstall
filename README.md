@@ -25,3 +25,5 @@ The position of the arguments of the ./ArchInstall.sh script are flexible.
 curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall.sh -o ./ArchInstall.sh && chmod +x ./ArchInstall.sh && ./ArchInstall.sh --option 1 --boot /dev/nvme0n1p1 --swap /dev/nvme0n1p2 --root /dev/nvme0n1p3 --hostname ArchLinux --user schnubby
 
 Add --cfdisk y and --disk /dev/nvme0n1 to partition the disk beforehand.
+
+If necessary arguments are missing. Or no arguments supplied at all, the script will start with an interactive menu.
