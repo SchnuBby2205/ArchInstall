@@ -1,15 +1,14 @@
 # ArchInstall
--  Installation Script for Arch Linux
--  ArchInstall.sh = ArchInstall through the archinstall script from archiso
--  ArchInstall_man.sh = ArchInstall through manual install less output
--  ArchInstall_det.sh = ArchInstall through manual install verbose (recommended)
+-  My own installation script for Arch Linux.
 
 # Install
-curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall.sh -o ./ArchInstall.sh && chmod +x ./ArchInstall.sh && ./ArchInstall.sh
+- With cfdisk
+  - curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall.sh -o ./ArchInstall.sh && chmod +x ./ArchInstall.sh && ./ArchInstall.sh --option 1 --cfdisk y --disk [diskname] --boot [bootpartition] --swap [swappartition] --root [rootpartition] --hostname [hostname] --user [non root username]
+    
+- Without cfdisk
+  - curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall.sh -o ./ArchInstall.sh && chmod +x ./ArchInstall.sh && ./ArchInstall.sh --option 1 --boot [bootpartition] --swap [swappartition] --root [rootpartition] --hostname [hostname] --user [non root username]
 
-curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall_man.sh -o ./ArchInstall.sh && chmod +x ./ArchInstall.sh && ./ArchInstall.sh 1 [disk] y/n [bootpartition] [swappartition] [rootpartition] [hostname] [non-root-username]
-
-curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall_det.sh -o ./ArchInstall.sh && chmod +x ./ArchInstall.sh && ./ArchInstall.sh 1 [disk] y/n [bootpartition] [swappartition] [rootpartition] [hostname] [non-root-username]
+The position of the arguments of the ./ArchInstall.sh script are flexible.
 
 # Example
 - Download Script
@@ -23,4 +22,6 @@ curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall
   - Hostname = ArchLinux
   - Non-root-username = schnubby
 
-curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall_det.sh -o ./ArchInstall.sh && chmod +x ./ArchInstall.sh && ./ArchInstall.sh 1 /dev/nvme0n1 n /dev/nvme0n1p1 /dev/nvme0n1p2 /dev/nvme0n1p3 ArchLinux schnubby
+curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall.sh -o ./ArchInstall.sh && chmod +x ./ArchInstall.sh && ./ArchInstall.sh --option 1 --boot /dev/nvme0n1p1 --swap /dev/nvme0n1p2 --root /dev/nvme0n1p3 --hostname ArchLinux --user schnubby
+
+Add --cfdisk y and --disk /dev/nvme0n1 to partition the disk beforehand.
