@@ -106,11 +106,11 @@ printStepOK() {
 		printf "${MOVEBACK}\r"
 		MOVEBACK=""
  	else
-		printf "\r${MYOK}   ${GREEN}• ${NC}\n"
+		printf "\r${MYOK}   ${GREEN}√ ${NC}\n"
  	fi
 }
 printError() {
-	printf "\r${ERROR}   ${RED}• ${NC}\n"
+	printf "\r${ERROR}   ${RED}× ${NC}\n"
 	MOVE=${MOVE}
 	printf "${MOVE}\r${ERROR}"
 	MOVE=""
