@@ -11,7 +11,6 @@ MYOK="[${GREEN}    OK     ${NC}]"
 ERROR="[${RED}  ERROR    ${NC}]"
 scriptname=$(basename "$0")
 UP='\033[A'
-CL='\033[2K'
 DOWN='\033[B'
 MOVE=""
 MOVEBACK=""
