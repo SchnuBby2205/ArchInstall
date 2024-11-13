@@ -294,7 +294,7 @@ if [[ "${option}" == "1" ]]; then
 		runcmds 0 "Mounting" "partitions..." "mount --mkdir ${root} /mnt" "mount --mkdir ${boot} /mnt/boot"
 		runcmds 0 "Setting up" "pacman..." "pacman -Syy &>/dev/null" "pacman --noconfirm -S reflector &>/dev/null" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager lutris &>/dev/null" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
-	printStepOK 1 "Installing" "base system..."
+	printStepOK 1
  	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu}"
   	bash -c "umount -R /mnt &>/dev/null" 
 	printCountDown 3 "Installation complete! Reboot in"
@@ -306,7 +306,7 @@ if [[ "${option}" == "2" ]]; then
 		runcmds 0 "Setting up" "locales..." "sed -e '/${locale}/s/^#*//' -i /etc/locale.gen" "locale-gen &>/dev/null" "echo LANG=${locale} >> /etc/locale.conf" "echo KEYMAP=${keymap} >> /etc/vconsole.conf"
 		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null" "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
 		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager &>/dev/null"
-	printStepOK 1 "Configuring" "arch-chroot..."
+	printStepOK 1
 	if [[ "${hostname}" == "" ]]; then
 		myPrint "yellow" "\nEnter your Hostname: "
 		read hostname
@@ -332,7 +332,7 @@ if [[ "${option}" == "3" ]]; then
  	Banner "hypr"
 	printStep 1 "Setting up" "HyprDots..."
 		runcmds 0 "Downloading // Configuring" "sources..." "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null" "nano ./custom_hypr.lst" "nano ./.extra/custom_flat.lst" "sudo pacman --noconfirm -Runs nano &>/dev/null"
-	printStepOK 1 "Setting up" "HyprDots..."
+	printStepOK 1
 	printCountDown 3 "Starting installation in"
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
 	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"		
@@ -367,7 +367,7 @@ if [[ "${option}" == "4" ]]; then
 		if [[ "${gpu}" == "nvidia" ]]; then
 			runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
 		fi
- 	printStepOK 1 "Installing" "Config files..."
+ 	printStepOK 1
   	bash -c "Hyde-install"  
  	sudo bash -c "rm -rf ~/${scriptname}"	
 	myPrint "green" "\n\nToDos:\n"
