@@ -1,0 +1,10 @@
+rm -rf ~/.config/hypr/userprefs.conf &&
+curl -o ~/.config/hypr/userprefs.conf roh github userprefs &&
+nano .config/code-flags.conf &&
+nano .config/waybar/modules/clock.jsonc &&
+nano .config/swaylock/config && 
+yay arch gaming meta &&
+sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=schnubby' >> /etc/sddm.conf.d/sddm.conf &&
+sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab &&
+sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab
+sudo pacman -Runs nano
