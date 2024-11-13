@@ -89,11 +89,11 @@ Banner () {
 }
 printStep() {
 	if [[ "${1}" == 1 ]]; then
-		printf "${RUNNING}   ${WHITE}${2}${NC} ${3}\n"
+		printf "${RUNNING}   ${2} ${WHITE}${3}${NC}\n"
 		MOVE=${MOVE}${UP}
 		MOVEBACK=${MOVEBACK}${DOWN}
  	else
-		printf "  ${RUNNING}   ${WHITE}${2}${NC} ${3}"
+		printf "${RUNNING}   ${YELLOW}• ${NC}${2} ${WHITE}${3}${NC}"
 		MOVE=${MOVE}${UP}
 		MOVEBACK=${MOVEBACK}${DOWN}
  	fi
@@ -106,11 +106,11 @@ printStepOK() {
 		printf "${MOVEBACK}\r"
 		MOVEBACK=""
  	else
-		printf "\r  ${MYOK}\n"
+		printf "\r${MYOK}   ${GREEN}• ${NC}\n"
  	fi
 }
 printError() {
-	printf "\r  ${ERROR}\n"
+	printf "\r${ERROR}   ${RED}• ${NC}\n"
 	MOVE=${MOVE}
 	printf "${MOVE}\r${ERROR}"
 	MOVE=""
