@@ -1,6 +1,5 @@
 #!/bin/bash
-
-# Konstanten für Farben
+# Konstanten für Farben und Cursor Bewegung
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -16,34 +15,26 @@ CL='\033[2K'
 DOWN='\033[B'
 MOVE=""
 MOVEBACK=""
-
 # Functions
 clearScreen() {
 	bash -c clear
 }
 myPrint() {
-	color="$1"
-	message="$2"
-	if [ "${color}" == "green" ]
-	then
-		printf "${GREEN}${message}${NC}"
+	if [[ "${1}" == "green" ]];	then
+		printf "${GREEN}${2}${NC}"
 	fi
-	if [ "${color}" == "red" ]
-	then
-		printf "${RED}${message}${NC}"
+	if [[ "${1}" == "red" ]]; then
+		printf "${RED}${2}${NC}"
 	fi
-	if [ "${color}" == "yellow" ]
-	then
-		printf "${YELLOW}${message}${NC}"
+	if [[ "${1}" == "yellow" ]]; then
+		printf "${YELLOW}${2}${NC}"
 	fi
- 	if [ "${color}" == "white" ]
-	then
-		printf "${WHITE}${message}${NC}"
+ 	if [[ "${1}" == "white" ]]; then
+		printf "${WHITE}${2}${NC}"
 	fi
 }
 Banner () {
-	banner="$1"
-	if [[ "${banner}" == "install" ]]; then
+	if [[ "${1}" == "install" ]]; then
 		clearScreen
 		myPrint "green" "   _____      __                ____  __                \n"
 		myPrint "green" "  / ___/_____/ /_  ____  __  __/ __ )/ /_  __  __       \n"
@@ -56,7 +47,7 @@ Banner () {
 		myPrint "green" " / ___ |/ /  / /__/ / / // // / / (__  ) /_/ /_/ / / /  \n"
 		myPrint "green" "/_/  |_/_/   \___/_/ /_/___/_/ /_/____/\__/\__,_/_/_/   \n\n"
 	fi
-	if [[ "${banner}" == "arch" ]]; then
+	if [[ "${1}" == "arch" ]]; then
 		clearScreen	
 		myPrint "green" "    ____           __        _____            \n"
 		myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _\n"
@@ -68,7 +59,7 @@ Banner () {
 		myPrint "green" " / ___ |/ /  / /__/ / / /                     \n"
 		myPrint "green" "/_/  |_/_/   \___/_/ /_/                      \n\n"
 	fi
-	if [[ "${banner}" == "hypr" ]]; then
+	if [[ "${1}" == "hypr" ]]; then
 		clearScreen		
 		myPrint "green" "    ____           __        _____             \n"
 		myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _ \n"
@@ -82,7 +73,7 @@ Banner () {
 		myPrint "green" "/_/ /_/\__, / .___/_/  /_____/\____/\__/____/  \n"
 		myPrint "green" "      /____/_/                                 \n\n"
 	fi
-	if [[ "${banner}" == "config" ]]; then
+	if [[ "${1}" == "config" ]]; then
 		clearScreen	
 		myPrint "green" "    ____           __        _____                   \n"
 		myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"
@@ -97,47 +88,42 @@ Banner () {
 		myPrint "green" "                       /____/                        \n\n"
 	fi
 }
-printMain() {
-	mode="$1"
-	message="$2"
-	printf "${RUNNING}   ${WHITE}${mode}${NC} ${message}\n"
-	MOVE=${MOVE}${UP}
-	MOVEBACK=${MOVEBACK}${DOWN}
-}
-printMainOK() {
-	MOVE=${MOVE}${CL}
-	mode="$1"
-	message="$2"
-	printf "${MOVE}${MYOK}   ${WHITE}${mode}${NC} ${message}"
-	MOVE=""
-	printf "${MOVEBACK}\r"
-	MOVEBACK=""
-}
 printStep() {
-	mode="$1"
-	message="$2"
-	printf "${RUNNING}   ${WHITE}${mode}${NC} ${message}"
-	MOVE=${MOVE}${UP}
-	MOVEBACK=${MOVEBACK}${DOWN}
+	if [[ "${1}" == 1 ]]; then
+		printf "${RUNNING}   ${WHITE}${2}${NC} ${3}\n"
+		MOVE=${MOVE}${UP}
+		MOVEBACK=${MOVEBACK}${DOWN}
+ 	else
+		printf "${RUNNING}   ${WHITE}${2}${NC} ${3}"
+		MOVE=${MOVE}${UP}
+		MOVEBACK=${MOVEBACK}${DOWN}
+ 	fi
 }
 printStepOK() {
-	mode="$1"
-	message="$2"
-	printf "\r${MYOK}   ${WHITE}${mode}${NC} ${message}\n"
+	if [[ "${1}" == 1 ]]; then
+		MOVE=${MOVE}${CL}
+		printf "${MOVE}${MYOK}   ${WHITE}${2}${NC} ${3}"
+		MOVE=""
+		printf "${MOVEBACK}\r"
+		MOVEBACK=""
+ 	else
+		printf "\r${MYOK}   ${WHITE}${2}${NC} ${3}\n"
+ 	fi
 }
 printError() {
-	message="$1"
-	printf "${ERROR}   ${message}"
+	printf "${ERROR}   ${1}"
 }
 printCountDown() {
 	local time=("$1")
 	myPrint "green" "\n${2} ${time}..."
-	for ((i=1; i<time; i++))
+	for ((i=1; i<$((time - 1)); i++))
 	do
 		sleep 1
 		myPrint "green" "\r${2} $((time-i))..."		
 	done
-	sleep 1
+	sleep 1 
+	myPrint "green" "\r${2} $((time-i))...\n\n"	
+	sleep 1 
 }
 printHelp() {
 	Banner "install"
@@ -161,9 +147,9 @@ printHelp() {
   	myPrint "white" "\t--kernel:\t "
    	printf "which kernel to install.\n"
    	myPrint "white" "\t--cpu:\t\t "
-    printf "which CPU to install (intel-ucode // amd-ucode).\n"
+    	printf "which CPU to install (intel-ucode // amd-ucode).\n"
    	myPrint "white" "\t--gpu:\t\t "
-    printf "which GPU to install (amd // nvidia).\n\n"
+    	printf "which GPU to install (amd // nvidia).\n\n"
  	exit 0
 }
 runcmds() {
@@ -171,7 +157,7 @@ runcmds() {
 	local mode=("$2")
 	local message=("$3")
 	shift 3
-	printStep "${mode}" "${message}"
+	printStep 0 "${mode}" "${message}"
  	for el in "$@"; do
 		if [[ $sudo == 1 ]]; then 
 			sudo bash -c "$el"
@@ -179,12 +165,8 @@ runcmds() {
 			bash -c "$el"
 		fi
   	done
-	printStepOK "${mode}" "${message}"
+	printStepOK 0 "${mode}" "${message}"
 }
-
-# Work
-# Banner "install"
-
 while [ $# -gt 0 ]; do
     if [[ $1 == "--"* ]]; then
 	v="${1/--/}"
@@ -196,24 +178,16 @@ while [ $# -gt 0 ]; do
     fi
     shift
 done
-
-if [ "${cpu}" == "" ]
-then
+if [[ "${cpu}" == "" ]]; then
 	cpu="intel-ucode"
 fi
-
-if [ "${kernel}" == "" ]
-then
+if [[ "${kernel}" == "" ]]; then
 	kernel="linux-lts"
 fi
-
-if [ "${gpu}" == "" ]
-then
+if [[ "${gpu}" == "" ]]; then
 	gpu="amd"
 fi
-
-if [ "${option}" == "" ]
-then
+if [[ "${option}" == "" ]]; then
 	Banner "install"
  
 	printf "["
@@ -237,180 +211,128 @@ then
 	myPrint "yellow" "Config files\n\n"
 	
 	read option
- fi
-
-if [ "${option}" == "" ]
-then
+fi
+if [[ "${option}" == "" ]]; then
 	exit 0
 fi
-
-if [ "${option}" == "1" ]
-then
+if [[ "${option}" == "1" ]]; then
 	Banner "arch"	
-	bash -c "lsblk"
-	
-	if [ "${cfdisk}" == "" ] && [ "${disk}" != "" ]
-	then
+ 	if [[ "${cfdisk}" == "" ]] && [[ "${disk}" != "" ]]; then
 		myPrint "yellow" "\nStart cfdisk (y/N) ?\n"
 		read cfdisk
-  	fi
-	
-	if [ "${cfdisk}" == "y" ] || [ "${cfdisk}" == "Y" ]
-	then
-		bash -c "cfdisk ${disk}"
-	fi
-
- 	if [ "${disk}" == "" ] && [ "${cfdisk}" == "y" ] || [ "${disk}" == "" ] && [ "${cfdisk}" == "Y" ]
-	then
-		myPrint "yellow" "\nEnter drive\n"
+  		if [[ "${cfdisk}" != "n" ]] && [[ "${cfdisk}" != "N" ]]; then
+    			bash -c "cfdisk ${disk}"
+    		fi
+   	fi
+ 	if [[ "${cfdisk}" == "y" ]] || [[ "${cfdisk}" == "Y" ]] && [[ "${disk}" == "" ]]; then
+		myPrint "yellow" "\nEnter disk\n"
 		read disk
-  	fi
-	
-	if [ "${disk}" == "" ] && [ "${cfdisk}" == "y" ] || [ "${disk}" == "" ] && [ "${cfdisk}" == "Y" ]
-	then
-		printError "No drive entered -> exit\n"
-		exit 0
-	fi
-		
-	if [ "${boot}" == "" ]
-	then
+  		if [[ "${disk}" != "" ]]; then
+    			bash -c "cfdisk ${disk}"
+       		else
+			printError "No disk entered -> exit\n"
+			exit 0	 
+    		fi
+   	fi
+	if [[ "${cfdisk}" == "y" ]] || [[ "${cfdisk}" == "Y" ]] && [[ "${disk}" != "" ]]; then
+ 		bash -c "cfdisk ${disk}"
+ 	fi
+	if [[ "${boot}" == "" ]]; then
 		myPrint "yellow" "\nEnter boot partition\n"
 		read boot
-  	fi
- 
-	if [ "${boot}" == "" ]
-	then
+  	fi 
+	if [[ "${boot}" == "" ]]; then
 		printError "No partition entered -> exit\n"
 		exit 0
-	fi
-	
-	if [ "${swap}" == "" ]
-	then
+	fi	
+	if [[ "${swap}" == "" ]]; then
 		myPrint "yellow" "\nEnter swap partition\n"
 		read swap
-  	fi
- 
-	if [ "${swap}" == "" ]
-	then
+  	fi 
+	if [[ "${swap}" == "" ]]; then
 		printError "No partition entered -> exit\n"
 		exit 0
-	fi
-	
-	if [ "${root}" == "" ]
-	then
+	fi	
+	if [[ "${root}" == "" ]]; then
 		myPrint "yellow" "\nEnter root partition\n"
 		read root
-  	fi
- 
-	if [ "${root}" == "" ]
-	then
+  	fi 
+	if [[ "${root}" == "" ]]; then
 		printError "No partition entered -> exit\n"
 		exit 0
 	fi
-
 	myPrint "green" "\nBoot partition: "
 	printf "${WHITE}${boot}${NC}\n"
 	myPrint "green" "Swap partition: "
 	printf "${WHITE}${swap}${NC}\n"
  	myPrint "green" "Root partition: "
 	printf "${WHITE}${root}${NC}\n"
-
 	printCountDown 3 "Starting installation in"
-
  	Banner "arch"
-
-	printMain "Installing" "base system..."
+	printStep 1 "Installing" "base system..."
 		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot} &>/dev/null" "mkswap ${swap} &>/dev/null" "swapon ${swap} &>/dev/null" "mkfs.ext4 ${root} &>/dev/null"
 		runcmds 0 "Mounting" "partitions..." "mount --mkdir ${root} /mnt" "mount --mkdir ${boot} /mnt/boot"
 		runcmds 0 "Setting up" "pacman..." "pacman -Syy &>/dev/null" "pacman --noconfirm -S reflector &>/dev/null" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager lutris &>/dev/null" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
-	printMainOK "Installing" "base system..."
+	printStepOK 1 "Installing" "base system..."
  	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu}"
-  	bash -c "umount -R /mnt &>/dev/null"
- 
- 	#runcmds 0 "Running" "arch-chroot..." "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu}" "umount -R /mnt &>/dev/null"
-
+  	bash -c "umount -R /mnt &>/dev/null" 
 	printCountDown 3 "Installation complete! Reboot in"
-
    	bash -c "reboot"
-
 fi
-
-if [ "${option}" == "2" ]
-then
-	printMain "Configuring" "arch-chroot..."
+if [[ "${option}" == "2" ]]; then
+	printStep 1 "Configuring" "arch-chroot..."
 		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime &>/dev/null" "hwclock --systohc &>/dev/null"
 		runcmds 0 "Setting up" "locales..." "sed -e '/de_DE.UTF-8/s/^#*//' -i /etc/locale.gen" "locale-gen &>/dev/null" "echo LANG=de_DE.UTF-8 >> /etc/locale.conf" "echo KEYMAP=de-latin1 >> /etc/vconsole.conf"
 		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null" "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
 		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager &>/dev/null"
-	printMainOK "Configuring" "arch-chroot..."
-
-	if [ "${hostname}" == "" ]
-	then
+	printStepOK 1 "Configuring" "arch-chroot..."
+	if [[ "${hostname}" == "" ]]; then
 		myPrint "yellow" "\nEnter your Hostname: "
 		read hostname
   	fi
-	bash -c "echo ${hostname} >> /etc/hostname"
-       	
+	bash -c "echo ${hostname} >> /etc/hostname"       	
 	myPrint "yellow" "\nEnter your NEW root password\n\n"
 	bash -c "passwd"
-
-	if [ "${user}" == "" ]
-	then
+	if [[ "${user}" == "" ]]; then
 		myPrint "yellow" "\nEnter your normal username: "
 		read user
-	fi
- 
+	fi 
 	bash -c "useradd -mG wheel ${user}"
 	myPrint "yellow" "\nEnter your normal user password\n\n"
 	bash -c "passwd ${user}"	
-
  	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
-
    	bash -c "mv ./${scriptname} /home/${user}/"
 	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} >> /home/${user}/.bashrc"
 fi    
-
-if [ "${option}" == "3" ]
-then
+if [[ "${option}" == "3" ]]; then
 	# Hier Pacman Mirrors abgleichen
 	bash -c "sudo pacman -Syy &>/dev/null"
  	bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
-
  	Banner "hypr"
-
-	printMain "Setting up" "HyprDots..."
-	runcmds 0 "Downloading // Configuring" "sources..." "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null" "nano ./custom_hypr.lst" "nano ./.extra/custom_flat.lst" "sudo pacman --noconfirm -Runs nano &>/dev/null"
-	printMainOK "Setting up" "HyprDots..."
-
+	printStep 1 "Setting up" "HyprDots..."
+		runcmds 0 "Downloading // Configuring" "sources..." "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null" "nano ./custom_hypr.lst" "nano ./.extra/custom_flat.lst" "sudo pacman --noconfirm -Runs nano &>/dev/null"
+	printStepOK 1 "Setting up" "HyprDots..."
 	printCountDown 3 "Starting installation in"
-	printf "\n\n"
-
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
-	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"
-		
+	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"		
   	cd ~/HyprDots/Scripts
 	bash -c "./install.sh -drs"
 fi
-
-if [ "${option}" == "4" ]
-then
+if [[ "${option}" == "4" ]]; then
 	Banner "config"
-
- 	if [ "${user}" == "" ]
-	then
+ 	if [[ "${user}" == "" ]]; then
 		myPrint "yellow" "Enter your normal username: "
 		read user
-	fi
-	
-	printMain "Installing" "Config files..."
+	fi	
+	printStep 1 "Installing" "Config files..."
 		runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/sddm.conf"
 		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 		runcmds 0 "Backing up" "HyprDots userprefs.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf" "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 		cd ~/.config
 		runcmds 0 "Cloning" "SchnuBbyconfig..." "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null"
 		runcmds 0 "Creating symlink to" "userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
-		if [ -d "~/.local/share/lutris" ]; then
+		if [[ -d "~/.local/share/lutris" ]]; then
 			bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
 		fi 	
 		runcmds 0 "Creating symlink to" "lutris..." "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris" 	
@@ -419,23 +341,17 @@ then
 		runcmds 0 "Configuring" "~/.config/swaylock/config..." "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config"
 		runcmds 0 "Installing" "gaming dependencies..." 'yes | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" arch gaming meta' 'yes | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" dxvk-bin'
 		runcmds 0 "Downloading" "Wine dependencies..." "sudo pacman -Syu &>/dev/null" "sudo pacman  --noconfirm -S wine-staging &>/dev/null" "sudo pacman  --noconfirm -S --needed --asdeps giflib lib32-giflib gnutls lib32-gnutls v4l-utils lib32-v4l-utils libpulse lib32-libpulse alsa-plugins lib32-alsa-plugins alsa-lib lib32-alsa-lib sqlite lib32-sqlite libxcomposite lib32-libxcomposite ocl-icd lib32-ocl-icd libva lib32-libva gtk3 lib32-gtk3 gst-plugins-base-libs lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader sdl2 lib32-sdl2 lib32-gamemode &>/dev/null"
-		if [ "${gpu}" == "amd" ]
-		then
+		if [[ "${gpu}" == "amd" ]]; then
 			runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
 		fi
-		if [ "${gpu}" == "nvidia" ]
-		then
+		if [[ "${gpu}" == "nvidia" ]]; then
 			runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
 		fi
- 	printMainOK "Installing" "Config files..."
-
-  	bash -c "Hyde-install"
-  
- 	sudo bash -c "rm -rf ~/${scriptname}"
-	
+ 	printStepOK 1 "Installing" "Config files..."
+  	bash -c "Hyde-install"  
+ 	sudo bash -c "rm -rf ~/${scriptname}"	
 	myPrint "green" "\n\nToDos:\n"
 	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
-
 	myPrint "green" "Hints:\n"
 	myPrint "yellow" "- kdwalletmanager (set empty password)\n"
  	myPrint "yellow" "  (if Brave was installed instead of Firefox and Brave cant open the kdwallet.)\n"
@@ -443,16 +359,11 @@ then
  	myPrint "yellow" "  (if there are Problems with Games.)\n"
 	myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
  	myPrint "yellow" "  (if you want to use git from the terminal.)\n\n"
-
 	bash -c "firefox -new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
 	-new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json \
 	-new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
-
-  	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"
-   
+  	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"   
   	printCountDown 3 "Reboot in"
-
-    bash -c "reboot"
+    	bash -c "reboot"
 fi
-
 exit 0
