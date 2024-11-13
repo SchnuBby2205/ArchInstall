@@ -93,7 +93,7 @@ printStep() {
 		MOVE=${MOVE}${UP}
 		MOVEBACK=${MOVEBACK}${DOWN}
  	else
-		printf "${RUNNING}   ${WHITE}${2}${NC} ${3}"
+		printf "  ${RUNNING}   ${WHITE}${2}${NC} ${3}"
 		MOVE=${MOVE}${UP}
 		MOVEBACK=${MOVEBACK}${DOWN}
  	fi
@@ -106,11 +106,11 @@ printStepOK() {
 		printf "${MOVEBACK}\r"
 		MOVEBACK=""
  	else
-		printf "\r${MYOK}\n"
+		printf "\r  ${MYOK}\n"
  	fi
 }
 printError() {
-	printf "\r${ERROR}\n"
+	printf "\r  ${ERROR}\n"
 	MOVE=${MOVE}
 	printf "${MOVE}\r${ERROR}"
 	MOVE=""
