@@ -6,9 +6,14 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 WHITE='\033[1;37m'
 NC='\033[0m'
-RUNNING="[${YELLOW}  RUNNING  ${NC}]"
-MYOK="[${GREEN}    OK     ${NC}]"
-ERROR="[${RED}  ERROR    ${NC}]"
+CHECK="\u2713"
+CROSS="\u2717"
+RUNNING="${YELLOW}•${NC}"
+MYOK="${GREEN}${CHECK}${NC}"
+ERROR="${RED}${CROSS}${NC}"
+#RUNNING="[${YELLOW}  RUNNING  ${NC}]"
+#MYOK="[${GREEN}    OK     ${NC}]"
+#ERROR="[${RED}  ERROR    ${NC}]"
 scriptname=$(basename "$0")
 UP='\033[A'
 DOWN='\033[B'
@@ -89,11 +94,11 @@ Banner () {
 }
 printStep() {
 	if [[ "${1}" == 1 ]]; then
-		printf "${RUNNING}   ${2} ${WHITE}${3}${NC}\n"
+		printf "${RUNNING} ${2} ${WHITE}${3}${NC}\n"
 		MOVE=${MOVE}${UP}
 		MOVEBACK=${MOVEBACK}${DOWN}
  	else
-		printf "${RUNNING}   ${YELLOW}• ${NC}${2} ${WHITE}${3}${NC}"
+		printf "${RUNNING}  ${2} ${WHITE}${3}${NC}"
 		MOVE=${MOVE}${UP}
 		MOVEBACK=${MOVEBACK}${DOWN}
  	fi
@@ -106,11 +111,11 @@ printStepOK() {
 		printf "${MOVEBACK}\r"
 		MOVEBACK=""
  	else
-		printf "\r${MYOK}   ${GREEN}‼ ${NC}\n"
+		printf "\r${MYOK}\n"
  	fi
 }
 printError() {
-	printf "\r${ERROR}   ${RED}↨ ${NC}\n"
+	printf "\r${ERROR}\n"
 	MOVE=${MOVE}
 	printf "${MOVE}\r${ERROR}"
 	MOVE=""
