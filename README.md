@@ -29,3 +29,11 @@ Add --cfdisk y --disk /dev/nvme0n1 to partition the disk beforehand.
 If necessary arguments are missing. Or no arguments supplied at all, the script will ask for them with an interactive menu.
 
 Use --help to see the arguments supported.
+
+Stable Diffusion:
+yay -S python310
+delete venv
+pathon3.10 -m venv venv
+https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Install-and-Run-on-AMD-GPUs
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.2
+
