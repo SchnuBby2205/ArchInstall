@@ -40,3 +40,5 @@ if nvidia error git clone https://github.com/lshqqytiger/stable-diffusion-webui-
 and ./webui.sh --skip-torch-cuda-test --precision full --no-half
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.2
 
+SwarmUI
+https://old.reddit.com/r/StableDiffusion/comments/1ei6fzg/flux_4_noobs_o_windows/
