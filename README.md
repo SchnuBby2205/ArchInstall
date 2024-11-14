@@ -36,5 +36,7 @@ yay -S python310
 delete venv
 pathon3.10 -m venv venv
 https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Install-and-Run-on-AMD-GPUs
+if nvidia error git clone https://github.com/lshqqytiger/stable-diffusion-webui-amdgpu
+or --skip-torch-cuda-test
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.2
 
