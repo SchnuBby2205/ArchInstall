@@ -31,6 +31,7 @@ If necessary arguments are missing. Or no arguments supplied at all, the script 
 Use --help to see the arguments supported.
 
 Stable Diffusion:
+https://amdadulhaquemilon.medium.com/4-methods-how-to-run-flux-locally-onwindows-mac-and-linux-544f4f11eab7
 yay -S python310
 delete venv
 pathon3.10 -m venv venv
