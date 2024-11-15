@@ -340,7 +340,7 @@ if [[ "${option}" == "3" ]]; then
  	bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
  	Banner "hypr"
 	printStep 1 "Setting up" "HyprDots..."
-		runcmds 0 "Downloading" "HyprDots..." "git clone https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null"
+		runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null"
 	printStepOK 1
  	bash -c "nano ./HyprDots/Scripts/custom_hypr.lst" 
   	bash -c "nano ./HyprDots/Scripts/.extra/custom_flat.lst"
@@ -357,21 +357,34 @@ if [[ "${option}" == "4" ]]; then
 		myPrint "yellow" "Enter your normal username: "
 		read user
 	fi	
+	if [[ "${gpu}" == "" ]]; then
+		myPrint "yellow" "Enter your gpu (amd // nvidia)): "
+		read gpu
+	fi	
 	printStep 1 "Installing" "Config files..."
 		runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/sddm.conf"
 		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
-		runcmds 0 "Backing up" "HyprDots userprefs.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf" "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
+		if [[ -f "/home/${user}/.config/hypr/userprefs.conf" ]]; then
+			runcmds 0 "Backing up" "HyprDots userprefs.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf" "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
+		fi
 		cd ~/.config
-		runcmds 0 "Cloning" "SchnuBbyconfig..." "git clone https://github.com/SchnuBby2205/HyprDots ./.schnubbyconfig &>/dev/null"
-		runcmds 0 "Creating symlink to" "userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
+		if [[ ! -d "~/.config/.schnubbyconfig" ]]; then
+			runcmds 0 "Cloning" "SchnuBbyconfig..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprDots ~/.config/.schnubbyconfig &>/dev/null"
+		fi
+ 	printStepOK 1
+		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
+			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
+		fi
 		if [[ -d "~/.local/share/lutris" ]]; then
 			bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
 		fi 	
-		runcmds 0 "Creating symlink to" "lutris..." "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris" 	
+		if [[ ! -d "~/.local/share/lutris" ]]; then
+			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris" 	
+		fi
+	printStep 1 "Running" "final steps..."
 		runcmds 0 "Removing flags from" "code-flags.conf..." "rm -rf ~/.config/code-flags.conf" "touch ~/.config/code-flags.conf"   	
 		runcmds 0 "Configuring" "~/.config/waybar/modules/clock.jsonc..." "sed -i 's/{:%I:%M %p}/{:%R 󰃭 %d·%m·%y}/g' ~/.config/waybar/modules/clock.jsonc" "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc"
 		runcmds 0 "Configuring" "~/.config/swaylock/config..." "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config"
-		runcmds 0 "Installing" "gaming dependencies..." 'yes | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" arch gaming meta' 'yes | LANG=C yay --noprovides --answerdiff None --answerclean None --mflags "--noconfirm" dxvk-bin'
 		runcmds 0 "Downloading" "Wine dependencies..." "sudo pacman -Syu &>/dev/null" "sudo pacman  --noconfirm -S wine-staging &>/dev/null" "sudo pacman  --noconfirm -S --needed --asdeps giflib lib32-giflib gnutls lib32-gnutls v4l-utils lib32-v4l-utils libpulse lib32-libpulse alsa-plugins lib32-alsa-plugins alsa-lib lib32-alsa-lib sqlite lib32-sqlite libxcomposite lib32-libxcomposite ocl-icd lib32-ocl-icd libva lib32-libva gtk3 lib32-gtk3 gst-plugins-base-libs lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader sdl2 lib32-sdl2 lib32-gamemode &>/dev/null"
 		if [[ "${gpu}" == "amd" ]]; then
 			runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
@@ -379,7 +392,9 @@ if [[ "${option}" == "4" ]]; then
 		if [[ "${gpu}" == "nvidia" ]]; then
 			runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
 		fi
- 	printStepOK 1
+	printStepOK 1
+	bash -c "yay arch gaming meta"
+	bash -c "yay dxvk-bin"
   	bash -c "Hyde-install"  
  	sudo bash -c "rm -rf ~/${scriptname}"	
 	myPrint "green" "\n\nToDos:\n"
@@ -396,6 +411,6 @@ if [[ "${option}" == "4" ]]; then
 	-new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
   	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"   
   	printCountDown 3 "Reboot in"
-    	bash -c "reboot"
+    bash -c "reboot"
 fi
 exit 0
