@@ -29,16 +29,3 @@ Add --cfdisk y --disk /dev/nvme0n1 to partition the disk beforehand.
 If necessary arguments are missing. Or no arguments supplied at all, the script will ask for them with an interactive menu.
 
 Use --help to see the arguments supported.
-
-Stable Diffusion:
-https://amdadulhaquemilon.medium.com/4-methods-how-to-run-flux-locally-onwindows-mac-and-linux-544f4f11eab7
-yay -S python310
-delete venv
-pathon3.10 -m venv venv
-https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Install-and-Run-on-AMD-GPUs
-if nvidia error git clone https://github.com/lshqqytiger/stable-diffusion-webui-amdgpu
-and ./webui.sh --skip-torch-cuda-test --precision full --no-half
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.2
-
-SwarmUI
-https://old.reddit.com/r/StableDiffusion/comments/1ei6fzg/flux_4_noobs_o_windows/
