@@ -99,9 +99,9 @@ myPasswd() {
 	# Schleife, die bis zu MAX_ATTEMPTS Versuche erlaubt
 	while [ $attempts -lt $MAX_ATTEMPTS ]; do
 		# Passwortabfrage
-		printf "Password:"
+		printf "Password: "
 		read -s password1
-		printf "\nRetype:"
+		printf "\nRetype: "
 		read -s password2
 
 		# Überprüfen, ob die Passwörter übereinstimmen
@@ -388,7 +388,8 @@ if [[ "${option}" == "3" ]]; then
    	bash -c "sudo pacman --noconfirm -Runs nano &>/dev/null"
 	printCountDown 3 "Starting installation in"
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
-	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/.config/hypr/hyprland.conf"		
+	#bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/.config/hypr/hyprland.conf"	
+	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> //home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"		
   	cd ~/HyprDots/Scripts
 	bash -c "./install.sh -drs"
 	#bash -c "./install.sh -ds"
@@ -405,7 +406,7 @@ if [[ "${option}" == "4" ]]; then
 	fi	
 
 	bash -c "sudo pacman -Syy"
-  	bash -c "Hyde-install"  
+  	#bash -c "Hyde-install"
 
 	Banner "config"
 	printStep 1 "Installing" "Config files..."
@@ -455,7 +456,8 @@ if [[ "${option}" == "4" ]]; then
 	bash -c "yay dxvk-bin"
  	sudo bash -c "rm -rf ~/${scriptname}"	
 	myPrint "green" "\n\nToDos:\n"
-	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n\n"
+	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n"
+	myPrint "yellow" "- Install theme through Themepatcher (vanta black...)\n\n"
 	myPrint "green" "Hints:\n"
 	myPrint "yellow" "- kdwalletmanager (set empty password)\n"
  	myPrint "yellow" "  (if Brave was installed instead of Firefox and Brave cant open the kdwallet.)\n"
@@ -463,10 +465,13 @@ if [[ "${option}" == "4" ]]; then
  	myPrint "yellow" "  (if there are Problems with Games.)\n"
 	myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
  	myPrint "yellow" "  (if you want to use git from the terminal.)\n\n"
-	bash -c "firefox -new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
-	-new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json \
-	-new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
-  	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"   
+	bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file"
+	
+	#bash -c "firefox -new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
+	#-new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json \
+	#-new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
+  	
+	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"   
   	printCountDown 3 "Reboot in"
     bash -c "reboot"
 fi
