@@ -101,12 +101,12 @@ myPasswd() {
 		# Passwortabfrage
 		printf "Password:"
 		read -s password1
-		printf "Retype:"
+		printf "\nRetype:"
 		read -s password2
 
 		# Überprüfen, ob die Passwörter übereinstimmen
 		if [ "$password1" != "$password2" ]; then
-			echo "Passwords didn't match."
+			printf "\nPasswords didn't match.\n"
 			((attempts++))
 			continue  # Gehe zurück zum Anfang der Schleife
 		fi
@@ -116,17 +116,17 @@ myPasswd() {
 
 		# Überprüfen, ob der `passwd`-Befehl erfolgreich war
 		if [ $? -eq 0 ]; then
-			echo "Password updated succesfully."
+			printf "\nPassword updated succesfully.\n"
 			break  # Beende die Schleife, wenn erfolgreich
 		else
-			echo "Error setting the password."
+			printf "\nError setting the password.\n"
 			((attempts++))
 		fi
 	done
 
 	# Falls die maximale Anzahl der Versuche erreicht wurde
 	if [ $attempts -ge $MAX_ATTEMPTS ]; then
-		echo "Maximum tries reached script will end."
+		printf "\nMaximum tries reached script will end.\n"
 		exit 1
 	fi
 }
@@ -384,13 +384,14 @@ if [[ "${option}" == "3" ]]; then
 	printStepOK 1
  	bash -c "nano ./HyprDots/Scripts/custom_hypr.lst" 
   	bash -c "nano ./HyprDots/Scripts/.extra/custom_flat.lst"
+	bash -c "nano ./HyprDots/Scripts/themepatcher.lst"
    	bash -c "sudo pacman --noconfirm -Runs nano &>/dev/null"
 	printCountDown 3 "Starting installation in"
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
-	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"		
+	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/.config/hypr/hyprland.conf"		
   	cd ~/HyprDots/Scripts
-	#bash -c "./install.sh -drs"
-	bash -c "./install.sh -ds"
+	bash -c "./install.sh -drs"
+	#bash -c "./install.sh -ds"
 fi
 if [[ "${option}" == "4" ]]; then
 	Banner "config"
@@ -409,6 +410,10 @@ if [[ "${option}" == "4" ]]; then
 	Banner "config"
 	printStep 1 "Installing" "Config files..."
 		runcmds 0 "Installing" "HyDe..." ""
+		if [[ ! -d "/etc/sddm.conf.d/" ]]; then
+			bash -c "sudo mkdir /etc/sddm.conf.d"
+			bash -c "sudo touch /etc/sddm.conf.d/sddm.conf"
+		fi		
 		runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/sddm.conf"
 		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 		if [[ -f "/home/${user}/.config/hypr/userprefs.conf" ]]; then
