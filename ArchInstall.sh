@@ -384,8 +384,13 @@ if [[ "${option}" == "3" ]]; then
 	printStepOK 1
  	bash -c "nano ./HyprDots/Scripts/custom_hypr.lst" 
   	bash -c "nano ./HyprDots/Scripts/.extra/custom_flat.lst"
+	bash -c "rm -rf ./HyprDots/Scripts/themepatcher.lst"
+
+	curl -s 'https://raw.githubusercontent.com/HyDE-Project/hyde-gallery/hyde-gallery/hyde-themes.json' | \
+    python3 -c "import sys, json; x = json.load(sys.stdin); [print(f'#\"{i['THEME']}\" \"{i['LINK']}\"') for i in x]" >> "./HyprDots/Scripts/themepatcher.lst"
 	bash -c "nano ./HyprDots/Scripts/themepatcher.lst"
-   	bash -c "sudo pacman --noconfirm -Runs nano &>/dev/null"
+
+	bash -c "sudo pacman --noconfirm -Runs nano &>/dev/null"
 	printCountDown 3 "Starting installation in"
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
 	#bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/.config/hypr/hyprland.conf"	
