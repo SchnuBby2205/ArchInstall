@@ -99,9 +99,9 @@ myPasswd() {
 	# Schleife, die bis zu MAX_ATTEMPTS Versuche erlaubt
 	while [ $attempts -lt $MAX_ATTEMPTS ]; do
 		# Passwortabfrage
-		echo "Password:"
+		printf "Password:"
 		read -s password1
-		echo "Retype:"
+		printf "Retype:"
 		read -s password2
 
 		# Überprüfen, ob die Passwörter übereinstimmen
@@ -112,7 +112,7 @@ myPasswd() {
 		fi
 
 		# Führe den `passwd`-Befehl aus, um das Passwort zu ändern
-		echo -e "$password1\n$password2" | sudo passwd ${1}
+		echo -e "$password1\n$password2" &>/dev/null | sudo passwd ${1}
 
 		# Überprüfen, ob der `passwd`-Befehl erfolgreich war
 		if [ $? -eq 0 ]; then
