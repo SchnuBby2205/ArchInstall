@@ -112,7 +112,7 @@ myPasswd() {
 		fi
 
 		# Führe den `passwd`-Befehl aus, um das Passwort zu ändern
-		echo -e "$password1\n$password2" &>/dev/null | sudo passwd ${1}
+		echo -e "$password1\n$password2" | sudo passwd ${1} &>/dev/null
 
 		# Überprüfen, ob der `passwd`-Befehl erfolgreich war
 		if [ $? -eq 0 ]; then
