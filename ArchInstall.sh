@@ -456,7 +456,11 @@ if [[ "${option}" == "4" ]]; then
 		if [[ ! -f "/home/${user}/.git-credentials" ]]; then
 			runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/.git-credentials ~/.git-credentials"
 		fi
-	printStepOK 1
+		f [[ -f "~/.zsh_history" ]]; then
+			bash -c "rm -rf ~/.zsh_history"
+		fi
+		runcmds 0 "Configuring" "zsh_history..." "ln -sf /programmieren/.zsh_history ~/.zsh_history"
+  	printStepOK 1
 	bash -c "yay arch gaming meta"
 	bash -c "yay dxvk-bin"
  	sudo bash -c "rm -rf ~/${scriptname}"	
