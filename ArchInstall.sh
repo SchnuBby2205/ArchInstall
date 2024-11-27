@@ -456,7 +456,7 @@ if [[ "${option}" == "4" ]]; then
 		if [[ ! -f "/home/${user}/.git-credentials" ]]; then
 			runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/.git-credentials ~/.git-credentials"
 		fi
-		f [[ -f "~/.zsh_history" ]]; then
+		if [[ -f "~/.zsh_history" ]]; then
 			bash -c "rm -rf ~/.zsh_history"
 		fi
 		runcmds 0 "Configuring" "zsh_history..." "ln -sf /programmieren/.zsh_history ~/.zsh_history"
