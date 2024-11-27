@@ -387,7 +387,7 @@ if [[ "${option}" == "3" ]]; then
 	bash -c "rm -rf ./HyprDots/Scripts/themepatcher.lst"
 
 	curl -s 'https://raw.githubusercontent.com/HyDE-Project/hyde-gallery/hyde-gallery/hyde-themes.json' | \
-    python3 -c "import sys, json; x = json.load(sys.stdin); [print(f'#\"{i['THEME']}\" \"{i['LINK']}\"') for i in x]" >> "./HyprDots/Scripts/themepatcher.lst"
+    python3 -c "import sys, json; x = json.load(sys.stdin); [print(f'\"{i['THEME']}\" \"{i['LINK']}\"') for i in x]" >> "./HyprDots/Scripts/themepatcher.lst"
 	bash -c "nano ./HyprDots/Scripts/themepatcher.lst"
 
 	bash -c "sudo pacman --noconfirm -Runs nano &>/dev/null"
