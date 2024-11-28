@@ -421,6 +421,7 @@ if [[ "${option}" == "4" ]]; then
 			bash -c "sudo touch /etc/sddm.conf.d/sddm.conf"
 		fi		
 		runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/sddm.conf"
+		# Muss bei anderen Rechnern nicht gemacht werden
 		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 		if [[ -f "/home/${user}/.config/hypr/userprefs.conf" ]]; then
 			runcmds 0 "Backing up" "HyprDots userprefs.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf" "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
@@ -433,9 +434,11 @@ if [[ "${option}" == "4" ]]; then
 		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
 			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
 		fi
+		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ -d "~/.local/share/lutris" ]]; then
 			bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
 		fi 	
+		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ ! -d "~/.local/share/lutris" ]]; then
 			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris" 	
 		fi
@@ -450,15 +453,19 @@ if [[ "${option}" == "4" ]]; then
 		if [[ "${gpu}" == "nvidia" ]]; then
 			runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
 		fi
+		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ ! -f "/home/${user}/.gitconfig" ]]; then
 			runcmds 0 "Configuring" "git..." "ln -sf /programmieren/.gitconfig ~/.gitconfig"
 		fi
+		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ ! -f "/home/${user}/.git-credentials" ]]; then
 			runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/.git-credentials ~/.git-credentials"
 		fi
+		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ -f "~/.zsh_history" ]]; then
 			bash -c "rm -rf ~/.zsh_history"
 		fi
+		# Muss bei anderen Rechnern nicht gemacht werden
 		runcmds 0 "Configuring" "zsh_history..." "ln -sf /programmieren/.zsh_history ~/.zsh_history"
   	printStepOK 1
 	bash -c "yay arch gaming meta"
@@ -475,7 +482,7 @@ if [[ "${option}" == "4" ]]; then
 	myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
  	myPrint "yellow" "  (if you want to use git from the terminal.)\n\n"
 	bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file"
-	
+
 	#bash -c "firefox -new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
 	#-new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json \
 	#-new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
