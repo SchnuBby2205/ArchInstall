@@ -416,13 +416,11 @@ if [[ "${option}" == "4" ]]; then
 	Banner "config"
 	printStep 1 "Installing" "Config files..."
 		runcmds 0 "Installing" "HyDe..." ""
-		if [[ ! -d "/etc/sddm.conf.d/" ]]; then
-			bash -c "sudo mkdir /etc/sddm.conf.d"
-			bash -c "sudo touch /etc/sddm.conf.d/sddm.conf"
-		fi		
+		#if [[ ! -d "/etc/sddm.conf.d/" ]]; then
+		#	bash -c "sudo mkdir /etc/sddm.conf.d"
+		#	bash -c "sudo touch /etc/sddm.conf.d/sddm.conf"
+		#fi		
 		runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/sddm.conf"
-		# Muss bei anderen Rechnern nicht gemacht werden
-		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 		if [[ -f "/home/${user}/.config/hypr/userprefs.conf" ]]; then
 			runcmds 0 "Backing up" "HyprDots userprefs.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf" "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 		fi
@@ -431,17 +429,6 @@ if [[ "${option}" == "4" ]]; then
 			runcmds 0 "Cloning" "SchnuBbyconfig..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprDots ~/.config/.schnubbyconfig &>/dev/null"
 		fi
  	printStepOK 1
-		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
-			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
-		fi
-		# Muss bei anderen Rechnern nicht gemacht werden
-		if [[ -d "~/.local/share/lutris" ]]; then
-			bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
-		fi 	
-		# Muss bei anderen Rechnern nicht gemacht werden
-		if [[ ! -d "~/.local/share/lutris" ]]; then
-			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris" 	
-		fi
 	printStep 1 "Running" "final steps..."
 		runcmds 0 "Removing flags from" "code-flags.conf..." "rm -rf ~/.config/code-flags.conf" "touch ~/.config/code-flags.conf"   	
 		runcmds 0 "Configuring" "~/.config/waybar/modules/clock.jsonc..." "sed -i 's/{:%I:%M %p}/{:%R 󰃭 %d·%m·%y}/g' ~/.config/waybar/modules/clock.jsonc" "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc"
@@ -453,6 +440,30 @@ if [[ "${option}" == "4" ]]; then
 		if [[ "${gpu}" == "nvidia" ]]; then
 			runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null"
 		fi
+  	printStepOK 1
+	bash -c "yay arch gaming meta"
+	bash -c "yay dxvk-bin"
+
+	myPrint "yellow" "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n"
+	read schnubby
+
+	if [[ ${schnubby}" == "y" ]] || [[ ${schnubby}" == "Y" ]]; then
+		printStep 1 "Installing" "schnubbyspecifics..."
+		# Muss bei anderen Rechnern nicht gemacht werden
+		if [[ -d "~/.local/share/lutris" ]]; then
+			bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
+		fi 	
+		# Muss bei anderen Rechnern nicht gemacht werden
+		if [[ ! -d "~/.local/share/lutris" ]]; then
+			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris" 	
+		fi	
+		# Muss bei anderen Rechnern nicht gemacht werden
+		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
+		# Muss bei anderen Rechnern nicht gemacht werden
+		if [[ -f "~/.zsh_history" ]]; then
+			bash -c "rm -rf ~/.zsh_history"
+		fi
+		runcmds 0 "Configuring" "zsh_history..." "ln -sf /programmieren/.zsh_history ~/.zsh_history"
 		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ ! -f "/home/${user}/.gitconfig" ]]; then
 			runcmds 0 "Configuring" "git..." "ln -sf /programmieren/.gitconfig ~/.gitconfig"
@@ -461,26 +472,28 @@ if [[ "${option}" == "4" ]]; then
 		if [[ ! -f "/home/${user}/.git-credentials" ]]; then
 			runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/.git-credentials ~/.git-credentials"
 		fi
-		# Muss bei anderen Rechnern nicht gemacht werden
-		if [[ -f "~/.zsh_history" ]]; then
-			bash -c "rm -rf ~/.zsh_history"
+
+		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
+			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs_schnubby.conf"
 		fi
-		# Muss bei anderen Rechnern nicht gemacht werden
-		runcmds 0 "Configuring" "zsh_history..." "ln -sf /programmieren/.zsh_history ~/.zsh_history"
-  	printStepOK 1
-	bash -c "yay arch gaming meta"
-	bash -c "yay dxvk-bin"
+		printStepOK 1
+	else
+		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
+			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
+		fi
+	fi
+
  	sudo bash -c "rm -rf ~/${scriptname}"	
-	myPrint "green" "\n\nToDos:\n"
-	myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n"
-	myPrint "yellow" "- Install theme through Themepatcher (vanta black...)\n\n"
-	myPrint "green" "Hints:\n"
-	myPrint "yellow" "- kdwalletmanager (set empty password)\n"
- 	myPrint "yellow" "  (if Brave was installed instead of Firefox and Brave cant open the kdwallet.)\n"
-	myPrint "yellow" "- Install newest GE-Proton through Lutris Wine Downloads\n"
- 	myPrint "yellow" "  (if there are Problems with Games.)\n"
-	myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
- 	myPrint "yellow" "  (if you want to use git from the terminal.)\n\n"
+	#myPrint "green" "\n\nToDos:\n"
+	#myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n"
+	#myPrint "yellow" "- Install theme through Themepatcher (vanta black...)\n\n"
+	#myPrint "green" "Hints:\n"
+	#myPrint "yellow" "- kdwalletmanager (set empty password)\n"
+ 	#myPrint "yellow" "  (if Brave was installed instead of Firefox and Brave cant open the kdwallet.)\n"
+	#myPrint "yellow" "- Install newest GE-Proton through Lutris Wine Downloads\n"
+ 	#myPrint "yellow" "  (if there are Problems with Games.)\n"
+	#myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
+ 	#myPrint "yellow" "  (if you want to use git from the terminal.)\n\n"
 	bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file"
 
 	#bash -c "firefox -new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
