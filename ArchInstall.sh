@@ -474,7 +474,7 @@ if [[ "${option}" == "4" ]]; then
 		fi
 
 		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
-			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs_schnubby.conf"
+			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs_schnubby.conf ~/.config/hypr/userprefs.conf"
 		fi
 		printStepOK 1
 	else
