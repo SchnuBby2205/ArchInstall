@@ -451,19 +451,19 @@ if [[ "${option}" == "4" ]]; then
 		printStep 1 "Installing" "schnubbyspecifics..."
 		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ -d "~/.local/share/lutris" ]]; then
-			bash -c "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
+			runcmds 0 "Backing up" "lutris..." "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
 		fi 	
 		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ ! -d "~/.local/share/lutris" ]]; then
-			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris" 	
+			runcmds 0 "Configuring" "lutris..." "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris" 	
 		fi	
 		# Muss bei anderen Rechnern nicht gemacht werden
 		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ -f "~/.zsh_history" ]]; then
-			bash -c "rm -rf ~/.zsh_history"
+			runcmds 0 "Removing" ".zsh_history..." "rm -rf ~/.zsh_history"
 		fi
-		runcmds 0 "Configuring" "zsh_history..." "ln -sf /programmieren/.zsh_history ~/.zsh_history"
+		runcmds 0 "Configuring" ".zsh_history..." "ln -sf /programmieren/.zsh_history ~/.zsh_history"
 		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ ! -f "/home/${user}/.gitconfig" ]]; then
 			runcmds 0 "Configuring" "git..." "ln -sf /programmieren/.gitconfig ~/.gitconfig"
@@ -474,12 +474,12 @@ if [[ "${option}" == "4" ]]; then
 		fi
 
 		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
-			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs_schnubby.conf ~/.config/hypr/userprefs.conf"
+			runcmds 0 "Configuring" "hypr/userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs_schnubby.conf ~/.config/hypr/userprefs.conf"
 		fi
 		printStepOK 1
 	else
 		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
-			bash -c "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
+			runcmds 0 "Configuring" "hypr/userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
 		fi
 	fi
 
