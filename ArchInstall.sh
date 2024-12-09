@@ -447,7 +447,7 @@ if [[ "${option}" == "4" ]]; then
 	myPrint "yellow" "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n"
 	read schnubby
 
-	if [[ ${schnubby}" == "y" ]] || [[ ${schnubby}" == "Y" ]]; then
+	if [[ "${schnubby}" == "y" ]] || [[ "${schnubby}" == "Y" ]]; then
 		printStep 1 "Installing" "schnubbyspecifics..."
 		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ -d "~/.local/share/lutris" ]]; then
