@@ -221,6 +221,37 @@ runcmds() {
   	done
 	printStepOK 0
 }
+installSchnuBby() {
+		printStep 1 "Installing" "schnubbyspecifics..."
+		# Muss bei anderen Rechnern nicht gemacht werden
+		if [[ -d "~/.local/share/lutris" ]]; then
+			runcmds 0 "Backing up" "lutris..." "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
+		fi 	
+		# Muss bei anderen Rechnern nicht gemacht werden
+		if [[ ! -d "~/.local/share/lutris" ]]; then
+			runcmds 0 "Configuring" "lutris..." "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris" 	
+		fi	
+		# Muss bei anderen Rechnern nicht gemacht werden
+		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
+		# Muss bei anderen Rechnern nicht gemacht werden
+		if [[ -f "~/.zsh_history" ]]; then
+			runcmds 0 "Removing" ".zsh_history..." "rm -rf ~/.zsh_history"
+		fi
+		runcmds 0 "Configuring" ".zsh_history..." "ln -sf /programmieren/.zsh_history ~/.zsh_history"
+		# Muss bei anderen Rechnern nicht gemacht werden
+		if [[ ! -f "/home/${user}/.gitconfig" ]]; then
+			runcmds 0 "Configuring" "git..." "ln -sf /programmieren/.gitconfig ~/.gitconfig"
+		fi
+		# Muss bei anderen Rechnern nicht gemacht werden
+		if [[ ! -f "/home/${user}/.git-credentials" ]]; then
+			runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/.git-credentials ~/.git-credentials"
+		fi
+
+		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
+			runcmds 0 "Configuring" "hypr/userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs_schnubby.conf ~/.config/hypr/userprefs.conf"
+		fi
+		printStepOK 1
+}
 while [ $# -gt 0 ]; do
     if [[ $1 == "--"* ]]; then
 	v="${1/--/}"
@@ -271,8 +302,13 @@ if [[ "${option}" == "" ]]; then
 	printf "["
 	myPrint "yellow" "4"
 	printf "]: Install "
-	myPrint "yellow" "Config files\n\n"
-	
+	myPrint "yellow" "Config files\n"
+
+ 	printf "["
+	myPrint "yellow" "5"
+	printf "]: Install "
+	myPrint "yellow" "SchnuBby specific config files (git / /fstab / lutris...)\n\n"
+ 
 	read option
 fi
 if [[ "${option}" == "" ]]; then
@@ -448,35 +484,7 @@ if [[ "${option}" == "4" ]]; then
 	read schnubby
 
 	if [[ "${schnubby}" == "y" ]] || [[ "${schnubby}" == "Y" ]]; then
-		printStep 1 "Installing" "schnubbyspecifics..."
-		# Muss bei anderen Rechnern nicht gemacht werden
-		if [[ -d "~/.local/share/lutris" ]]; then
-			runcmds 0 "Backing up" "lutris..." "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
-		fi 	
-		# Muss bei anderen Rechnern nicht gemacht werden
-		if [[ ! -d "~/.local/share/lutris" ]]; then
-			runcmds 0 "Configuring" "lutris..." "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris" 	
-		fi	
-		# Muss bei anderen Rechnern nicht gemacht werden
-		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
-		# Muss bei anderen Rechnern nicht gemacht werden
-		if [[ -f "~/.zsh_history" ]]; then
-			runcmds 0 "Removing" ".zsh_history..." "rm -rf ~/.zsh_history"
-		fi
-		runcmds 0 "Configuring" ".zsh_history..." "ln -sf /programmieren/.zsh_history ~/.zsh_history"
-		# Muss bei anderen Rechnern nicht gemacht werden
-		if [[ ! -f "/home/${user}/.gitconfig" ]]; then
-			runcmds 0 "Configuring" "git..." "ln -sf /programmieren/.gitconfig ~/.gitconfig"
-		fi
-		# Muss bei anderen Rechnern nicht gemacht werden
-		if [[ ! -f "/home/${user}/.git-credentials" ]]; then
-			runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/.git-credentials ~/.git-credentials"
-		fi
-
-		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
-			runcmds 0 "Configuring" "hypr/userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs_schnubby.conf ~/.config/hypr/userprefs.conf"
-		fi
-		printStepOK 1
+ 		installSchnuBby
 	else
 		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
 			runcmds 0 "Configuring" "hypr/userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
@@ -499,9 +507,19 @@ if [[ "${option}" == "4" ]]; then
 	#bash -c "firefox -new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
 	#-new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json \
 	#-new-tab -url https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
-  	
+
+ 	bash -c "firefox --ProfileManager"
+  
 	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"   
   	printCountDown 3 "Reboot in"
     bash -c "reboot"
+fi
+if [[ "${option}" == "5" ]]; then
+	Banner "config"
+ 	if [[ "${user}" == "" ]]; then
+		myPrint "yellow" "Enter your normal username: "
+		read user
+	fi	
+ 	installSchnuBby
 fi
 exit 0
