@@ -416,7 +416,7 @@ if [[ "${option}" == "3" ]]; then
  	bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
  	Banner "hypr"
 	printStep 1 "Setting up" "HyprDots..."
-		runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/prasanthrangan/hyprdots ~/HyprDots &>/dev/null"
+		runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/HyDE-Project/HyDE ~/HyprDots &>/dev/null"
 	printStepOK 1
  	#bash -c "nano ./HyprDots/Scripts/custom_hypr.lst" 
   bash -c "nano ./HyprDots/Scripts/pkg_core.lst.lst" 
