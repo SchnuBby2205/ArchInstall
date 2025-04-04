@@ -458,7 +458,8 @@ if [[ "${option}" == "4" ]]; then
 		#	bash -c "sudo mkdir /etc/sddm.conf.d"
 		#	bash -c "sudo touch /etc/sddm.conf.d/sddm.conf"
 		#fi		
-		runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/sddm.conf"
+		#runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/sddm.conf"
+  		runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/the_hyde_project.conf"
 		if [[ -f "/home/${user}/.config/hypr/userprefs.conf" ]]; then
 			runcmds 0 "Backing up" "HyprDots userprefs.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf" "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
 		fi
