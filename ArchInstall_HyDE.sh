@@ -515,7 +515,8 @@ if [[ "${option}" == "4" ]]; then
  	#myPrint "yellow" "  (if there are Problems with Games.)\n"
 	#myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
  	#myPrint "yellow" "  (if you want to use git from the terminal.)\n\n"
-	bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file"
+	bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
+ 	-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
 
 	#bash -c "firefox -new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
 	#-new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json \
