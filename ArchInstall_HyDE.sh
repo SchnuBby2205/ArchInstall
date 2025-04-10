@@ -223,7 +223,12 @@ runcmds() {
 }
 installSchnuBby() {
 		printStep 1 "Installing" "schnubbyspecifics..."
-		# Muss bei anderen Rechnern nicht gemacht werden
+  		runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/the_hyde_project.conf"
+		cd ~/.config
+		if [[ ! -d "~/.config/.schnubbyconfig" ]]; then
+			runcmds 0 "Cloning" "SchnuBbyconfig..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprDots ~/.config/.schnubbyconfig &>/dev/null"
+		fi
+  		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ -d "~/.local/share/lutris" ]]; then
 			runcmds 0 "Backing up" "lutris..." "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
 		fi 	
@@ -246,9 +251,21 @@ installSchnuBby() {
 		if [[ ! -f "/home/${user}/.git-credentials" ]]; then
 			runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/.git-credentials ~/.git-credentials"
 		fi
+  
+		if [[ -f "/home/${user}/.config/hypr/userprefs.conf" ]]; then
+			#runcmds 0 "Backing up" "HyprDots userprefs.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf" "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
+   			runcmds 0 "Backing up" "HyprDots userprefs.conf..." "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
+		fi
+  		if [[ -f "/home/${user}/.config/hypr/hypridle.conf" ]]; then
+			#runcmds 0 "Backing up" "HyprDots hypridle.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/hypridle.conf" "mv ~/.config/hypr/hypridle.conf ~/.config/hypr/hypridle.bak"
+   			runcmds 0 "Backing up" "HyprDots hypridle.conf..." "mv ~/.config/hypr/hypridle.conf ~/.config/hypr/hypridle.bak"
+		fi
 
 		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
-			runcmds 0 "Configuring" "hypr/userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs_schnubby.conf ~/.config/hypr/userprefs.conf"
+			runcmds 0 "Configuring" "hypr/userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
+		fi
+  		if [[ ! -f "~/.config/hypr/hypridle.conf" ]]; then
+			runcmds 0 "Configuring" "hypr/hypridle.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/hypridle.conf ~/.config/hypr/hypridle.conf"
 		fi
 		printStepOK 1
 }
@@ -452,22 +469,14 @@ if [[ "${option}" == "4" ]]; then
   	#bash -c "Hyde-install"
 
 	Banner "config"
-	printStep 1 "Installing" "Config files..."
-		runcmds 0 "Installing" "HyDe..." ""
+	#printStep 1 "Installing" "Config files..."
+		#runcmds 0 "Installing" "HyDe..." ""
 		#if [[ ! -d "/etc/sddm.conf.d/" ]]; then
 		#	bash -c "sudo mkdir /etc/sddm.conf.d"
 		#	bash -c "sudo touch /etc/sddm.conf.d/sddm.conf"
 		#fi		
 		#runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/sddm.conf"
-  		runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/the_hyde_project.conf"
-		if [[ -f "/home/${user}/.config/hypr/userprefs.conf" ]]; then
-			runcmds 0 "Backing up" "HyprDots userprefs.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf" "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
-		fi
-		cd ~/.config
-		if [[ ! -d "~/.config/.schnubbyconfig" ]]; then
-			runcmds 0 "Cloning" "SchnuBbyconfig..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprDots ~/.config/.schnubbyconfig &>/dev/null"
-		fi
- 	printStepOK 1
+ 	#printStepOK 1
 	printStep 1 "Running" "final steps..."
 		runcmds 0 "Removing flags from" "code-flags.conf..." "rm -rf ~/.config/code-flags.conf" "touch ~/.config/code-flags.conf"   	
 		runcmds 0 "Configuring" "~/.config/waybar/modules/clock.jsonc..." "sed -i 's/{:%I:%M %p}/{:%R 󰃭 %d·%m·%y}/g' ~/.config/waybar/modules/clock.jsonc" "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc"
@@ -489,10 +498,10 @@ if [[ "${option}" == "4" ]]; then
 
 	if [[ "${schnubby}" == "y" ]] || [[ "${schnubby}" == "Y" ]]; then
  		installSchnuBby
-	else
-		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
-			runcmds 0 "Configuring" "hypr/userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
-		fi
+	#else
+		#if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
+			#runcmds 0 "Configuring" "hypr/userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
+		#fi
 	fi
 
  	sudo bash -c "rm -rf ~/${scriptname}"	
