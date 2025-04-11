@@ -234,7 +234,7 @@ installSchnuBby() {
 		fi 	
 		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ ! -d "~/.local/share/lutris" ]]; then
-			runcmds 0 "Configuring" "lutris..." "ln -s ~/.config/.schnubbyconfig/Configs/.local/share/lutris ~/.local/share/lutris" 	
+			runcmds 0 "Configuring" "lutris..." "ln -s /programmieren/.local/share/lutris ~/.local/share/lutris" 	
 		fi	
 		# Muss bei anderen Rechnern nicht gemacht werden
 		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
