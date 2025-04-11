@@ -225,9 +225,9 @@ installSchnuBby() {
 		printStep 1 "Installing" "schnubbyspecifics..."
   		runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/the_hyde_project.conf"
 		cd ~/.config
-		if [[ ! -d "~/.config/.schnubbyconfig" ]]; then
-			runcmds 0 "Cloning" "SchnuBbyconfig..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprDots ~/.config/.schnubbyconfig &>/dev/null"
-		fi
+		#if [[ ! -d "~/.config/.schnubbyconfig" ]]; then
+		#	runcmds 0 "Cloning" "SchnuBbyconfig..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprDots ~/.config/.schnubbyconfig &>/dev/null"
+		#fi
   		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ -d "~/.local/share/lutris" ]]; then
 			runcmds 0 "Backing up" "lutris..." "mv ~/.local/share/lutris ~/.local/share/lutris_bak"
@@ -252,21 +252,21 @@ installSchnuBby() {
 			runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/.git-credentials ~/.git-credentials"
 		fi
   
-		if [[ -f "/home/${user}/.config/hypr/userprefs.conf" ]]; then
-			#runcmds 0 "Backing up" "HyprDots userprefs.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf" "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
-   			runcmds 0 "Backing up" "HyprDots userprefs.conf..." "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
-		fi
-  		if [[ -f "/home/${user}/.config/hypr/hypridle.conf" ]]; then
-			#runcmds 0 "Backing up" "HyprDots hypridle.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/hypridle.conf" "mv ~/.config/hypr/hypridle.conf ~/.config/hypr/hypridle.bak"
-   			runcmds 0 "Backing up" "HyprDots hypridle.conf..." "mv ~/.config/hypr/hypridle.conf ~/.config/hypr/hypridle.bak"
-		fi
+		#if [[ -f "/home/${user}/.config/hypr/userprefs.conf" ]]; then
+		#	#runcmds 0 "Backing up" "HyprDots userprefs.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/userprefs.conf" "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
+   		#	runcmds 0 "Backing up" "HyprDots userprefs.conf..." "mv ~/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.bak"
+		#fi
+  		#if [[ -f "/home/${user}/.config/hypr/hypridle.conf" ]]; then
+		#	#runcmds 0 "Backing up" "HyprDots hypridle.conf..." "sed -i '/${scriptname}/d' /home/${user}/.config/hypr/hypridle.conf" "mv ~/.config/hypr/hypridle.conf ~/.config/hypr/hypridle.bak"
+   		#	runcmds 0 "Backing up" "HyprDots hypridle.conf..." "mv ~/.config/hypr/hypridle.conf ~/.config/hypr/hypridle.bak"
+		#fi
 
-		if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
-			runcmds 0 "Configuring" "hypr/userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
-		fi
-  		if [[ ! -f "~/.config/hypr/hypridle.conf" ]]; then
-			runcmds 0 "Configuring" "hypr/hypridle.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/hypridle.conf ~/.config/hypr/hypridle.conf"
-		fi
+		#if [[ ! -f "~/.config/hypr/userprefs.conf" ]]; then
+		#	runcmds 0 "Configuring" "hypr/userprefs.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/userprefs.conf ~/.config/hypr/userprefs.conf"
+		#fi
+  		#if [[ ! -f "~/.config/hypr/hypridle.conf" ]]; then
+		#	runcmds 0 "Configuring" "hypr/hypridle.conf..." "ln -s ~/.config/.schnubbyconfig/Configs/.config/hypr/hypridle.conf ~/.config/hypr/hypridle.conf"
+		#fi
 		printStepOK 1
 }
 while [ $# -gt 0 ]; do
@@ -430,22 +430,22 @@ if [[ "${option}" == "3" ]]; then
 		read user
 	fi	
  	bash -c "sudo pacman -Syy &>/dev/null"
- 	bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
+ 	#bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
  	Banner "hypr"
 	printStep 1 "Setting up" "HyprDots..."
-		runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/HyDE-Project/HyDE ~/HyprDots &>/dev/null"
+		runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyprDots &>/dev/null"
 	printStepOK 1
  	#bash -c "nano ./HyprDots/Scripts/custom_hypr.lst" 
-  bash -c "nano ./HyprDots/Scripts/pkg_core.lst" 
+  #bash -c "nano ./HyprDots/Scripts/pkg_core.lst" 
   	#bash -c "nano ./HyprDots/Scripts/.extra/custom_flat.lst"
-  bash -c "nano ./HyprDots/Scripts/extra/custom_flat.lst"
+  #bash -c "nano ./HyprDots/Scripts/extra/custom_flat.lst"
 #FUNKTIONIERT KOMISCHERWEISE NICHT MEHR .....	
  #bash -c "rm -rf ./HyprDots/Scripts/themepatcher.lst"
 	#curl -s 'https://raw.githubusercontent.com/HyDE-Project/hyde-gallery/hyde-gallery/hyde-themes.json' | \
     #python3 -c "import sys, json; x = json.load(sys.stdin); [print(f'\"{i['THEME']}\" \"{i['LINK']}\"') for i in x]" >> "./HyprDots/Scripts/themepatcher.lst"
 	#bash -c "nano ./HyprDots/Scripts/themepatcher.lst"
 
-	bash -c "sudo pacman --noconfirm -Runs nano &>/dev/null"
+	#bash -c "sudo pacman --noconfirm -Runs nano &>/dev/null"
 	printCountDown 3 "Starting installation in"
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
 	#bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/.config/hypr/hyprland.conf"	
@@ -478,8 +478,8 @@ if [[ "${option}" == "4" ]]; then
 		#runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/sddm.conf"
  	#printStepOK 1
 	printStep 1 "Running" "final steps..."
-		runcmds 0 "Removing flags from" "code-flags.conf..." "rm -rf ~/.config/code-flags.conf" "touch ~/.config/code-flags.conf"   	
-		runcmds 0 "Configuring" "~/.config/waybar/modules/clock.jsonc..." "sed -i 's/{:%I:%M %p}/{:%R 󰃭 %d·%m·%y}/g' ~/.config/waybar/modules/clock.jsonc" "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc"
+		#runcmds 0 "Removing flags from" "code-flags.conf..." "rm -rf ~/.config/code-flags.conf" "touch ~/.config/code-flags.conf"   	
+		#runcmds 0 "Configuring" "~/.config/waybar/modules/clock.jsonc..." "sed -i 's/{:%I:%M %p}/{:%R 󰃭 %d·%m·%y}/g' ~/.config/waybar/modules/clock.jsonc" "sed -i '/format-alt/d' ~/.config/waybar/modules/clock.jsonc"
 		#runcmds 0 "Configuring" "~/.config/swaylock/config..." "sed -i '/timestr=%I:%M %p/c\timestr=%H:%M %p' ~/.config/swaylock/config"
 		#runcmds 0 "Downloading" "Wine dependencies..." "sudo pacman  --noconfirm -S wine-staging &>/dev/null" "sudo pacman  --noconfirm -S --needed --asdeps giflib lib32-giflib gnutls lib32-gnutls v4l-utils lib32-v4l-utils libpulse lib32-libpulse alsa-plugins lib32-alsa-plugins alsa-lib lib32-alsa-lib sqlite lib32-sqlite libxcomposite lib32-libxcomposite ocl-icd lib32-ocl-icd libva lib32-libva gtk3 lib32-gtk3 gst-plugins-base-libs lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader sdl2 lib32-sdl2 lib32-gamemode &>/dev/null"
 		if [[ "${gpu}" == "amd" ]]; then
@@ -515,8 +515,8 @@ if [[ "${option}" == "4" ]]; then
  	#myPrint "yellow" "  (if there are Problems with Games.)\n"
 	#myPrint "yellow" "- Set https://SchnuBby2205:[created access token]@github.com under $HOME/. git-credentials"
  	#myPrint "yellow" "  (if you want to use git from the terminal.)\n\n"
-	#bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
- 	bash -c "firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
+	bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
+ 	firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
 
 	#bash -c "firefox -new-tab -url https://addons.mozilla.org/de/firefox/addon/bonjourr-startpage/ \
 	#-new-tab -url https://raw.githubusercontent.com/SchnuBby2205/W11Settings/refs/heads/main/bonjourr%20settings.json \
