@@ -237,7 +237,7 @@ installSchnuBby() {
 			runcmds 0 "Configuring" "lutris..." "ln -s /programmieren/.local/share/lutris ~/.local/share/lutris" 	
 		fi	
 		# Muss bei anderen Rechnern nicht gemacht werden
-		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
+		#runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 		# Muss bei anderen Rechnern nicht gemacht werden
 		if [[ -f "~/.zsh_history" ]]; then
 			runcmds 0 "Removing" ".zsh_history..." "rm -rf ~/.zsh_history"
@@ -433,6 +433,7 @@ if [[ "${option}" == "3" ]]; then
  	#bash -c "sudo pacman --noconfirm -S nano &>/dev/null"
  	Banner "hypr"
 	printStep 1 "Setting up" "HyprDots..."
+  		runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab"
 		runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyprDots &>/dev/null"
 	printStepOK 1
  	#bash -c "nano ./HyprDots/Scripts/custom_hypr.lst" 
@@ -449,7 +450,7 @@ if [[ "${option}" == "3" ]]; then
 	printCountDown 3 "Starting installation in"
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
 	#bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/.config/hypr/hyprland.conf"	
-	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> //home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"		
+	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> /home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"		
   	cd ~/HyprDots/Scripts
 	bash -c "./install.sh -drs"
 	#bash -c "./install.sh -ds"
@@ -504,7 +505,8 @@ if [[ "${option}" == "4" ]]; then
 		#fi
 	fi
 
- 	sudo bash -c "rm -rf ~/${scriptname}"	
+ 	sudo bash -c "sudo rm -rf ~/${scriptname}"	
+  	bash -c "sed -i '/${scriptname}/d' /home/${user}/HyprDots/Configs/.config/hypr/userprefs.conf"
 	#myPrint "green" "\n\nToDos:\n"
 	#myPrint "yellow" "- Bonjour or https://new-tab.sophia-dev.io + uBlock Origin for Firefox\n"
 	#myPrint "yellow" "- Install theme through Themepatcher (vanta black...)\n\n"
