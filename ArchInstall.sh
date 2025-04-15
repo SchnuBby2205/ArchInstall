@@ -40,9 +40,11 @@ function getInput() {
 	printf "${YELLOW}${prompt} ${NC}"
 	read -r inputValue
 	if [[ -z "$inputValue" ]]; then
-		eval "$varName='$defaultValue'"
+		#eval "$varName='$defaultValue'"
+		printf -v "$varName" "%s" "$defaultValue"
 	else
-		eval "$varName='$inputValue'"
+		#eval "$varName='$inputValue'"
+		printf -v "$varName" "%s" "$inputValue"
 	fi
 	if [[ -z "${!varName}" ]]; then
 		exitWithError "Input value can not be empty!"
@@ -256,11 +258,11 @@ function installSchnuBby() {
 function readArgs() {
 	while [ $# -gt 0 ]; do
 		if [[ $1 == "--"* ]]; then
-		v="${1/--/}"
-			if [[ "${v}" == "help" ]]; then
-			printHelp
-		fi
-		declare "$v"="$2"
+			v="${1/--/}"
+				if [[ "${v}" == "help" ]]; then
+				printHelp
+			fi
+			printf -v "$v" "%s" "$2"
 			shift
 		fi
 		shift
@@ -293,7 +295,7 @@ function runCFDiskIfNeeded() {
 	if [[ "$cfdisk" =~ ^[yY]$ ]]; then
 		if [[ -z "$disk" ]]; then
 			getInput "\nEnter disk\n" disk
-			[[ -z "$disk" ]] && { exitWithError "No disk entered -> exit\n" }
+			[[ -z "$disk" ]] && exitWithError "No disk entered -> exit\n"
 		fi
 		cfdisk "$disk"
 	fi
@@ -389,7 +391,7 @@ function installSchnuBbyOption() {
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
  	installSchnuBby
 }
-readArgs
+readArgs $@
 if [[ -n "$defaults" ]]; then
 	boot="/dev/nvme0n1p1"
 	swap="/dev/nvme0n1p2"
