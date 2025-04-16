@@ -326,7 +326,7 @@ function installBaseSystem() {
  	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu}"
   	bash -c "umount -R /mnt &>/dev/null" 
 	printCountDown 3 "Installation complete! Reboot in"
-   	#bash -c "reboot"
+   	bash -c "reboot"
 }
 function installArchCHRoot() {
 	printStep 1 "Configuring" "arch-chroot..."
