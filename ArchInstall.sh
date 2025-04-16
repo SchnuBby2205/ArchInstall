@@ -224,7 +224,7 @@ function runcmds() {
 function installSchnuBby() {
 	printStep 1 "Installing" "schnubbyspecifics..."
 	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren &>/dev/null"
-	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred")
+	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred" "teamspeak3")
 	for step in "${steps[@]}"; do
 		case $step in
 			fstab) runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
@@ -249,6 +249,11 @@ function installSchnuBby() {
 			if [[ ! -f "$HOME/.git-credentials" ]]; then
 				runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/.git-credentials $HOME/.git-credentials"
 			fi;;
+			teamspeak3)
+			if [[ -f "$HOME/.ts3client" ]]; then
+				runcmds 0 "Removing" ".ts3client..." "rm -rf $HOME/.ts3client"
+			fi
+			runcmds 0 "Configuring" ".ts3client..." "ln -sf /programmieren/.ts3client $HOME/.ts3client";;
 			*)
 			exitWithError "Error setting SchnuBby specifics!"
 		esac
