@@ -269,12 +269,12 @@ function readArgs() {
 	done
 }
 function setDefaults() {
-	cpu="${cpu:=intel-ucode}"
-	kernel="${kernel:=linux-lts}"
-	gpu="${gpu:=amd}"
-	timezone="${timezone:=Europe/Berlin}"
-	locale="${locale:=de_DE.UTF-8}"
-	keymap="${keymap:=de-latin1}"
+	cpu="${cpu:-intel-ucode}"
+	kernel="${kernel:-linux-lts}"
+	gpu="${gpu:-amd}"
+	timezone="${timezone:-Europe/Berlin}"
+	locale="${locale:-de_DE.UTF-8}"
+	keymap="${keymap:-de-latin1}"
 }
 function listOptions() {
 	Banner "install"
@@ -391,6 +391,7 @@ function installSchnuBbyOption() {
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
  	installSchnuBby
 }
+setDefaults
 readArgs "$@"
 if [[ -n "$defaults" ]]; then
 	cfdisk="y"
