@@ -326,7 +326,7 @@ function installBaseSystem() {
  	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu}"
   	bash -c "umount -R /mnt &>/dev/null" 
 	printCountDown 3 "Installation complete! Reboot in"
-   	bash -c "reboot"
+   	#bash -c "reboot"
 }
 function installArchCHRoot() {
 	printStep 1 "Configuring" "arch-chroot..."
@@ -393,9 +393,14 @@ function installSchnuBbyOption() {
 }
 readArgs "$@"
 if [[ -n "$defaults" ]]; then
-	boot="/dev/nvme0n1p1"
-	swap="/dev/nvme0n1p2"
-	root="/dev/nvme0n1p3"
+	cfdisk="y"
+	disk="/dev/vda"
+	boot="/dev/vda1"
+	swap="/dev/vda2"
+	root="/dev/vda3"
+	#boot="/dev/nvme0n1p1"
+	#swap="/dev/nvme0n1p2"
+	#root="/dev/nvme0n1p3"
 	hostname="ArchLinux"
 	user="schnubby"
 	installBaseSystem
