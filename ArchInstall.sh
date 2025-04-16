@@ -106,8 +106,10 @@ function Banner() {
 		myPrint "green" "/_/  |_/_/   \___/_/ /_/___/_/ /_/____/\__/\__,_/_/_/   \n\n";;
 	esac
 }
-function myPasswd() {
-	local MAX_ATTEMPTS=3 attempts=0
+myPasswd() {
+	MAX_ATTEMPTS=3
+	attempts=0
+
 	# Schleife, die bis zu MAX_ATTEMPTS Versuche erlaubt
 	while [ $attempts -lt $MAX_ATTEMPTS ]; do
 		# Passwortabfrage
@@ -115,26 +117,31 @@ function myPasswd() {
 		read -s password1
 		printf "\nRetype: "
 		read -s password2
+
 		# Überprüfen, ob die Passwörter übereinstimmen
 		if [ "$password1" != "$password2" ]; then
-			printf "\nPasswords do not match.\n"
+			printf "\nPasswords didn't match.\n"
 			((attempts++))
 			continue  # Gehe zurück zum Anfang der Schleife
 		fi
+
 		# Führe den `passwd`-Befehl aus, um das Passwort zu ändern
-		echo -e "$password1\n$password2" | sudo passwd ${1}
+		echo -e "$password1\n$password2" | sudo passwd ${1} &>/dev/null
+
 		# Überprüfen, ob der `passwd`-Befehl erfolgreich war
 		if [ $? -eq 0 ]; then
-			printf "\nPassword set successfully.\n"
+			printf "\nPassword updated succesfully.\n"
 			break  # Beende die Schleife, wenn erfolgreich
 		else
-			printf "\nError setting password.\n"
+			printf "\nError setting the password.\n"
 			((attempts++))
 		fi
 	done
+
 	# Falls die maximale Anzahl der Versuche erreicht wurde
 	if [ $attempts -ge $MAX_ATTEMPTS ]; then
-		exitWithError "\nMax tries reached. Exiting!\n"
+		printf "\nMaximum tries reached script will end.\n"
+		exit 1
 	fi
 }
 function printStep() {
