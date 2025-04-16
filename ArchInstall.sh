@@ -122,7 +122,7 @@ function myPasswd() {
 			continue  # Gehe zurück zum Anfang der Schleife
 		fi
 		# Führe den `passwd`-Befehl aus, um das Passwort zu ändern
-		echo -e "$password1\n$password2" | sudo passwd ${1} &>/dev/null
+		echo -e "$password1\n$password2" | sudo passwd ${1}
 		# Überprüfen, ob der `passwd`-Befehl erfolgreich war
 		if [ $? -eq 0 ]; then
 			printf "\nPassword set successfully.\n"
@@ -211,7 +211,7 @@ function printHelp() {
 function runcmds() {
 	local sudo=$1 mode=$2 message=$3
 	shift 3
-	printStep 0 "${mode}" "${message}"
+	#printStep 0 "${mode}" "${message}"
  	for cmd in "$@"; do
 		if [[ "$sudo" == "1" ]]; then 
 			sudo bash -c "$cmd" || exitWithError "Command failed: $cmd"
@@ -219,11 +219,11 @@ function runcmds() {
 			bash -c "$cmd" || exitWithError "Command failed: $cmd"
 		fi
   	done
-	printStepOK 0
+	#printStepOK 0
 }
 function installSchnuBby() {
 	printStep 1 "Installing" "schnubbyspecifics..."
-	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren &>/dev/null"
+	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren"
 	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred" "teamspeak3")
 	for step in "${steps[@]}"; do
 		case $step in
@@ -322,24 +322,24 @@ function installBaseSystem() {
 	printf "${WHITE}${root}${NC}\n"
 	printCountDown 3 "Starting installation in"	
 	Banner "arch"
-	printStep 1 "Installing" "base system..."
-		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot} &>/dev/null" "mkswap ${swap} &>/dev/null" "swapon ${swap} &>/dev/null" "mkfs.ext4 ${root} &>/dev/null"
+	#printStep 1 "Installing" "base system..."
+		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot}" "mkswap ${swap}" "swapon ${swap}" "mkfs.ext4 ${root}"
 		runcmds 0 "Mounting" "partitions..." "mount --mkdir ${root} /mnt" "mount --mkdir ${boot} /mnt/boot"
-		runcmds 0 "Setting up" "pacman..." "pacman -Syy &>/dev/null" "pacman --noconfirm -S reflector &>/dev/null" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
-		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager &>/dev/null" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
-	printStepOK 1
+		runcmds 0 "Setting up" "pacman..." "pacman -Syy" "pacman --noconfirm -S reflector" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
+		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
+	#printStepOK 1
  	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu}"
-  	bash -c "umount -R /mnt &>/dev/null" 
+  	bash -c "umount -R /mnt" 
 	printCountDown 3 "Installation complete! Reboot in"
    	bash -c "reboot"
 }
 function installArchCHRoot() {
-	printStep 1 "Configuring" "arch-chroot..."
-		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime &>/dev/null" "hwclock --systohc &>/dev/null"
-		runcmds 0 "Setting up" "locales..." "sed -e '/${locale}/s/^#*//' -i /etc/locale.gen" "locale-gen &>/dev/null" "echo LANG=${locale} >> /etc/locale.conf" "echo KEYMAP=${keymap} >> /etc/vconsole.conf"
-		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null" "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
-		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager &>/dev/null"
-	printStepOK 1
+	#printStep 1 "Configuring" "arch-chroot..."
+		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime" "hwclock --systohc"
+		runcmds 0 "Setting up" "locales..." "sed -e '/${locale}/s/^#*//' -i /etc/locale.gen" "locale-gen" "echo LANG=${locale} >> /etc/locale.conf" "echo KEYMAP=${keymap} >> /etc/vconsole.conf"
+		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB" "grub-mkconfig -o /boot/grub/grub.cfg"
+		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager"
+	#printStepOK 1
 	if [[ -z "$hostname" ]]; then getInput "\nEnter your Hostname: " hostname "ArchLinux"; fi
 	bash -c "echo ${hostname} >> /etc/hostname"       	
 	myPrint "yellow" "\nEnter your NEW root password\n\n"
@@ -354,11 +354,11 @@ function installArchCHRoot() {
 }
 function installHyDE() {
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
- 	bash -c "sudo pacman -Syy &>/dev/null"
+ 	bash -c "sudo pacman -Syy"
 	Banner "hypr"
-	printStep 1 "Setting up" "HyprDots..."
-		runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE &>/dev/null"
-	printStepOK 1
+	#printStep 1 "Setting up" "HyprDots..."
+		runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE"
+	#printStepOK 1
 	printCountDown 3 "Starting installation in"
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
 	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
@@ -371,13 +371,13 @@ function installConfigs() {
 	if [[ -z "$gpu" ]]; then getInput "Enter your gpu (amd // nvidia)): " gpu "amd"; fi
 	bash -c "sudo pacman -Syy"
 	Banner "config"
-	printStep 1 "Running" "final steps..."
+	#printStep 1 "Running" "final steps..."
 	case $gpu in 
-		amd) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null";;
-		nvidia) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null";;
+		amd) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader";;
+		nvidia) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader";;
 		*) exitWithError "No valid GPU specified!";;
 	esac
-  	printStepOK 1
+  	#printStepOK 1
 	bash -c "yay arch gaming meta"
 	bash -c "yay dxvk-bin"
 	getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
