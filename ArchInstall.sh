@@ -391,7 +391,7 @@ function installSchnuBbyOption() {
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
  	installSchnuBby
 }
-readArgs $@
+readArgs "$@"
 if [[ -n "$defaults" ]]; then
 	boot="/dev/nvme0n1p1"
 	swap="/dev/nvme0n1p2"
@@ -400,8 +400,10 @@ if [[ -n "$defaults" ]]; then
 	user="schnubby"
 	installBaseSystem
 fi
-listOptions
-getInput "Wich step to run?" option 1
+if [[ -z "$option" ]]; then
+	listOptions
+	getInput "Wich step to run?" option 1
+fi
 case $option in
 	1) installBaseSystem;;
 	2) installArchCHRoot;;
