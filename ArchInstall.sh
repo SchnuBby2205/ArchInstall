@@ -390,7 +390,7 @@ function installConfigs() {
 	getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
 	[[ "$schnubby" =~ ^[yY]$ ]] && installSchnuBby
  	sudo bash -c "sudo rm -rf ~/${scriptname}"	
-  	bash -c "sed -i '/${scriptname}/d' $HOME/HyDE/Configs/.config/hypr/userprefs.conf"
+  	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"
 	bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
  	firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
