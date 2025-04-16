@@ -394,14 +394,9 @@ function installSchnuBbyOption() {
 setDefaults
 readArgs "$@"
 if [[ -n "$defaults" ]]; then
-	cfdisk="y"
-	disk="/dev/vda"
-	boot="/dev/vda1"
-	swap="/dev/vda2"
-	root="/dev/vda3"
-	#boot="/dev/nvme0n1p1"
-	#swap="/dev/nvme0n1p2"
-	#root="/dev/nvme0n1p3"
+	boot="/dev/nvme0n1p1"
+	swap="/dev/nvme0n1p2"
+	root="/dev/nvme0n1p3"
 	hostname="ArchLinux"
 	user="schnubby"
 	installBaseSystem
