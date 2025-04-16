@@ -385,10 +385,8 @@ function installConfigs() {
 		*) exitWithError "No valid GPU specified!";;
 	esac
   	#printStepOK 1
-	#bash -c "yay arch gaming meta"
-	#bash -c "yay dxvk-bin"
-	bash -c "echo -e '1\nN\nN' | yay arch gaming meta"
-	bash -c "echo -e '1\nN\nN' | yay dxvk-bin"
+	bash -c "yay -S --noconfirm arch-gaming-meta"
+	bash -c "yay -S --noconfirm dxvk-bin"
 	getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
 	[[ "$schnubby" =~ ^[yY]$ ]] && installSchnuBby
  	sudo bash -c "sudo rm -rf ~/${scriptname}"	
