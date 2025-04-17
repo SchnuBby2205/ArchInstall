@@ -371,7 +371,7 @@ function installHyDE() {
 	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
   	cd $HOME/HyDE/Scripts
 	#bash -c "./install.sh -drs"
-	bash -c "printf '2\ny11falter\nfalter\n1\nfalter\nn' | ./install.sh -drs"
+	bash -c "printf '2\ny11f\nf\n1\nf\nn' | ./install.sh -drs"
 }
 function installConfigs() {
 	Banner "config"
