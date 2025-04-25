@@ -381,10 +381,10 @@ function installHyDE() {
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
 	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
   	cd $HOME/HyDE/Scripts
-	#bash -c "./install.sh -drs"
 	echo "schnubby ALL=(ALL) NOPASSWD: /usr/bin/pacman" | sudo tee /etc/sudoers.d/install-script >/dev/null
 	sudo chmod 0440 /etc/sudoers.d/install-script	
-	bash -c "printf '2\ny111\nn' | ./install.sh -drs"
+	#bash -c "printf '2\ny111\nn' | ./install.sh -drs"
+	bash -c "./install.sh -drs"
 }
 function installConfigs() {
 	Banner "config"
