@@ -231,7 +231,7 @@ function runcmds() {
 function installSchnuBby() {
 	printStep 1 "Installing" "schnubbyspecifics..."
 	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren"
-	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred" "teamspeak3")
+	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred" "teamspeak3" "grub" "firefox" "steam")
 	for step in "${steps[@]}"; do
 		case $step in
 			fstab) runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
@@ -241,26 +241,37 @@ function installSchnuBby() {
 				runcmds 0 "Backing up" "lutris..." "mv $HOME/.local/share/lutris $HOME/.local/share/lutris_bak"
 			fi 	
 			if [[ ! -d "$HOME/.local/share/lutris" ]]; then
-				runcmds 0 "Configuring" "lutris..." "ln -s /programmieren/.local/share/lutris $HOME/.local/share/lutris" 	
+				runcmds 0 "Configuring" "lutris..." "ln -s /programmieren/backups/.local/share/lutris $HOME/.local/share/lutris" 	
 			fi;;
 			zshhist)
 			if [[ -f "$HOME/.zsh_history" ]]; then
 				runcmds 0 "Removing" ".zsh_history..." "rm -rf $HOME/.zsh_history"
 			fi
-			runcmds 0 "Configuring" ".zsh_history..." "ln -sf /programmieren/.zsh_history $HOME/.zsh_history";;
+			runcmds 0 "Configuring" ".zsh_history..." "ln -sf /programmieren/backups/.zsh_history $HOME/.zsh_history";;
 			gitconf)
 			if [[ ! -f "$HOME/.gitconfig" ]]; then
-				runcmds 0 "Configuring" "git..." "ln -sf /programmieren/.gitconfig $HOME/.gitconfig"
+				runcmds 0 "Configuring" "git..." "ln -sf /programmieren/backups/.gitconfig $HOME/.gitconfig"
 			fi;;
 			gitcred)
 			if [[ ! -f "$HOME/.git-credentials" ]]; then
-				runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/.git-credentials $HOME/.git-credentials"
+				runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/backups/.git-credentials $HOME/.git-credentials"
 			fi;;
 			teamspeak3)
 			if [[ -f "$HOME/.ts3client" ]]; then
 				runcmds 0 "Removing" ".ts3client..." "rm -rf $HOME/.ts3client"
 			fi
-			runcmds 0 "Configuring" ".ts3client..." "ln -sf /programmieren/.ts3client $HOME/.ts3client";;
+			runcmds 0 "Configuring" ".ts3client..." "ln -sf /programmieren/backups/.ts3client $HOME/.ts3client";;
+			grub)
+			sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/g' /etc/default/grub
+			sudo grub-mkconfig -o /boot/grub/grub.cfg;;
+			firefox)
+			ff_new_user=$HOME/.mozilla/firefox/$(ls $HOME/.mozilla/firefox | grep "Default User")
+			rm -rf "${ff_new_user}"
+			ln -sf /programmieren/backups/FireFox/3665cjzf.default-release "${ff_new_user}";;
+			steam)
+			cd $HOME/.steam/steam/compatibilitytools.d/
+			url=$(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep "browser_download_url.*tar.gz" | cut -d : -f 2,3 | tr -d \") 
+			curl -L $url | tar zx;;
 			*)
 			exitWithError "Error setting SchnuBby specifics!"
 		esac
@@ -371,6 +382,7 @@ function installHyDE() {
 	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
   	cd $HOME/HyDE/Scripts
 	#bash -c "./install.sh -drs"
+	sudo -v
 	bash -c "printf '2\ny111\nn' | ./install.sh -drs"
 }
 function installConfigs() {
@@ -388,13 +400,13 @@ function installConfigs() {
   	#printStepOK 1
 	bash -c "yay -S --noconfirm arch-gaming-meta"
 	bash -c "yay -S --noconfirm dxvk-bin"
-	getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
-	[[ "$schnubby" =~ ^[yY]$ ]] && installSchnuBby
  	sudo bash -c "sudo rm -rf ~/${scriptname}"	
   	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"
 	bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
  	firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
+	getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
+	[[ "$schnubby" =~ ^[yY]$ ]] && installSchnuBby
 	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"   
   	printCountDown 3 "Reboot in"
     bash -c "reboot"
