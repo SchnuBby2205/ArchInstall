@@ -381,14 +381,13 @@ function installHyDE() {
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
 	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
   	cd $HOME/HyDE/Scripts
-	echo "schnubby ALL=(ALL) NOPASSWD: /usr/bin/pacman" | sudo tee /etc/sudoers.d/install-script >/dev/null
+	echo -e "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman\n${user} ALL=(ALL) NOPASSWD: /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
 	sudo chmod 0440 /etc/sudoers.d/install-script	
-	#bash -c "printf '2\ny111\nn' | ./install.sh -drs"
-	bash -c "./install.sh -drs"
+	bash -c "printf '2\ny111\nn' | ./install.sh -drs"
+	#bash -c "./install.sh -drs"
 }
 function installConfigs() {
 	Banner "config"
-	bash -c "sudo rm -rf /etc/sudoers.d/install-script"
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
 	if [[ -z "$gpu" ]]; then getInput "Enter your gpu (amd // nvidia)): " gpu "amd"; fi
 	bash -c "sudo pacman -Syy"
@@ -403,7 +402,8 @@ function installConfigs() {
 	bash -c "steam"
 	bash -c "yay -S --noconfirm arch-gaming-meta"
 	bash -c "yay -S --noconfirm dxvk-bin"
- 	sudo bash -c "sudo rm -rf ~/${scriptname}"	
+ 	bash -c "sudo rm -rf ~/${scriptname}"	
+	bash -c "sudo rm -rf /etc/sudoers.d/install-script"
   	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"
 	bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
  	firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
