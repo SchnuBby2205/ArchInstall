@@ -346,7 +346,7 @@ function installBaseSystem() {
 		runcmds 0 "Setting up" "pacman..." "pacman -Syy" "pacman --noconfirm -S reflector" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
 	#printStepOK 1
- 	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu}"
+ 	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu} --defaults ${defaults}"
   	bash -c "umount -R /mnt" 
 	printCountDown 3 "Installation complete! Reboot in"
    	bash -c "reboot"
@@ -368,7 +368,7 @@ function installArchCHRoot() {
 	myPasswd "${user}"
  	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
    	bash -c "mv ./${scriptname} /home/${user}/"
-	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} >> /home/${user}/.bashrc"
+	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} --defaults ${defaults} >> /home/${user}/.bashrc"
 }
 function installHyDE() {
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
@@ -379,12 +379,15 @@ function installHyDE() {
 	#printStepOK 1
 	printCountDown 3 "Starting installation in"
  	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
-	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
+	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
   	cd $HOME/HyDE/Scripts
-	echo -e "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman\n${user} ALL=(ALL) NOPASSWD: /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
-	sudo chmod 0440 /etc/sudoers.d/install-script	
-	bash -c "printf '2\ny111\nn' | ./install.sh -drs"
-	#bash -c "./install.sh -drs"
+	if [[ -n "$defaults" ]]; then
+		echo -e "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman\n${user} ALL=(ALL) NOPASSWD: /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
+		sudo chmod 0440 /etc/sudoers.d/install-script	
+		bash -c "printf '2\ny111\nn' | ./install.sh -drs"
+	else
+		bash -c "./install.sh -drs"
+	fi
 }
 function installConfigs() {
 	Banner "config"
@@ -403,13 +406,15 @@ function installConfigs() {
 	bash -c "yay -S --noconfirm arch-gaming-meta"
 	bash -c "yay -S --noconfirm dxvk-bin"
  	bash -c "sudo rm -rf ~/${scriptname}"	
-	bash -c "sudo rm -rf /etc/sudoers.d/install-script"
+	if [[ -n "$defaults" ]]; then
+		bash -c "sudo rm -rf /etc/sudoers.d/install-script"
+	fi
   	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"
-	bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
- 	firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
+	#bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
+ 	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
 	getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
-	[[ "$schnubby" =~ ^[yY]$ ]] && installSchnuBby
+	[[ "$schnubby" =~ ^[yY]$ || -n "$defaults" ]] && installSchnuBby
 	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"   
   	printCountDown 3 "Reboot in"
     bash -c "reboot"
