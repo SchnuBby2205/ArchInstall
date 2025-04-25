@@ -382,9 +382,9 @@ function installHyDE() {
 	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
   	cd $HOME/HyDE/Scripts
 	if [[ -n "$defaults" ]]; then
-		echo -e "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman\n${user} ALL=(ALL) NOPASSWD: /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
+		echo "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
 		sudo chmod 0440 /etc/sudoers.d/install-script	
-		bash -c "printf '2\ny111\nn' | ./install.sh -drs"
+		bash -c "printf '2\ny111\n' | ./install.sh -drs"
 	else
 		bash -c "./install.sh -drs"
 	fi
@@ -402,9 +402,9 @@ function installConfigs() {
 		*) exitWithError "No valid GPU specified!";;
 	esac
   	#printStepOK 1
-	bash -c "steam"
 	bash -c "yay -S --noconfirm arch-gaming-meta"
 	bash -c "yay -S --noconfirm dxvk-bin"
+	bash -c "steam"
  	bash -c "sudo rm -rf ~/${scriptname}"	
 	if [[ -n "$defaults" ]]; then
 		bash -c "sudo rm -rf /etc/sudoers.d/install-script"
@@ -414,7 +414,9 @@ function installConfigs() {
  	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
 	getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
-	[[ "$schnubby" =~ ^[yY]$ || -n "$defaults" ]] && installSchnuBby
+	[[ "$schnubby" =~ ^[yY]$ || -n "$defaults" ]]; then
+		installSchnuBby
+	fi
 	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"   
   	printCountDown 3 "Reboot in"
     bash -c "reboot"
