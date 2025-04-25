@@ -229,7 +229,7 @@ function runcmds() {
 	#printStepOK 0
 }
 function installSchnuBby() {
-	printStep 1 "Installing" "schnubbyspecifics..."
+	#printStep 1 "Installing" "schnubbyspecifics..."
 	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren"
 	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred" "teamspeak3" "grub" "firefox" "steam")
 	for step in "${steps[@]}"; do
@@ -276,7 +276,7 @@ function installSchnuBby() {
 			exitWithError "Error setting SchnuBby specifics!"
 		esac
 	done
-	printStepOK 1
+	#printStepOK 1
 }
 function readArgs() {
 	while [ $# -gt 0 ]; do
@@ -382,11 +382,13 @@ function installHyDE() {
 	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
   	cd $HOME/HyDE/Scripts
 	#bash -c "./install.sh -drs"
-	sudo -v
+	echo "schnubby ALL=(ALL) NOPASSWD: $HOME/HyDE/Scripts/install.sh" | sudo tee /etc/sudoers.d/install-script >/dev/null
+	sudo chmod 0440 /etc/sudoers.d/install-script	
 	bash -c "printf '2\ny111\nn' | ./install.sh -drs"
 }
 function installConfigs() {
 	Banner "config"
+	bash -c "sudo rm -rf /etc/sudoers.d/install-script"
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
 	if [[ -z "$gpu" ]]; then getInput "Enter your gpu (amd // nvidia)): " gpu "amd"; fi
 	bash -c "sudo pacman -Syy"
@@ -398,6 +400,7 @@ function installConfigs() {
 		*) exitWithError "No valid GPU specified!";;
 	esac
   	#printStepOK 1
+	bash -c "steam"
 	bash -c "yay -S --noconfirm arch-gaming-meta"
 	bash -c "yay -S --noconfirm dxvk-bin"
  	sudo bash -c "sudo rm -rf ~/${scriptname}"	
