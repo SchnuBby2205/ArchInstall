@@ -402,9 +402,9 @@ function installConfigs() {
 		*) exitWithError "No valid GPU specified!";;
 	esac
   	#printStepOK 1
+	bash -c "steam"
 	bash -c "yay -S --noconfirm arch-gaming-meta"
 	bash -c "yay -S --noconfirm dxvk-bin"
-	bash -c "steam"
  	bash -c "sudo rm -rf ~/${scriptname}"	
 	if [[ -n "$defaults" ]]; then
 		bash -c "sudo rm -rf /etc/sudoers.d/install-script"
