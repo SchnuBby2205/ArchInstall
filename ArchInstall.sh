@@ -384,7 +384,7 @@ function installHyDE() {
 	if [[ -n "$defaults" ]]; then
 		echo "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
 		sudo chmod 0440 /etc/sudoers.d/install-script	
-		bash -c "printf '2\ny111\n' | ./install.sh -drs"
+		bash -c "printf '2\ny111' | ./install.sh -drs"
 	else
 		bash -c "./install.sh -drs"
 	fi
@@ -402,9 +402,9 @@ function installConfigs() {
 		*) exitWithError "No valid GPU specified!";;
 	esac
   	#printStepOK 1
-	bash -c "steam"
 	bash -c "yay -S --noconfirm arch-gaming-meta"
 	bash -c "yay -S --noconfirm dxvk-bin"
+	bash -c "steam"
  	bash -c "sudo rm -rf ~/${scriptname}"	
 	if [[ -n "$defaults" ]]; then
 		bash -c "sudo rm -rf /etc/sudoers.d/install-script"
@@ -413,8 +413,10 @@ function installConfigs() {
 	#bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
  	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
-	getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
-	[[ "$schnubby" =~ ^[yY]$ || -n "$defaults" ]]; then
+	if [[ -z "$defaults" ]]; then
+ 		getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
+   	fi
+	if [[ "$schnubby" =~ ^[yY]$ || -n "$defaults" ]]; then
 		installSchnuBby
 	fi
 	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"   
@@ -428,7 +430,7 @@ function installSchnuBbyOption() {
 }
 setDefaults
 readArgs "$@"
-if [[ -n "$defaults" ]]; then
+if [[ -n "$defaults" && "$option" -eq 1 ]]; then
 	boot="/dev/nvme0n1p1"
 	swap="/dev/nvme0n1p2"
 	root="/dev/nvme0n1p3"
