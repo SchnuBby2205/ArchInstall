@@ -384,7 +384,9 @@ function installHyDE() {
 	if [[ -n "$defaults" ]]; then
 		echo "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
 		sudo chmod 0440 /etc/sudoers.d/install-script	
-		bash -c "printf '2\ny111' | ./install.sh -drs"
+		bash -c "./install.sh -drs"
+		#defaults klappen nocht nicht testen.... solange ohne :/
+		#bash -c "printf '2\ny111' | ./install.sh -drs"
 	else
 		bash -c "./install.sh -drs"
 	fi
