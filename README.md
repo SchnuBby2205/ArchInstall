@@ -39,5 +39,5 @@ An advanced **interactive Bash installer** for setting up a customized Arch Linu
 
 ### 1. **Download the script**
 ```bash
-curl -O https://raw.githubusercontent.com/yourusername/schnubby-arch-install/main/install.sh
+curl -o https://raw.githubusercontent.com/SchnuBby/ArchInstall/main/ArchInstall.sh ./ArchInstall.sh
 chmod +x install.sh
