@@ -1,31 +1,43 @@
-# ArchInstall
--  My own installation script for Arch Linux.
+# 🐧 SchnuBby Arch Installer
 
-# Install
-- With cfdisk
-  - curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall.sh -o ./ArchInstall.sh && chmod +x ./ArchInstall.sh && ./ArchInstall.sh --option 1 --cfdisk y --disk [diskname] --boot [bootpartition] --swap [swappartition] --root [rootpartition] --hostname [hostname] --user [non root username]
-    
-- Without cfdisk
-  - curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall.sh -o ./ArchInstall.sh && chmod +x ./ArchInstall.sh && ./ArchInstall.sh --option 1 --boot [bootpartition] --swap [swappartition] --root [rootpartition] --hostname [hostname] --user [non root username]
+An advanced **interactive Bash installer** for setting up a customized Arch Linux environment with optional desktop configurations, application presets, and `SchnuBby`-specific dotfiles.
 
-The position of the arguments of the ./ArchInstall.sh script are flexible.
+---
 
-# Example
-- Download Script
-- Set Runflag (rwx) 
-- Start with
-  - Disk nvme0n1
-  - No partitioning (cfdisk)
-  - bootpartition nvme0n1p1
-  - swappartition nvme0n1p2
-  - rootpartition nvme0n1p3
-  - Hostname = ArchLinux
-  - Non-root-username = schnubby
+## ⚡ Features
 
-curl https://raw.githubusercontent.com/SchnuBby2205/ArchInstall/main/ArchInstall.sh -o ./ArchInstall.sh && chmod +x ./ArchInstall.sh && ./ArchInstall.sh --option 1 --boot /dev/nvme0n1p1 --swap /dev/nvme0n1p2 --root /dev/nvme0n1p3 --hostname ArchLinux --user schnubby
+- ✅ Guided Arch Linux base installation
+- ✅ Interactive terminal UI with colorful prompts
+- ✅ Supports Hyprland via HyDE
+- ✅ Modular options (e.g., dotfiles, GPU config, GRUB, system locales)
+- ✅ `SchnuBby` presets (lutris, zsh history, Steam, fstab, git config, etc.)
+- ✅ Password setup flow with confirmation
+- ✅ Optional headless/scriptable defaults
 
-Add --cfdisk y --disk /dev/nvme0n1 to partition the disk beforehand.
+---
 
-If necessary arguments are missing. Or no arguments supplied at all, the script will ask for them with an interactive menu.
+## 📁 Repository Structure
 
-Use --help to see the arguments supported.
+- `install.sh` – main script with all logic
+- `HyDE` – optional Hyprland dotfiles repository
+- `.config/`, `.zsh_history`, `.gitconfig` – sourced from mounted backup
+- `fstab`, etc. – optional config files used during install
+
+---
+
+## 🧰 Requirements
+
+- A working Arch ISO (booted)
+- Internet connection
+- Mounted backup volume (e.g. `/programmieren`)
+- Open terminal access as `root` or via `sudo`
+- `git`, `pacman`, and optionally `yay` pre-installed
+
+---
+
+## 🚀 Quick Start
+
+### 1. **Download the script**
+```bash
+curl -O https://raw.githubusercontent.com/yourusername/schnubby-arch-install/main/install.sh
+chmod +x install.sh
