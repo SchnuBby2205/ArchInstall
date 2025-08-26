@@ -81,6 +81,17 @@ function Banner() {
 		myPrint "green" " / __  / /_/ / /_/ / /  / /_/ / /_/ / /_(__  ) \n"
 		myPrint "green" "/_/ /_/\__, / .___/_/  /_____/\____/\__/____/  \n"
 		myPrint "green" "      /____/_/                                 \n\n";;
+  		celestia)
+		myPrint "green" "    ____           __        _____             \n"
+		myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _ \n"
+		myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/ \n"
+		myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ /  \n"
+		myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /   \n"
+		myPrint "green" "                           ____      /____/    \n"
+		myPrint "green" "                          / __ \____  / /______\n"
+		myPrint "green" "                         / / / / __ \/ __/ ___/\n"
+		myPrint "green" "                        / /_/ / /_/ / /_(__  ) \n"
+		myPrint "green" "                       /_____/\____/\__/____/  \n\n";;
 		config)
 		myPrint "green" "    ____           __        _____                   \n"
 		myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"
@@ -298,6 +309,7 @@ function setDefaults() {
 	timezone="${timezone:-Europe/Berlin}"
 	locale="${locale:-de_DE.UTF-8}"
 	keymap="${keymap:-de-latin1}"
+	desktop="${desktop:-hypr}"
 }
 function listOptions() {
 	Banner "install"
@@ -372,24 +384,50 @@ function installArchCHRoot() {
 }
 function installHyDE() {
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
+ 	if [[ -z "$desktop" ]]; then 
+  		local i=1
+		options=("hypr" "celestia")
+		for option in "${options[@]}"; do
+			printf "["
+			myPrint "yellow" "$i"
+			printf "]: Install "
+			myPrint "yellow" "$option\n"
+			((i++))
+		done  
+  	fi
+   	desktop="hypr"
+	if [[ "$desktop" -eq 2 ]] then
+ 		desktop="celestia"
+   	fi
  	bash -c "sudo pacman -Syy"
-	Banner "hypr"
-	#printStep 1 "Setting up" "HyprDots..."
-		runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE"
-	#printStepOK 1
-	printCountDown 3 "Starting installation in"
- 	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
-	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
-  	cd $HOME/HyDE/Scripts
-	if [[ -n "$defaults" ]]; then
-		echo "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
-		sudo chmod 0440 /etc/sudoers.d/install-script	
-		bash -c "./install.sh -drs"
-		#defaults klappen nocht nicht testen.... solange ohne :/
-		#bash -c "printf '2\ny111' | ./install.sh -drs"
-	else
-		bash -c "./install.sh -drs"
+
+ 	if [[ "$desktop" -eq "hypr" ]]; then	
+		Banner "hypr"
+		#printStep 1 "Setting up" "HyprDots..."
+			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE"
+		#printStepOK 1
+		printCountDown 3 "Starting installation in"
+	 	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
+	  	cd $HOME/HyDE/Scripts
+		if [[ -n "$defaults" ]]; then
+			echo "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
+			sudo chmod 0440 /etc/sudoers.d/install-script	
+			bash -c "./install.sh -drs"
+			#defaults klappen nocht nicht testen.... solange ohne :/
+			#bash -c "printf '2\ny111' | ./install.sh -drs"
+		else
+			bash -c "./install.sh -drs"
+		fi
 	fi
+ 	if [[ "$desktop" -eq "celestia" ]]; then
+		#sddm conf, hypridle, monitors, userprefs, windowrules  		
+  		# sudo systemctl enable sddm 
+		Banner "celestia"
+		runcmds 0 "Downloading" "Fish, sddm..." "sudo pacman --noconfirm -S --needed fish sddm"
+		runcmds 0 "Downloading" "Celestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia"
+		bash -c "~/.local/share/caelestia/install.fish"
+  	fi
 }
 function installConfigs() {
 	Banner "config"
@@ -438,6 +476,7 @@ if [[ -n "$defaults" && "$option" -eq 1 ]]; then
 	root="/dev/nvme0n1p3"
 	hostname="ArchLinux"
 	user="schnubby"
+ 	desktop="celestia"
 	installBaseSystem
 fi
 if [[ -z "$option" ]]; then
