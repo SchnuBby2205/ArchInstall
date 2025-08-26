@@ -424,7 +424,7 @@ function installHyDE() {
 		#sddm conf, hypridle, monitors, userprefs, windowrules  		
   		# sudo systemctl enable sddm 
 		Banner "celestia"
-		runcmds 0 "Downloading" "Fish, sddm..." "sudo pacman --noconfirm -S --needed fish sddm"
+		runcmds 0 "Downloading" "Fish, sddm and Hyprland..." "sudo pacman --noconfirm -S --needed fish sddm hyprland"
 		runcmds 0 "Downloading" "Celestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia"
 		bash -c "~/.local/share/caelestia/install.fish"
   	fi
