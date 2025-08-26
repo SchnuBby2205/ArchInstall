@@ -358,7 +358,7 @@ function installBaseSystem() {
 		runcmds 0 "Setting up" "pacman..." "pacman -Syy" "pacman --noconfirm -S reflector" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
 	#printStepOK 1
- 	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu} --defaults ${defaults}"
+ 	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop}"
   	bash -c "umount -R /mnt" 
 	printCountDown 3 "Installation complete! Reboot in"
    	bash -c "reboot"
@@ -380,7 +380,7 @@ function installArchCHRoot() {
 	myPasswd "${user}"
  	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
    	bash -c "mv ./${scriptname} /home/${user}/"
-	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} --defaults ${defaults} >> /home/${user}/.bashrc"
+	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> /home/${user}/.bashrc"
 }
 function installHyDE() {
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
@@ -408,7 +408,7 @@ function installHyDE() {
 		#printStepOK 1
 		printCountDown 3 "Starting installation in"
 	 	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
-		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
 	  	cd $HOME/HyDE/Scripts
 		if [[ -n "$defaults" ]]; then
 			echo "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
@@ -426,7 +426,13 @@ function installHyDE() {
 		Banner "celestia"
 		runcmds 0 "Downloading" "Fish, sddm and Hyprland..." "sudo pacman --noconfirm -S --needed fish sddm hyprland"
 		runcmds 0 "Downloading" "Celestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia"
-		bash -c "~/.local/share/caelestia/install.fish"
+  		#test
+		bash -c "sudo systemctl enable sddm.service"
+		bash -c "echo exec-once=~/.local/share/caelestia/install.fish >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"
+  		bash -c "sudo systemctl start sddm.service"
+  		#bash -c "./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults}"
+		# bash -c "~/.local/share/caelestia/install.fish"
   	fi
 }
 function installConfigs() {
@@ -450,6 +456,7 @@ function installConfigs() {
 		bash -c "sudo rm -rf /etc/sudoers.d/install-script"
 	fi
   	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"
+    if [[ "$desktop" -eq "celestia" ]]; then bash -c "sed -i '/install.fish/d' $HOME/.config/hypr/userprefs.conf" fi
 	#bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
  	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
