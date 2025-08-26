@@ -245,7 +245,9 @@ function installSchnuBby() {
 	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred" "teamspeak3" "grub" "firefox" "steam")
 	for step in "${steps[@]}"; do
 		case $step in
-			fstab) runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
+			#fstab) runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
+			#Angepasst für W10 dual boot
+			fstab) runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p6      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
 			autologin) runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/the_hyde_project.conf";;
 			lutris)
 			if [[ -d "$HOME/.local/share/lutris" ]]; then
@@ -401,7 +403,7 @@ function installHyDE() {
    	fi
  	bash -c "sudo pacman -Syy"
 
- 	if [[ "$desktop" -eq "hypr" ]]; then	
+ 	if [[ "$desktop" == "hypr" ]]; then	
 		Banner "hypr"
 		#printStep 1 "Setting up" "HyprDots..."
 			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE"
@@ -420,7 +422,7 @@ function installHyDE() {
 			bash -c "./install.sh -drs"
 		fi
 	fi
- 	if [[ "$desktop" -eq "celestia" ]]; then
+ 	if [[ "$desktop" == "celestia" ]]; then
 		#sddm conf, hypridle, monitors, userprefs, windowrules  		
   		# sudo systemctl enable sddm 
 		Banner "celestia"
@@ -456,7 +458,7 @@ function installConfigs() {
 		bash -c "sudo rm -rf /etc/sudoers.d/install-script"
 	fi
   	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"
-    if [[ "$desktop" -eq "celestia" ]]; then bash -c "sed -i '/install.fish/d' $HOME/.config/hypr/userprefs.conf" fi
+    if [[ "$desktop" == "celestia" ]]; then bash -c "sed -i '/install.fish/d' $HOME/.config/hypr/userprefs.conf"; fi
 	#bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
  	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
