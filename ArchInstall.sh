@@ -428,8 +428,8 @@ function installHyDE() {
 		runcmds 0 "Downloading" "Celestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia"
   		#test
 		bash -c "sudo systemctl enable sddm.service"
-		bash -c "echo exec-once=~/.local/share/caelestia/install.fish >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"
-		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"
+		bash -c "echo exec-once=~/.local/share/caelestia/install.fish >> $HOME/.config/hypr/userprefs.conf"
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> $HOME/.config/hypr/userprefs.conf"
   		bash -c "sudo systemctl start sddm.service"
   		#bash -c "./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults}"
 		# bash -c "~/.local/share/caelestia/install.fish"
