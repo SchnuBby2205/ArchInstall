@@ -225,7 +225,9 @@ function printHelp() {
    	myPrint "white" "\t--keymap:\t\t "
     printf "which keymap to user (default: de-latin1).\n"
    	myPrint "white" "\t--desktop:\t\t "
-    printf "which desktop environment to use (hypr or caelestia).\n\n"	
+    printf "which desktop environment to use (hypr or caelestia).\n"	
+   	myPrint "white" "\t--debug:\t\t "
+    printf "switches to verbose output.\n\n"	
   	exit 0
 }
 function runcmds() {
@@ -313,6 +315,7 @@ function setDefaults() {
 	timezone="${timezone:-Europe/Berlin}"
 	locale="${locale:-de_DE.UTF-8}"
 	keymap="${keymap:-de-latin1}"
+ 	debug="${debug:-n}"
 }
 function listOptions() {
 	Banner "install"
@@ -486,6 +489,11 @@ function installSchnuBbyOption() {
 }
 setDefaults
 readArgs "$@"
+if [[ "$debug" =~ ^[yY]$ ]]; then
+	debugstring=""
+else
+	debugstring=" &>/dev/null"
+fi
 if [[ -n "$defaults" && "$option" -eq 1 ]]; then
 	boot="/dev/nvme0n1p1"
 	swap="/dev/nvme0n1p2"
