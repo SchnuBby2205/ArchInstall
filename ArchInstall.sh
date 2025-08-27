@@ -357,7 +357,7 @@ function installBaseSystem() {
  	myPrint "green" "Root partition: "
 	printf "${WHITE}${root}${NC}\n"
 	printCountDown 3 "Starting installation in"	
-	Banner "arch"
+	#Banner "arch"
  
 	if [[ -z "$debugstring" || "$debugstring" == "" ]]; then printStep 1 "Installing" "base system..."; fi
 		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot}" "mkswap ${swap}" "swapon ${swap}" "mkfs.ext4 ${root}"
