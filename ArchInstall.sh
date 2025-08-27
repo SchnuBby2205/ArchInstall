@@ -421,6 +421,7 @@ function installDE() {
    
 		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStep 1 "Setting up" "HyprDots..."; fi
 			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE"
+   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/HyDE/Configs/.config/hypr/schnubby"
 		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 1; fi
   
 		printCountDown 3 "Starting installation in"
@@ -445,6 +446,7 @@ function installDE() {
 		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
 	  		runcmds 0 "Downloading" "Kitty, Fish, sddm, firefox and Hyprland..." "sudo pacman --noconfirm -S --needed kitty fish sddm firefox hyprland"
 			runcmds 0 "Downloading" "Caelestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia"
+   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.local/share/caelestia/hypr/schnubby"
    		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 1; fi
 	
 		bash -c "sudo systemctl enable sddm.service ${debugstring}"
@@ -461,6 +463,7 @@ function installDE() {
 		
   		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
 			runcmds 0 "Downloading" "end4..." "git clone --depth 1 https://github.com/SchnuBby2205/end4.git ~/end4"
+   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/end4/.config/hypr/schnubby"
 		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 1; fi
 		
   		cd $HOME/end4
