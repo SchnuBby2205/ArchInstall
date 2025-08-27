@@ -225,7 +225,7 @@ function printHelp() {
    	myPrint "white" "\t--keymap:\t\t "
     printf "which keymap to user (default: de-latin1).\n"
    	myPrint "white" "\t--desktop:\t\t "
-    printf "which desktop environment to use (hypr or caelestia).\n"	
+    printf "which desktop environment to use (hypr, caelestia or end4).\n"	
    	myPrint "white" "\t--debug:\t\t "
     printf "switches to verbose output.\n\n"	
   	exit 0
@@ -396,7 +396,7 @@ function installDE() {
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
  	if [[ -z "$desktop" ]]; then 
   		local i=1
-		options=("hypr" "caelestia")
+		options=("hypr" "caelestia" "end4")
 		for option in "${options[@]}"; do
 			printf "["
 			myPrint "yellow" "$i"
@@ -411,6 +411,9 @@ function installDE() {
    	fi
 	if [[ "$desktop" -eq 2 ]] then
  		desktop="caelestia"
+   	fi
+	if [[ "$desktop" -eq 3 ]] then
+ 		desktop="end4"
    	fi
  	if [[ "$desktop" == "hypr" ]]; then	
 		Banner "hypr"
@@ -451,6 +454,22 @@ function installDE() {
   		printCountDown 3 "Reboot in"
 		bash -c "reboot"
   	fi
+   	if [[ "$desktop" == "end4" ]]; then
+		Banner "caelestia"
+		#bash -c "sudo sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf"
+		bash -c "sudo pacman -Syy ${debugstring}"
+		
+  		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
+			runcmds 0 "Downloading" "end4..." "git clone --depth 1 https://github.com/SchnuBby2205/end4.git ~/end4"
+		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 1; fi
+		
+  		cd $HOME/end4
+		printCountDown 3 "Starting installation in"
+		bash -c "./install.sh"
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debugstring ${debugstring} >> $HOME/.config/hypr/schnubby/userprefs.conf"
+  		printCountDown 3 "Reboot in"
+		bash -c "reboot"
+   fi
 }
 function installConfigs() {
 	Banner "config"
@@ -478,9 +497,10 @@ function installConfigs() {
 	if [[ -n "$defaults" ]]; then
 		bash -c "sudo rm -rf /etc/sudoers.d/install-script"
 	fi
-  	if [[ "$desktop" == "caelestia" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/hyprland/schnubby/userprefs.conf"; fi
-	if [[ "$desktop" == "hypr" ]]; then	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"; fi
- 	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
+  	if [[ "$desktop" == "hypr" ]]; then	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"; fi
+ 	if [[ "$desktop" == "caelestia" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/hyprland/schnubby/userprefs.conf"; fi
+	if [[ "$desktop" == "end4" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
+	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
 	if [[ -z "$defaults" ]]; then
  		getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
