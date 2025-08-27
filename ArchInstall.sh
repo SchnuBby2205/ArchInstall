@@ -81,7 +81,7 @@ function Banner() {
 		myPrint "green" " / __  / /_/ / /_/ / /  / /_/ / /_/ / /_(__  ) \n"
 		myPrint "green" "/_/ /_/\__, / .___/_/  /_____/\____/\__/____/  \n"
 		myPrint "green" "      /____/_/                                 \n\n";;
-  		celestia)
+  		caelestia)
 		myPrint "green" "    ____           __        _____             \n"
 		myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _ \n"
 		myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/ \n"
@@ -223,7 +223,9 @@ function printHelp() {
    	myPrint "white" "\t--locale:\t\t "
     printf "which locale to user (default: de_DE.UTF-8\n"
    	myPrint "white" "\t--keymap:\t\t "
-    printf "which keymap to user (default: de-latin1).\n\n"
+    printf "which keymap to user (default: de-latin1).\n"
+   	myPrint "white" "\t--desktop:\t\t "
+    printf "which desktop environment to use (hypr or caelestia).\n\n"	
   	exit 0
 }
 function runcmds() {
@@ -311,12 +313,11 @@ function setDefaults() {
 	timezone="${timezone:-Europe/Berlin}"
 	locale="${locale:-de_DE.UTF-8}"
 	keymap="${keymap:-de-latin1}"
-	desktop="${desktop:-hypr}"
 }
 function listOptions() {
 	Banner "install"
 	local i=1
-	options=("Arch" "Chroot" "HyDE" "Config files" "SchnuBby specific (git/fstab/lutris...)")
+	options=("Arch" "Chroot" "Desktop environment" "Config files" "SchnuBby specific (git/fstab/lutris...)")
 	for option in "${options[@]}"; do
 		printf "["
 		myPrint "yellow" "$i"
@@ -384,22 +385,25 @@ function installArchCHRoot() {
    	bash -c "mv ./${scriptname} /home/${user}/"
 	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> /home/${user}/.bashrc"
 }
-function installHyDE() {
+function installDE() {
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
  	if [[ -z "$desktop" ]]; then 
   		local i=1
-		options=("hypr" "celestia")
+		options=("hypr" "caelestia")
 		for option in "${options[@]}"; do
 			printf "["
 			myPrint "yellow" "$i"
 			printf "]: Install "
 			myPrint "yellow" "$option\n"
 			((i++))
-		done  
+		done
+  		getInput "Which desktop environment to install?" desktop "hypr"
   	fi
-   	desktop="hypr"
+	if [[ "$desktop" -eq 1 ]] then
+ 		desktop="hypr"
+   	fi
 	if [[ "$desktop" -eq 2 ]] then
- 		desktop="celestia"
+ 		desktop="caelestia"
    	fi
  	bash -c "sudo pacman -Syy"
 
@@ -422,19 +426,22 @@ function installHyDE() {
 			bash -c "./install.sh -drs"
 		fi
 	fi
- 	if [[ "$desktop" == "celestia" ]]; then
+ 	if [[ "$desktop" == "caelestia" ]]; then
 		#sddm conf, hypridle, monitors, userprefs, windowrules  		
   		# sudo systemctl enable sddm 
-		Banner "celestia"
-		runcmds 0 "Downloading" "Fish, sddm and Hyprland..." "sudo pacman --noconfirm -S --needed fish sddm hyprland"
-		runcmds 0 "Downloading" "Celestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia"
+		Banner "caelestia"
+		runcmds 0 "Downloading" "Kitty, Fish, sddm, firefox and Hyprland..." "sudo pacman --noconfirm -S --needed kitty fish sddm firefox hyprland"
+		runcmds 0 "Downloading" "Caelestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia"
   		#test
 		bash -c "sudo systemctl enable sddm.service"
-		bash -c "echo exec-once=~/.local/share/caelestia/install.fish >> $HOME/.config/hypr/userprefs.conf"
-		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> $HOME/.config/hypr/userprefs.conf"
-  		bash -c "sudo systemctl start sddm.service"
+		#bash -c "echo exec-once=~/.local/share/caelestia/install.fish >> $HOME/.config/hypr/userprefs.conf"
+		#bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> $HOME/.config/hypr/userprefs.conf"
+  		#bash -c "sudo systemctl start sddm.service"
   		#bash -c "./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults}"
-		# bash -c "~/.local/share/caelestia/install.fish"
+		bash -c "~/.local/share/caelestia/install.fish"
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> $HOME/.config/hypr/hyprland/schnubby/userprefs.conf"
+  		printCountDown 3 "Reboot in"
+		bash -c "reboot"
   	fi
 }
 function installConfigs() {
@@ -457,9 +464,8 @@ function installConfigs() {
 	if [[ -n "$defaults" ]]; then
 		bash -c "sudo rm -rf /etc/sudoers.d/install-script"
 	fi
-  	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"
-    if [[ "$desktop" == "celestia" ]]; then bash -c "sed -i '/install.fish/d' $HOME/.config/hypr/userprefs.conf"; fi
-	#bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
+  	if [[ "$desktop" == "caelestia" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/hyprland/schnubby/userprefs.conf"; fi
+	if [[ "$desktop" == "hypr" ]]; then	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"; fi
  	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
 	if [[ -z "$defaults" ]]; then
@@ -485,7 +491,7 @@ if [[ -n "$defaults" && "$option" -eq 1 ]]; then
 	root="/dev/nvme0n1p3"
 	hostname="ArchLinux"
 	user="schnubby"
- 	desktop="celestia"
+ 	desktop="caelestia"
 	installBaseSystem
 fi
 if [[ -z "$option" ]]; then
@@ -495,7 +501,7 @@ fi
 case $option in
 	1) installBaseSystem;;
 	2) installArchCHRoot;;
-	3) installHyDE;;
+	3) installDE;;
 	4) installConfigs;;
 	5) installSchnuBbyOption;;
 	*) exitWithError "No valid option!";;
