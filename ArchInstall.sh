@@ -426,7 +426,7 @@ function installDE() {
   
 		printCountDown 3 "Starting installation in"
 	 	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
-		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debugstring ${debugstring} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debugstring ${debugstring} >> $HOME/HyDE/Configs/.config/hypr/schnubby/userprefs.conf"		
 	  	cd $HOME/HyDE/Scripts
 		if [[ -n "$defaults" ]]; then
 			echo "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
@@ -452,7 +452,7 @@ function installDE() {
 		bash -c "sudo systemctl enable sddm.service ${debugstring}"
   		printCountDown 3 "Starting installation in"
 		bash -c "~/.local/share/caelestia/install.fish"
-		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debugstring ${debugstring} >> $HOME/.config/hypr/hyprland/schnubby/userprefs.conf"
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debugstring ${debugstring} >> $HOME/.config/hypr/schnubby/userprefs.conf"
   		printCountDown 3 "Reboot in"
 		bash -c "reboot"
   	fi
@@ -500,8 +500,8 @@ function installConfigs() {
 	if [[ -n "$defaults" ]]; then
 		bash -c "sudo rm -rf /etc/sudoers.d/install-script"
 	fi
-  	if [[ "$desktop" == "hypr" ]]; then	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"; fi
- 	if [[ "$desktop" == "caelestia" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/hyprland/schnubby/userprefs.conf"; fi
+  	if [[ "$desktop" == "hypr" ]]; then	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
+ 	if [[ "$desktop" == "caelestia" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
 	if [[ "$desktop" == "end4" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
 	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
