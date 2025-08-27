@@ -405,10 +405,9 @@ function installDE() {
 	if [[ "$desktop" -eq 2 ]] then
  		desktop="caelestia"
    	fi
- 	bash -c "sudo pacman -Syy"
-
  	if [[ "$desktop" == "hypr" ]]; then	
 		Banner "hypr"
+ 		bash -c "sudo pacman -Syy"
 		#printStep 1 "Setting up" "HyprDots..."
 			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE"
 		#printStepOK 1
@@ -430,6 +429,8 @@ function installDE() {
 		#sddm conf, hypridle, monitors, userprefs, windowrules  		
   		# sudo systemctl enable sddm 
 		Banner "caelestia"
+		bash -c "sudo sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf"
+		bash -c "sudo pacman -Syy"
 		runcmds 0 "Downloading" "Kitty, Fish, sddm, firefox and Hyprland..." "sudo pacman --noconfirm -S --needed kitty fish sddm firefox hyprland"
 		runcmds 0 "Downloading" "Caelestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia"
   		#test
