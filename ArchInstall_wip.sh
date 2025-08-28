@@ -244,7 +244,7 @@ function runcmds() {
 	if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 0; fi
 }
 function installSchnuBby() {
-	if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStep 1 "Installing" "schnubbyspecifics..."; fi
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Installing" "schnubbyspecifics..."; fi
 	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren"
 	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred" "teamspeak3" "grub" "firefox" "steam")
 	for step in "${steps[@]}"; do
@@ -293,7 +293,7 @@ function installSchnuBby() {
 			exitWithError "Error setting SchnuBby specifics!"
 		esac
 	done
-	if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 1; fi
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 }
 function readArgs() {
 	while [ $# -gt 0 ]; do
@@ -329,6 +329,13 @@ function listOptions() {
 		((i++))
 	done
 }
+function checkDebugFlag() {
+	if [[ "$debug" =~ ^[yY]$ ]]; then
+		debugstring=""
+	else
+		debugstring=" &>/dev/null"
+	fi
+ }
 function runCFDiskIfNeeded() {
 	if [[ -z "$cfdisk" && -n "$disk" ]]; then
 		getInput "\nStart cfdisk (y/N) ?\n" cfdisk "N"
@@ -359,26 +366,26 @@ function installBaseSystem() {
 	printCountDown 3 "Starting installation in"	
 	#Banner "arch"
  
-	if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStep 1 "Installing" "base system..."; fi
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Installing" "base system..."; fi
 		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot}" "mkswap ${swap}" "swapon ${swap}" "mkfs.ext4 ${root}"
 		runcmds 0 "Mounting" "partitions..." "mount --mkdir ${root} /mnt" "mount --mkdir ${boot} /mnt/boot"
 		runcmds 0 "Setting up" "pacman..." "pacman -Syy" "pacman --noconfirm -S reflector" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
-	if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 1; fi
+	if [[ "$debug" =~ ^[nN]$ ]]; then  printStepOK 1; fi
   
- 	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debugstring ${debugstring}"
+ 	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug}"
   	bash -c "umount -R /mnt ${debugstring}" 
 	printCountDown 3 "Installation complete! Reboot in"
    	bash -c "reboot"
 }
 function installArchCHRoot() {
-
-	if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStep 1 "Configuring" "arch-chroot..."; fi
+	checkDebugFlag
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Configuring" "arch-chroot..."; fi
 		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime" "hwclock --systohc"
 		runcmds 0 "Setting up" "locales..." "sed -e '/${locale}/s/^#*//' -i /etc/locale.gen" "locale-gen" "echo LANG=${locale} >> /etc/locale.conf" "echo KEYMAP=${keymap} >> /etc/vconsole.conf"
 		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB" "grub-mkconfig -o /boot/grub/grub.cfg"
 		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager"
-	if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 1; fi
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
  
 	if [[ -z "$hostname" ]]; then getInput "\nEnter your Hostname: " hostname "ArchLinux"; fi
 	bash -c "echo ${hostname} >> /etc/hostname"       	
@@ -390,9 +397,10 @@ function installArchCHRoot() {
 	myPasswd "${user}"
  	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
    	bash -c "mv ./${scriptname} /home/${user}/"
-	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debugstring ${debugstring} >> /home/${user}/.bashrc"
+	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug} >> /home/${user}/.bashrc"
 }
 function installDE() {
+	checkDebugFlag
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
  	if [[ -z "$desktop" ]]; then 
   		local i=1
@@ -419,14 +427,14 @@ function installDE() {
 		Banner "hypr"
  		bash -c "sudo pacman -Syy ${debugstring}"
    
-		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStep 1 "Setting up" "HyprDots..."; fi
+		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "HyprDots..."; fi
 			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE"
    			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/HyDE/Configs/.config/hypr/schnubby"
-		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 1; fi
+		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
   
 		printCountDown 3 "Starting installation in"
 	 	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
-		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debugstring ${debugstring} >> $HOME/HyDE/Configs/.config/hypr/schnubby/userprefs.conf"		
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug} >> $HOME/HyDE/Configs/.config/hypr/schnubby/userprefs.conf"		
 	  	cd $HOME/HyDE/Scripts
 		if [[ -n "$defaults" ]]; then
 			echo "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
@@ -443,16 +451,16 @@ function installDE() {
 		bash -c "sudo sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf"
 		bash -c "sudo pacman -Syy ${debugstring}"
   
-		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
+		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
 	  		runcmds 0 "Downloading" "Kitty, Fish, sddm, firefox and Hyprland..." "sudo pacman --noconfirm -S --needed kitty fish sddm firefox hyprland"
 			runcmds 0 "Downloading" "Caelestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia"
    			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.local/share/caelestia/hypr/schnubby"
-   		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 1; fi
+   		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 	
 		bash -c "sudo systemctl enable sddm.service ${debugstring}"
   		printCountDown 3 "Starting installation in"
 		bash -c "~/.local/share/caelestia/install.fish"
-		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debugstring ${debugstring} >> $HOME/.config/hypr/schnubby/userprefs.conf"
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug} >> $HOME/.config/hypr/schnubby/userprefs.conf"
   		printCountDown 3 "Reboot in"
 		bash -c "reboot"
   	fi
@@ -461,27 +469,28 @@ function installDE() {
 		#bash -c "sudo sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf"
 		bash -c "sudo pacman -Syy ${debugstring}"
 		
-  		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
+  		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
 			runcmds 0 "Downloading" "end4..." "git clone --depth 1 https://github.com/SchnuBby2205/end4.git ~/end4"
    			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/end4/.config/hypr/schnubby"
-		if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 1; fi
+		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 		
   		cd $HOME/end4
 		printCountDown 3 "Starting installation in"
 		bash -c "./install.sh"
-		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debugstring ${debugstring} >> $HOME/.config/hypr/schnubby/userprefs.conf"
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug} >> $HOME/.config/hypr/schnubby/userprefs.conf"
   		printCountDown 3 "Reboot in"
 		bash -c "reboot"
    fi
 }
 function installConfigs() {
-	Banner "config"
+	checkDebugFlag
+ 	Banner "config"
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
 	if [[ -z "$gpu" ]]; then getInput "Enter your gpu (amd // nvidia)): " gpu "amd"; fi
-	bash -c "sudo pacman -Syy"
+	bash -c "sudo pacman -Syy ${debugstring}"
 	Banner "config"
 	
- 	if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStep 1 "Running" "final steps..."; fi
+ 	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Running" "final steps..."; fi
 	case $gpu in 
 		amd) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader";;
 		nvidia) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader";;
@@ -490,7 +499,7 @@ function installConfigs() {
   		runcmds 0 "Downloading" "arch-gaming-meta..." "yay -S --noconfirm arch-gaming-meta"
 		runcmds 0 "Downloading" "dxvk-bin..." "yay -S --noconfirm dxvk-bin"
   		runcmds 0 "Starting" "STEAM..." "steam"
-   	if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 1; fi
+   	if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
    
 	#bash -c "yay -S --noconfirm arch-gaming-meta"
 	#bash -c "yay -S --noconfirm dxvk-bin"
