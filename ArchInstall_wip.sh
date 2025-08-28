@@ -363,11 +363,14 @@ function installBaseSystem() {
 	printf "${WHITE}${swap}${NC}\n"
  	myPrint "green" "Root partition: "
 	printf "${WHITE}${root}${NC}\n"
-	printCountDown 3 "Starting installation in"	
+
+ 	getInput "These partitions will be !!WIPED AND FORMATTED!! Please check them TWICE before you continue!!" check "y"
+ 
+ 	printCountDown 3 "Starting installation in"	
 	#Banner "arch"
  
 	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Installing" "base system..."; fi
-		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot}" "mkswap ${swap}" "swapon ${swap}" "mkfs.ext4 ${root}"
+		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot}" "mkswap ${swap}" "swapon ${swap}" "mkfs.ext4 -F ${root}"
 		runcmds 0 "Mounting" "partitions..." "mount --mkdir ${root} /mnt" "mount --mkdir ${boot} /mnt/boot"
 		runcmds 0 "Setting up" "pacman..." "pacman -Syy" "pacman --noconfirm -S reflector" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
