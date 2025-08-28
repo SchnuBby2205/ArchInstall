@@ -303,7 +303,7 @@ function installSchnuBby() {
 			steam)
 			cd $HOME/.steam/steam/compatibilitytools.d/
 			url=$(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep "browser_download_url.*tar.gz" | cut -d : -f 2,3 | tr -d \") 
-			runcmds 0 "Downloading" "latest ProtonGE..." "curl -L $url | tar zx";;
+			runcmds 0 "Downloading" "latest ProtonGE..." "curl -L $url | tar zx ${debugstring}";;
 			*)
 			exitWithError "Error setting SchnuBby specifics!"
 		esac
@@ -448,8 +448,8 @@ function installDE() {
  		bash -c "sudo pacman -Syy ${debugstring}"
    
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "HyprDots..."; fi
-			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE"
-   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/HyDE/Configs/.config/hypr/schnubby"
+			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE ${debugstring}"
+   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/HyDE/Configs/.config/hypr/schnubby ${debugstring}"
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
   
 		printCountDown 3 "Starting installation in"
@@ -472,9 +472,9 @@ function installDE() {
 		bash -c "sudo pacman -Syy ${debugstring}"
   
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
-	  		runcmds 0 "Downloading" "Kitty, Fish, sddm, firefox and Hyprland..." "sudo pacman --noconfirm -S --needed kitty fish sddm firefox hyprland"
-			runcmds 0 "Downloading" "Caelestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia"
-   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.local/share/caelestia/hypr/schnubby"
+	  		runcmds 0 "Downloading" "Kitty, Fish, sddm, firefox and Hyprland..." "sudo pacman --noconfirm -S --needed kitty fish sddm firefox hyprland ${debugstring}"
+			runcmds 0 "Downloading" "Caelestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia ${debugstring}"
+   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.local/share/caelestia/hypr/schnubby ${debugstring}"
    		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 	
 		bash -c "sudo systemctl enable sddm.service ${debugstring}"
@@ -490,8 +490,8 @@ function installDE() {
 		bash -c "sudo pacman -Syy ${debugstring}"
 		
   		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
-			runcmds 0 "Downloading" "end4..." "git clone --depth 1 https://github.com/SchnuBby2205/end4.git ~/end4"
-   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/end4/.config/hypr/schnubby"
+			runcmds 0 "Downloading" "end4..." "git clone --depth 1 https://github.com/SchnuBby2205/end4.git ~/end4 ${debugstring}"
+   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/end4/.config/hypr/schnubby ${debugstring}"
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 		
   		cd $HOME/end4
@@ -512,13 +512,13 @@ function installConfigs() {
 	
  	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Running" "final steps..."; fi
 	case $gpu in 
-		amd) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader";;
-		nvidia) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader";;
+		amd) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}";;
+		nvidia) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}";;
 		*) exitWithError "No valid GPU specified!";;
 	esac
-  		runcmds 0 "Downloading" "arch-gaming-meta..." "yay -S --noconfirm arch-gaming-meta"
-		runcmds 0 "Downloading" "dxvk-bin..." "yay -S --noconfirm dxvk-bin"
-  		runcmds 0 "Starting" "STEAM..." "steam"
+  		runcmds 0 "Downloading" "arch-gaming-meta..." "yay -S --noconfirm arch-gaming-meta ${debugstring}"
+		runcmds 0 "Downloading" "dxvk-bin..." "yay -S --noconfirm dxvk-bin ${debugstring}"
+  		runcmds 0 "Starting" "STEAM..." "steam ${debugstring}"
    	if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
    
 	#bash -c "yay -S --noconfirm arch-gaming-meta"
@@ -551,11 +551,6 @@ function installSchnuBbyOption() {
 }
 setDefaults
 readArgs "$@"
-if [[ "$debug" =~ ^[yY]$ ]]; then
-	debugstring=""
-else
-	debugstring=" &>/dev/null"
-fi
 checkDefaultRun
 if [[ -z "$option" ]]; then
 	listOptions
