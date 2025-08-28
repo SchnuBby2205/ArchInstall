@@ -248,15 +248,15 @@ function printHelp() {
 function runcmds() {
 	local sudo=$1 mode=$2 message=$3
 	shift 3
-	if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStep 0 "${mode}" "${message}"; fi
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 0 "${mode}" "${message}"; fi
  	for cmd in "$@"; do
 		if [[ "$sudo" == "1" ]]; then 
-			sudo bash -c "$cmd $debugstring" || exitWithError "Command failed: $cmd"
+			sudo bash -c "$cmd" || exitWithError "Command failed: $cmd"
 		else
-			bash -c "$cmd $debugstring" || exitWithError "Command failed: $cmd"
+			bash -c "$cmd" || exitWithError "Command failed: $cmd"
 		fi
   	done
-	if [[ -n "$debugstring" || "$debugstring" != "" ]]; then printStepOK 0; fi
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 0; fi
 }
 function installSchnuBby() {
 	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Installing" "schnubbyspecifics..."; fi
@@ -370,6 +370,7 @@ function checkPartitions() {
 }
 function installBaseSystem() {
 	Banner "arch"
+ 	checkDebugFlag
 	runCFDiskIfNeeded
 	checkPartitions	
 	myPrint "green" "\nBoot partition: "
@@ -386,10 +387,10 @@ function installBaseSystem() {
 	#Banner "arch"
  
 	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Installing" "base system..."; fi
-		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot}" "mkswap ${swap}" "swapon ${swap}" "mkfs.ext4 -F ${root}"
-		runcmds 0 "Mounting" "partitions..." "mount --mkdir ${root} /mnt" "mount --mkdir ${boot} /mnt/boot"
-		runcmds 0 "Setting up" "pacman..." "pacman -Syy" "pacman --noconfirm -S reflector" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
-		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
+		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot} ${debugstring}" "mkswap ${swap} ${debugstring}" "swapon ${swap} ${debugstring}" "mkfs.ext4 -F ${root} ${debugstring}"
+		runcmds 0 "Mounting" "partitions..." "mount --mkdir ${root} /mnt ${debugstring}" "mount --mkdir ${boot} /mnt/boot ${debugstring}"
+		runcmds 0 "Setting up" "pacman..." "pacman -Syy" "pacman --noconfirm -S reflector" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist ${debugstring}" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
+		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager ${debugstring}" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
 	if [[ "$debug" =~ ^[nN]$ ]]; then  printStepOK 1; fi
   
  	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug}"
@@ -400,10 +401,10 @@ function installBaseSystem() {
 function installArchCHRoot() {
 	checkDebugFlag
 	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Configuring" "arch-chroot..."; fi
-		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime" "hwclock --systohc"
-		runcmds 0 "Setting up" "locales..." "sed -e '/${locale}/s/^#*//' -i /etc/locale.gen" "locale-gen" "echo LANG=${locale} >> /etc/locale.conf" "echo KEYMAP=${keymap} >> /etc/vconsole.conf"
-		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB" "grub-mkconfig -o /boot/grub/grub.cfg"
-		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager"
+		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime ${debugstring}" "hwclock --systohc ${debugstring}"
+		runcmds 0 "Setting up" "locales..." "sed -e '/${locale}/s/^#*//' -i /etc/locale.gen" "locale-gen ${debugstring}" "echo LANG=${locale} >> /etc/locale.conf" "echo KEYMAP=${keymap} >> /etc/vconsole.conf"
+		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB ${debugstring}" "grub-mkconfig -o /boot/grub/grub.cfg ${debugstring}"
+		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager ${debugstring}"
 	if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
  
 	if [[ -z "$hostname" ]]; then getInput "\nEnter your Hostname: " hostname "ArchLinux"; fi
