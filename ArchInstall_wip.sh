@@ -1,4 +1,6 @@
 #!/bin/bash
+
+#### EDIT THESE SETTINGS FOR A DEFAULT FLAG RUN
 function checkDefaultRun() {
 	if [[ -n "$defaults" && "$option" -eq 1 ]]; then
 		boot="/dev/nvme0n1p1"
@@ -10,6 +12,8 @@ function checkDefaultRun() {
 		installBaseSystem
 	fi
 }
+#### EDIT THESE SETTINGS FOR A DEFAULT FLAG RUN
+
 # Farben im Terminal
 RED='\033[0;31m'
 GREEN='\033[0;32m'
