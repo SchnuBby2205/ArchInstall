@@ -260,7 +260,7 @@ function runcmds() {
 }
 function installSchnuBby() {
 	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Installing" "schnubbyspecifics..."; fi
-	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren"
+	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren ${debugstring}"
 	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred" "teamspeak3" "grub" "firefox" "steam")
 	for step in "${steps[@]}"; do
 		case $step in
@@ -445,10 +445,11 @@ function installDE() {
    	fi
  	if [[ "$desktop" == "hypr" ]]; then	
 		Banner "hypr"
- 		bash -c "sudo pacman -Syy ${debugstring}"
+ 		#bash -c "sudo pacman -Syy ${debugstring}"
    
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "HyprDots..."; fi
-			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE ${debugstring}"
+			runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
+   			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE ${debugstring}"
    			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/HyDE/Configs/.config/hypr/schnubby ${debugstring}"
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
   
@@ -469,10 +470,11 @@ function installDE() {
  	if [[ "$desktop" == "caelestia" ]]; then
 		Banner "caelestia"
 		bash -c "sudo sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf"
-		bash -c "sudo pacman -Syy ${debugstring}"
+		#bash -c "sudo pacman -Syy ${debugstring}"
   
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
-	  		runcmds 0 "Downloading" "Kitty, Fish, sddm, firefox and Hyprland..." "sudo pacman --noconfirm -S --needed kitty fish sddm firefox hyprland ${debugstring}"
+  			runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
+	  		runcmds 0 "Installing" "Kitty, Fish, sddm, firefox and Hyprland..." "sudo pacman --noconfirm -S --needed kitty fish sddm firefox hyprland ${debugstring}"
 			runcmds 0 "Downloading" "Caelestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia ${debugstring}"
    			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.local/share/caelestia/hypr/schnubby ${debugstring}"
    		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
@@ -487,9 +489,10 @@ function installDE() {
    	if [[ "$desktop" == "end4" ]]; then
 		Banner "caelestia"
 		#bash -c "sudo sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf"
-		bash -c "sudo pacman -Syy ${debugstring}"
+		#bash -c "sudo pacman -Syy ${debugstring}"
 		
-  		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
+  		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "Caelestia..."; fi	
+			runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
 			runcmds 0 "Downloading" "end4..." "git clone --depth 1 https://github.com/SchnuBby2205/end4.git ~/end4 ${debugstring}"
    			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/end4/.config/hypr/schnubby ${debugstring}"
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
@@ -507,18 +510,19 @@ function installConfigs() {
  	Banner "config"
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
 	if [[ -z "$gpu" ]]; then getInput "Enter your gpu (amd // nvidia)): " gpu "amd"; fi
-	bash -c "sudo pacman -Syy ${debugstring}"
+	#bash -c "sudo pacman -Syy ${debugstring}"
 	Banner "config"
 	
  	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Running" "final steps..."; fi
+  		runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
 	case $gpu in 
-		amd) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}";;
-		nvidia) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}";;
+		amd) runcmds 0 "Installing" "graphics drivers..." "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}";;
+		nvidia) runcmds 0 "Installing" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}";;
 		*) exitWithError "No valid GPU specified!";;
 	esac
-  		runcmds 0 "Downloading" "arch-gaming-meta..." "yay -S --noconfirm arch-gaming-meta ${debugstring}"
-		runcmds 0 "Downloading" "dxvk-bin..." "yay -S --noconfirm dxvk-bin ${debugstring}"
-  		runcmds 0 "Starting" "STEAM..." "steam ${debugstring}"
+  		runcmds 0 "Installing" "arch-gaming-meta..." "yay -S --noconfirm arch-gaming-meta ${debugstring}"
+		runcmds 0 "Installing" "dxvk-bin..." "yay -S --noconfirm dxvk-bin ${debugstring}"
+  		runcmds 0 "Launching" "STEAM..." "steam ${debugstring}"
    	if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
    
 	#bash -c "yay -S --noconfirm arch-gaming-meta"
