@@ -1,15 +1,15 @@
 #!/bin/bash
-
-if [[ -n "$defaults" && "$option" -eq 1 ]]; then
-	boot="/dev/nvme0n1p1"
-	swap="/dev/nvme0n1p2"
-	root="/dev/nvme0n1p3"
-	hostname="ArchLinux"
-	user="schnubby"
- 	desktop="caelestia"
-	installBaseSystem
-fi
-
+function checkDefaultRun() {
+	if [[ -n "$defaults" && "$option" -eq 1 ]]; then
+		boot="/dev/nvme0n1p1"
+		swap="/dev/nvme0n1p2"
+		root="/dev/nvme0n1p3"
+		hostname="ArchLinux"
+		user="schnubby"
+	 	desktop="caelestia"
+		installBaseSystem
+	fi
+}
 # Farben im Terminal
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -551,6 +551,7 @@ if [[ "$debug" =~ ^[yY]$ ]]; then
 else
 	debugstring=" &>/dev/null"
 fi
+checkDefaultRun
 if [[ -z "$option" ]]; then
 	listOptions
 	getInput "Wich step to run?" option 1
