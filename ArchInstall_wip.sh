@@ -375,7 +375,8 @@ function installBaseSystem() {
  	myPrint "green" "Root partition: "
 	printf "${WHITE}${root}${NC}\n"
 
- 	getInput "These partitions will be !!WIPED AND FORMATTED!! Please check them TWICE before you continue!!" check "y"
+ 	myPrint "red" "\nThese partitions will be !!WIPED AND FORMATTED!! Please check them TWICE before you continue!!\nPress ENTER to continue (STRG-C to exit now)..."
+	getInput "" check "y"
  
  	printCountDown 3 "Starting installation in"	
 	#Banner "arch"
