@@ -259,6 +259,7 @@ function runcmds() {
 	if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 0; fi
 }
 function installSchnuBby() {
+	checkDebugFlag
 	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Installing" "schnubbyspecifics..."; fi
 	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren ${debugstring}"
 	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred" "teamspeak3" "grub" "firefox" "steam")
@@ -389,7 +390,8 @@ function installBaseSystem() {
 	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Installing" "base system..."; fi
 		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot} ${debugstring}" "mkswap ${swap} ${debugstring}" "swapon ${swap} ${debugstring}" "mkfs.ext4 -F ${root} ${debugstring}"
 		runcmds 0 "Mounting" "partitions..." "mount --mkdir ${root} /mnt ${debugstring}" "mount --mkdir ${boot} /mnt/boot ${debugstring}"
-		runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}" "pacman --noconfirm -S reflector" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist ${debugstring}" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
+		#runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}" "pacman --noconfirm -S reflector" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist ${debugstring}" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
+		runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist ${debugstring}" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
 		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager ${debugstring}" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
 	if [[ "$debug" =~ ^[nN]$ ]]; then  printStepOK 1; fi
   
@@ -445,12 +447,12 @@ function installDE() {
    	fi
  	if [[ "$desktop" == "hypr" ]]; then	
 		Banner "hypr"
- 		#bash -c "sudo pacman -Syy ${debugstring}"
+ 		bash -c "sudo pacman -Syy ${debugstring}"
    
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "HyprDots..."; fi
-			runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
+			#runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
    			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE ${debugstring}"
-   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/HyDE/Configs/.config/hypr/schnubby ${debugstring}"
+   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.config/hypr/schnubby ${debugstring}"
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
   
 		printCountDown 3 "Starting installation in"
@@ -470,10 +472,10 @@ function installDE() {
  	if [[ "$desktop" == "caelestia" ]]; then
 		Banner "caelestia"
 		bash -c "sudo sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf"
-		#bash -c "sudo pacman -Syy ${debugstring}"
+		bash -c "sudo pacman -Syy ${debugstring}"
   
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
-  			runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
+  			#runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
 	  		runcmds 0 "Installing" "Kitty, Fish, sddm, firefox and Hyprland..." "sudo pacman --noconfirm -S --needed kitty fish sddm firefox hyprland ${debugstring}"
 			runcmds 0 "Downloading" "Caelestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia ${debugstring}"
    			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.local/share/caelestia/hypr/schnubby ${debugstring}"
@@ -489,12 +491,12 @@ function installDE() {
    	if [[ "$desktop" == "end4" ]]; then
 		Banner "caelestia"
 		#bash -c "sudo sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf"
-		#bash -c "sudo pacman -Syy ${debugstring}"
+		bash -c "sudo pacman -Syy ${debugstring}"
 		
   		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "Caelestia..."; fi	
-			runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
+			#runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
 			runcmds 0 "Downloading" "end4..." "git clone --depth 1 https://github.com/SchnuBby2205/end4.git ~/end4 ${debugstring}"
-   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/end4/.config/hypr/schnubby ${debugstring}"
+   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.config/hypr/schnubby ${debugstring}"
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 		
   		cd $HOME/end4
@@ -514,7 +516,7 @@ function installConfigs() {
 	Banner "config"
 	
  	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Running" "final steps..."; fi
-  		runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
+  		runcmds 0 "Setting up" "pacman..." "sudo pacman -Syy ${debugstring}"
 	case $gpu in 
 		amd) runcmds 0 "Installing" "graphics drivers..." "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}";;
 		nvidia) runcmds 0 "Installing" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}";;
