@@ -81,6 +81,17 @@ function Banner() {
 		myPrint "green" " / __  / /_/ / /_/ / /  / /_/ / /_/ / /_(__  ) \n"
 		myPrint "green" "/_/ /_/\__, / .___/_/  /_____/\____/\__/____/  \n"
 		myPrint "green" "      /____/_/                                 \n\n";;
+  		celestia)
+		myPrint "green" "    ____           __        _____             \n"
+		myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _ \n"
+		myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/ \n"
+		myPrint "green" " _/ // / / (__  ) /_/ /_/ / / / / / / / /_/ /  \n"
+		myPrint "green" "/___/_/ /_/____/\__/\__,_/_/_/_/_/ /_/\__, /   \n"
+		myPrint "green" "                           ____      /____/    \n"
+		myPrint "green" "                          / __ \____  / /______\n"
+		myPrint "green" "                         / / / / __ \/ __/ ___/\n"
+		myPrint "green" "                        / /_/ / /_/ / /_(__  ) \n"
+		myPrint "green" "                       /_____/\____/\__/____/  \n\n";;
 		config)
 		myPrint "green" "    ____           __        _____                   \n"
 		myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _       \n"
@@ -106,8 +117,10 @@ function Banner() {
 		myPrint "green" "/_/  |_/_/   \___/_/ /_/___/_/ /_/____/\__/\__,_/_/_/   \n\n";;
 	esac
 }
-function myPasswd() {
-	local MAX_ATTEMPTS=3 attempts=0
+myPasswd() {
+	MAX_ATTEMPTS=3
+	attempts=0
+
 	# Schleife, die bis zu MAX_ATTEMPTS Versuche erlaubt
 	while [ $attempts -lt $MAX_ATTEMPTS ]; do
 		# Passwortabfrage
@@ -115,26 +128,31 @@ function myPasswd() {
 		read -s password1
 		printf "\nRetype: "
 		read -s password2
+
 		# Überprüfen, ob die Passwörter übereinstimmen
 		if [ "$password1" != "$password2" ]; then
-			printf "\nPasswords do not match.\n"
+			printf "\nPasswords didn't match.\n"
 			((attempts++))
 			continue  # Gehe zurück zum Anfang der Schleife
 		fi
+
 		# Führe den `passwd`-Befehl aus, um das Passwort zu ändern
 		echo -e "$password1\n$password2" | sudo passwd ${1} &>/dev/null
+
 		# Überprüfen, ob der `passwd`-Befehl erfolgreich war
 		if [ $? -eq 0 ]; then
-			printf "\nPassword set successfully.\n"
+			printf "\nPassword updated succesfully.\n"
 			break  # Beende die Schleife, wenn erfolgreich
 		else
-			printf "\nError setting password.\n"
+			printf "\nError setting the password.\n"
 			((attempts++))
 		fi
 	done
+
 	# Falls die maximale Anzahl der Versuche erreicht wurde
 	if [ $attempts -ge $MAX_ATTEMPTS ]; then
-		exitWithError "\nMax tries reached. Exiting!\n"
+		printf "\nMaximum tries reached script will end.\n"
+		exit 1
 	fi
 }
 function printStep() {
@@ -211,7 +229,7 @@ function printHelp() {
 function runcmds() {
 	local sudo=$1 mode=$2 message=$3
 	shift 3
-	printStep 0 "${mode}" "${message}"
+	#printStep 0 "${mode}" "${message}"
  	for cmd in "$@"; do
 		if [[ "$sudo" == "1" ]]; then 
 			sudo bash -c "$cmd" || exitWithError "Command failed: $cmd"
@@ -219,46 +237,59 @@ function runcmds() {
 			bash -c "$cmd" || exitWithError "Command failed: $cmd"
 		fi
   	done
-	printStepOK 0
+	#printStepOK 0
 }
 function installSchnuBby() {
-	printStep 1 "Installing" "schnubbyspecifics..."
-	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren &>/dev/null"
-	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred" "teamspeak3")
+	#printStep 1 "Installing" "schnubbyspecifics..."
+	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren"
+	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred" "teamspeak3" "grub" "firefox" "steam")
 	for step in "${steps[@]}"; do
 		case $step in
-			fstab) runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
+			#fstab) runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
+			#Angepasst für W10 dual boot
+			fstab) runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p6      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
 			autologin) runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/the_hyde_project.conf";;
 			lutris)
 			if [[ -d "$HOME/.local/share/lutris" ]]; then
 				runcmds 0 "Backing up" "lutris..." "mv $HOME/.local/share/lutris $HOME/.local/share/lutris_bak"
 			fi 	
 			if [[ ! -d "$HOME/.local/share/lutris" ]]; then
-				runcmds 0 "Configuring" "lutris..." "ln -s /programmieren/.local/share/lutris $HOME/.local/share/lutris" 	
+				runcmds 0 "Configuring" "lutris..." "ln -s /programmieren/backups/.local/share/lutris $HOME/.local/share/lutris" 	
 			fi;;
 			zshhist)
 			if [[ -f "$HOME/.zsh_history" ]]; then
 				runcmds 0 "Removing" ".zsh_history..." "rm -rf $HOME/.zsh_history"
 			fi
-			runcmds 0 "Configuring" ".zsh_history..." "ln -sf /programmieren/.zsh_history $HOME/.zsh_history";;
+			runcmds 0 "Configuring" ".zsh_history..." "ln -sf /programmieren/backups/.zsh_history $HOME/.zsh_history";;
 			gitconf)
 			if [[ ! -f "$HOME/.gitconfig" ]]; then
-				runcmds 0 "Configuring" "git..." "ln -sf /programmieren/.gitconfig $HOME/.gitconfig"
+				runcmds 0 "Configuring" "git..." "ln -sf /programmieren/backups/.gitconfig $HOME/.gitconfig"
 			fi;;
 			gitcred)
 			if [[ ! -f "$HOME/.git-credentials" ]]; then
-				runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/.git-credentials $HOME/.git-credentials"
+				runcmds 0 "Configuring" "git credentials..." "ln -sf /programmieren/backups/.git-credentials $HOME/.git-credentials"
 			fi;;
 			teamspeak3)
 			if [[ -f "$HOME/.ts3client" ]]; then
 				runcmds 0 "Removing" ".ts3client..." "rm -rf $HOME/.ts3client"
 			fi
-			runcmds 0 "Configuring" ".ts3client..." "ln -sf /programmieren/.ts3client $HOME/.ts3client";;
+			runcmds 0 "Configuring" ".ts3client..." "ln -sf /programmieren/backups/.ts3client $HOME/.ts3client";;
+			grub)
+			sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/g' /etc/default/grub
+			sudo grub-mkconfig -o /boot/grub/grub.cfg;;
+			firefox)
+			ff_new_user=$HOME/.mozilla/firefox/$(ls $HOME/.mozilla/firefox | grep "Default User")
+			rm -rf "${ff_new_user}"
+			ln -sf /programmieren/backups/FireFox/3665cjzf.default-release "${ff_new_user}";;
+			steam)
+			cd $HOME/.steam/steam/compatibilitytools.d/
+			url=$(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep "browser_download_url.*tar.gz" | cut -d : -f 2,3 | tr -d \") 
+			curl -L $url | tar zx;;
 			*)
 			exitWithError "Error setting SchnuBby specifics!"
 		esac
 	done
-	printStepOK 1
+	#printStepOK 1
 }
 function readArgs() {
 	while [ $# -gt 0 ]; do
@@ -280,6 +311,7 @@ function setDefaults() {
 	timezone="${timezone:-Europe/Berlin}"
 	locale="${locale:-de_DE.UTF-8}"
 	keymap="${keymap:-de-latin1}"
+	desktop="${desktop:-hypr}"
 }
 function listOptions() {
 	Banner "install"
@@ -322,24 +354,24 @@ function installBaseSystem() {
 	printf "${WHITE}${root}${NC}\n"
 	printCountDown 3 "Starting installation in"	
 	Banner "arch"
-	printStep 1 "Installing" "base system..."
-		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot} &>/dev/null" "mkswap ${swap} &>/dev/null" "swapon ${swap} &>/dev/null" "mkfs.ext4 ${root} &>/dev/null"
+	#printStep 1 "Installing" "base system..."
+		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot}" "mkswap ${swap}" "swapon ${swap}" "mkfs.ext4 ${root}"
 		runcmds 0 "Mounting" "partitions..." "mount --mkdir ${root} /mnt" "mount --mkdir ${boot} /mnt/boot"
-		runcmds 0 "Setting up" "pacman..." "pacman -Syy &>/dev/null" "pacman --noconfirm -S reflector &>/dev/null" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist &>/dev/null" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
-		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager &>/dev/null" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
-	printStepOK 1
- 	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu}"
-  	bash -c "umount -R /mnt &>/dev/null" 
+		runcmds 0 "Setting up" "pacman..." "pacman -Syy" "pacman --noconfirm -S reflector" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
+		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
+	#printStepOK 1
+ 	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop}"
+  	bash -c "umount -R /mnt" 
 	printCountDown 3 "Installation complete! Reboot in"
    	bash -c "reboot"
 }
 function installArchCHRoot() {
-	printStep 1 "Configuring" "arch-chroot..."
-		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime &>/dev/null" "hwclock --systohc &>/dev/null"
-		runcmds 0 "Setting up" "locales..." "sed -e '/${locale}/s/^#*//' -i /etc/locale.gen" "locale-gen &>/dev/null" "echo LANG=${locale} >> /etc/locale.conf" "echo KEYMAP=${keymap} >> /etc/vconsole.conf"
-		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB &>/dev/null" "grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null"
-		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager &>/dev/null"
-	printStepOK 1
+	#printStep 1 "Configuring" "arch-chroot..."
+		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime" "hwclock --systohc"
+		runcmds 0 "Setting up" "locales..." "sed -e '/${locale}/s/^#*//' -i /etc/locale.gen" "locale-gen" "echo LANG=${locale} >> /etc/locale.conf" "echo KEYMAP=${keymap} >> /etc/vconsole.conf"
+		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB" "grub-mkconfig -o /boot/grub/grub.cfg"
+		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager"
+	#printStepOK 1
 	if [[ -z "$hostname" ]]; then getInput "\nEnter your Hostname: " hostname "ArchLinux"; fi
 	bash -c "echo ${hostname} >> /etc/hostname"       	
 	myPrint "yellow" "\nEnter your NEW root password\n\n"
@@ -350,20 +382,60 @@ function installArchCHRoot() {
 	myPasswd "${user}"
  	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
    	bash -c "mv ./${scriptname} /home/${user}/"
-	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} >> /home/${user}/.bashrc"
+	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> /home/${user}/.bashrc"
 }
 function installHyDE() {
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
- 	bash -c "sudo pacman -Syy &>/dev/null"
-	Banner "hypr"
-	printStep 1 "Setting up" "HyprDots..."
-		runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE &>/dev/null"
-	printStepOK 1
-	printCountDown 3 "Starting installation in"
- 	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
-	bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
-  	cd $HOME/HyDE/Scripts
-	bash -c "./install.sh -drs"
+ 	if [[ -z "$desktop" ]]; then 
+  		local i=1
+		options=("hypr" "celestia")
+		for option in "${options[@]}"; do
+			printf "["
+			myPrint "yellow" "$i"
+			printf "]: Install "
+			myPrint "yellow" "$option\n"
+			((i++))
+		done  
+  	fi
+   	desktop="hypr"
+	if [[ "$desktop" -eq 2 ]] then
+ 		desktop="celestia"
+   	fi
+ 	bash -c "sudo pacman -Syy"
+
+ 	if [[ "$desktop" == "hypr" ]]; then	
+		Banner "hypr"
+		#printStep 1 "Setting up" "HyprDots..."
+			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE"
+		#printStepOK 1
+		printCountDown 3 "Starting installation in"
+	 	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
+	  	cd $HOME/HyDE/Scripts
+		if [[ -n "$defaults" ]]; then
+			echo "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
+			sudo chmod 0440 /etc/sudoers.d/install-script	
+			bash -c "./install.sh -drs"
+			#defaults klappen nocht nicht testen.... solange ohne :/
+			#bash -c "printf '2\ny111' | ./install.sh -drs"
+		else
+			bash -c "./install.sh -drs"
+		fi
+	fi
+ 	if [[ "$desktop" == "celestia" ]]; then
+		#sddm conf, hypridle, monitors, userprefs, windowrules  		
+  		# sudo systemctl enable sddm 
+		Banner "celestia"
+		runcmds 0 "Downloading" "Fish, sddm and Hyprland..." "sudo pacman --noconfirm -S --needed fish sddm hyprland"
+		runcmds 0 "Downloading" "Celestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia"
+  		#test
+		bash -c "sudo systemctl enable sddm.service"
+		bash -c "echo exec-once=~/.local/share/caelestia/install.fish >> $HOME/.config/hypr/userprefs.conf"
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> $HOME/.config/hypr/userprefs.conf"
+  		bash -c "sudo systemctl start sddm.service"
+  		#bash -c "./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults}"
+		# bash -c "~/.local/share/caelestia/install.fish"
+  	fi
 }
 function installConfigs() {
 	Banner "config"
@@ -371,22 +443,31 @@ function installConfigs() {
 	if [[ -z "$gpu" ]]; then getInput "Enter your gpu (amd // nvidia)): " gpu "amd"; fi
 	bash -c "sudo pacman -Syy"
 	Banner "config"
-	printStep 1 "Running" "final steps..."
+	#printStep 1 "Running" "final steps..."
 	case $gpu in 
-		amd) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null";;
-		nvidia) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader &>/dev/null";;
+		amd) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader";;
+		nvidia) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader";;
 		*) exitWithError "No valid GPU specified!";;
 	esac
-  	printStepOK 1
-	bash -c "yay arch gaming meta"
-	bash -c "yay dxvk-bin"
-	getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
-	[[ "$schnubby" =~ ^[yY]$ ]] && installSchnuBby
- 	sudo bash -c "sudo rm -rf ~/${scriptname}"	
-  	bash -c "sed -i '/${scriptname}/d' $HOME/HyDE/Configs/.config/hypr/userprefs.conf"
-	bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
- 	firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
+  	#printStepOK 1
+	bash -c "yay -S --noconfirm arch-gaming-meta"
+	bash -c "yay -S --noconfirm dxvk-bin"
+	bash -c "steam"
+ 	bash -c "sudo rm -rf ~/${scriptname}"	
+	if [[ -n "$defaults" ]]; then
+		bash -c "sudo rm -rf /etc/sudoers.d/install-script"
+	fi
+  	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"
+    if [[ "$desktop" == "celestia" ]]; then bash -c "sed -i '/install.fish/d' $HOME/.config/hypr/userprefs.conf"; fi
+	#bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
+ 	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
+	if [[ -z "$defaults" ]]; then
+ 		getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
+   	fi
+	if [[ "$schnubby" =~ ^[yY]$ || -n "$defaults" ]]; then
+		installSchnuBby
+	fi
 	myPrint "green" "Installation is finished! The system will reboot one last time!\n\n"   
   	printCountDown 3 "Reboot in"
     bash -c "reboot"
@@ -398,12 +479,13 @@ function installSchnuBbyOption() {
 }
 setDefaults
 readArgs "$@"
-if [[ -n "$defaults" ]]; then
+if [[ -n "$defaults" && "$option" -eq 1 ]]; then
 	boot="/dev/nvme0n1p1"
 	swap="/dev/nvme0n1p2"
 	root="/dev/nvme0n1p3"
 	hostname="ArchLinux"
 	user="schnubby"
+ 	desktop="celestia"
 	installBaseSystem
 fi
 if [[ -z "$option" ]]; then

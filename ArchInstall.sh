@@ -1,4 +1,19 @@
 #!/bin/bash
+
+#### EDIT THESE SETTINGS FOR A DEFAULT FLAG RUN
+function checkDefaultRun() {
+	if [[ -n "$defaults" && "$option" -eq 1 ]]; then
+		boot="/dev/nvme0n1p1"
+		swap="/dev/nvme0n1p2"
+		root="/dev/nvme0n1p3"
+		hostname="ArchLinux"
+		user="schnubby"
+	 	desktop="caelestia"
+		installBaseSystem
+	fi
+}
+#### EDIT THESE SETTINGS FOR A DEFAULT FLAG RUN
+
 # Farben im Terminal
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -81,7 +96,7 @@ function Banner() {
 		myPrint "green" " / __  / /_/ / /_/ / /  / /_/ / /_/ / /_(__  ) \n"
 		myPrint "green" "/_/ /_/\__, / .___/_/  /_____/\____/\__/____/  \n"
 		myPrint "green" "      /____/_/                                 \n\n";;
-  		celestia)
+  		caelestia)
 		myPrint "green" "    ____           __        _____             \n"
 		myPrint "green" "   /  _/___  _____/ /_____ _/ / (_)___  ____ _ \n"
 		myPrint "green" "   / // __ \/ ___/ __/ __ \`/ / / / __ \/ __ \`/ \n"
@@ -223,13 +238,17 @@ function printHelp() {
    	myPrint "white" "\t--locale:\t\t "
     printf "which locale to user (default: de_DE.UTF-8\n"
    	myPrint "white" "\t--keymap:\t\t "
-    printf "which keymap to user (default: de-latin1).\n\n"
+    printf "which keymap to user (default: de-latin1).\n"
+   	myPrint "white" "\t--desktop:\t\t "
+    printf "which desktop environment to use (hypr, caelestia or end4).\n"	
+   	myPrint "white" "\t--debug:\t\t "
+    printf "switches to verbose output.\n\n"	
   	exit 0
 }
 function runcmds() {
 	local sudo=$1 mode=$2 message=$3
 	shift 3
-	#printStep 0 "${mode}" "${message}"
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 0 "${mode}" "${message}"; fi
  	for cmd in "$@"; do
 		if [[ "$sudo" == "1" ]]; then 
 			sudo bash -c "$cmd" || exitWithError "Command failed: $cmd"
@@ -237,11 +256,12 @@ function runcmds() {
 			bash -c "$cmd" || exitWithError "Command failed: $cmd"
 		fi
   	done
-	#printStepOK 0
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 0; fi
 }
 function installSchnuBby() {
-	#printStep 1 "Installing" "schnubbyspecifics..."
-	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren"
+	checkDebugFlag
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Installing" "schnubbyspecifics..."; fi
+	bash -c "sudo mount --mkdir /dev/nvme0n1p4 /programmieren ${debugstring}"
 	steps=("fstab" "autologin" "lutris" "zshhist" "gitconf" "gitcred" "teamspeak3" "grub" "firefox" "steam")
 	for step in "${steps[@]}"; do
 		case $step in
@@ -276,7 +296,7 @@ function installSchnuBby() {
 			runcmds 0 "Configuring" ".ts3client..." "ln -sf /programmieren/backups/.ts3client $HOME/.ts3client";;
 			grub)
 			sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/g' /etc/default/grub
-			sudo grub-mkconfig -o /boot/grub/grub.cfg;;
+			sudo grub-mkconfig -o /boot/grub/grub.cfg ${debugstring};;
 			firefox)
 			ff_new_user=$HOME/.mozilla/firefox/$(ls $HOME/.mozilla/firefox | grep "Default User")
 			rm -rf "${ff_new_user}"
@@ -284,12 +304,12 @@ function installSchnuBby() {
 			steam)
 			cd $HOME/.steam/steam/compatibilitytools.d/
 			url=$(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep "browser_download_url.*tar.gz" | cut -d : -f 2,3 | tr -d \") 
-			curl -L $url | tar zx;;
+			runcmds 0 "Downloading" "latest ProtonGE..." "curl -L $url | tar zx ${debugstring}";;
 			*)
 			exitWithError "Error setting SchnuBby specifics!"
 		esac
 	done
-	#printStepOK 1
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 }
 function readArgs() {
 	while [ $# -gt 0 ]; do
@@ -311,12 +331,12 @@ function setDefaults() {
 	timezone="${timezone:-Europe/Berlin}"
 	locale="${locale:-de_DE.UTF-8}"
 	keymap="${keymap:-de-latin1}"
-	desktop="${desktop:-hypr}"
+ 	debug="${debug:-n}"
 }
 function listOptions() {
 	Banner "install"
 	local i=1
-	options=("Arch" "Chroot" "HyDE" "Config files" "SchnuBby specific (git/fstab/lutris...)")
+	options=("Arch" "Chroot" "Desktop environment" "Config files" "SchnuBby specific (git/fstab/lutris...)")
 	for option in "${options[@]}"; do
 		printf "["
 		myPrint "yellow" "$i"
@@ -325,6 +345,13 @@ function listOptions() {
 		((i++))
 	done
 }
+function checkDebugFlag() {
+	if [[ "$debug" =~ ^[yY]$ ]]; then
+		debugstring=""
+	else
+		debugstring=" &>/dev/null"
+	fi
+ }
 function runCFDiskIfNeeded() {
 	if [[ -z "$cfdisk" && -n "$disk" ]]; then
 		getInput "\nStart cfdisk (y/N) ?\n" cfdisk "N"
@@ -344,6 +371,7 @@ function checkPartitions() {
 }
 function installBaseSystem() {
 	Banner "arch"
+ 	checkDebugFlag
 	runCFDiskIfNeeded
 	checkPartitions	
 	myPrint "green" "\nBoot partition: "
@@ -352,26 +380,35 @@ function installBaseSystem() {
 	printf "${WHITE}${swap}${NC}\n"
  	myPrint "green" "Root partition: "
 	printf "${WHITE}${root}${NC}\n"
-	printCountDown 3 "Starting installation in"	
-	Banner "arch"
-	#printStep 1 "Installing" "base system..."
-		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot}" "mkswap ${swap}" "swapon ${swap}" "mkfs.ext4 ${root}"
-		runcmds 0 "Mounting" "partitions..." "mount --mkdir ${root} /mnt" "mount --mkdir ${boot} /mnt/boot"
-		runcmds 0 "Setting up" "pacman..." "pacman -Syy" "pacman --noconfirm -S reflector" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
-		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
-	#printStepOK 1
- 	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop}"
-  	bash -c "umount -R /mnt" 
+
+ 	myPrint "red" "\nThese partitions will be !!WIPED AND FORMATTED!! Please check them TWICE before you continue!!\nPress ENTER to continue (STRG-C to exit now)..."
+	getInput "" check "y"
+ 
+ 	printCountDown 3 "Starting installation in"	
+	#Banner "arch"
+ 
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Installing" "base system..."; fi
+		runcmds 0 "Formatting" "drives..." "mkfs.fat -F 32 ${boot} ${debugstring}" "mkswap ${swap} ${debugstring}" "swapon ${swap} ${debugstring}" "mkfs.ext4 -F ${root} ${debugstring}"
+		runcmds 0 "Mounting" "partitions..." "mount --mkdir ${root} /mnt ${debugstring}" "mount --mkdir ${boot} /mnt/boot ${debugstring}"
+		#runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}" "pacman --noconfirm -S reflector" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist ${debugstring}" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
+		runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}" "reflector --sort rate --latest 20 --protocol https --country Germany --save /etc/pacman.d/mirrorlist ${debugstring}" "sed -i '/ParallelDownloads/s/^#//' /etc/pacman.conf"
+		runcmds 0 "Running" "pacstrap..." "pacstrap -K /mnt base base-devel ${kernel} linux-firmware ${cpu} efibootmgr grub sudo git networkmanager ${debugstring}" "genfstab -U /mnt >> /mnt/etc/fstab" "cp ./${scriptname} /mnt"
+	if [[ "$debug" =~ ^[nN]$ ]]; then  printStepOK 1; fi
+  
+ 	bash -c "arch-chroot /mnt ./${scriptname} --option 2 --hostname ${hostname} --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug}"
+  	bash -c "umount -R /mnt ${debugstring}" 
 	printCountDown 3 "Installation complete! Reboot in"
    	bash -c "reboot"
 }
 function installArchCHRoot() {
-	#printStep 1 "Configuring" "arch-chroot..."
-		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime" "hwclock --systohc"
-		runcmds 0 "Setting up" "locales..." "sed -e '/${locale}/s/^#*//' -i /etc/locale.gen" "locale-gen" "echo LANG=${locale} >> /etc/locale.conf" "echo KEYMAP=${keymap} >> /etc/vconsole.conf"
-		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB" "grub-mkconfig -o /boot/grub/grub.cfg"
-		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager"
-	#printStepOK 1
+	checkDebugFlag
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Configuring" "arch-chroot..."; fi
+		runcmds 0 "Setting" "localtime..." "ln -sf /usr/share/zoneinfo/${timezone} /etc/localtime ${debugstring}" "hwclock --systohc ${debugstring}"
+		runcmds 0 "Setting up" "locales..." "sed -e '/${locale}/s/^#*//' -i /etc/locale.gen" "locale-gen ${debugstring}" "echo LANG=${locale} >> /etc/locale.conf" "echo KEYMAP=${keymap} >> /etc/vconsole.conf"
+		runcmds 0 "Setting up" "GRUB..." "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB ${debugstring}" "grub-mkconfig -o /boot/grub/grub.cfg ${debugstring}"
+		runcmds 0 "Enabling" "services..." "systemctl enable NetworkManager ${debugstring}"
+	if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
+ 
 	if [[ -z "$hostname" ]]; then getInput "\nEnter your Hostname: " hostname "ArchLinux"; fi
 	bash -c "echo ${hostname} >> /etc/hostname"       	
 	myPrint "yellow" "\nEnter your NEW root password\n\n"
@@ -382,35 +419,45 @@ function installArchCHRoot() {
 	myPasswd "${user}"
  	bash -c "sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers"
    	bash -c "mv ./${scriptname} /home/${user}/"
-	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> /home/${user}/.bashrc"
+	bash -c "echo ./${scriptname} --option 3 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug} >> /home/${user}/.bashrc"
 }
-function installHyDE() {
+function installDE() {
+	checkDebugFlag
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
  	if [[ -z "$desktop" ]]; then 
   		local i=1
-		options=("hypr" "celestia")
+		options=("hypr" "caelestia" "end4")
 		for option in "${options[@]}"; do
 			printf "["
 			myPrint "yellow" "$i"
 			printf "]: Install "
 			myPrint "yellow" "$option\n"
 			((i++))
-		done  
+		done
+  		getInput "Which desktop environment to install?" desktop "hypr"
   	fi
-   	desktop="hypr"
-	if [[ "$desktop" -eq 2 ]] then
- 		desktop="celestia"
+	if [[ "$desktop" -eq 1 ]] then
+ 		desktop="hypr"
    	fi
- 	bash -c "sudo pacman -Syy"
-
+	if [[ "$desktop" -eq 2 ]] then
+ 		desktop="caelestia"
+   	fi
+	if [[ "$desktop" -eq 3 ]] then
+ 		desktop="end4"
+   	fi
  	if [[ "$desktop" == "hypr" ]]; then	
 		Banner "hypr"
-		#printStep 1 "Setting up" "HyprDots..."
-			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE"
-		#printStepOK 1
+ 		bash -c "sudo pacman -Syy ${debugstring}"
+   
+		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "HyprDots..."; fi
+			#runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
+   			runcmds 0 "Downloading" "HyprDots..." "git clone --depth 1 https://github.com/SchnuBby2205/HyDE ~/HyDE ${debugstring}"
+   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.config/hypr/schnubby ${debugstring}"
+		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
+  
 		printCountDown 3 "Starting installation in"
 	 	bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
-		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> $HOME/HyDE/Configs/.config/hypr/userprefs.conf"		
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug} >> $HOME/HyDE/Configs/.config/hypr/schnubby/userprefs.conf"		
 	  	cd $HOME/HyDE/Scripts
 		if [[ -n "$defaults" ]]; then
 			echo "${user} ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/chsh" | sudo tee /etc/sudoers.d/install-script >/dev/null
@@ -422,45 +469,76 @@ function installHyDE() {
 			bash -c "./install.sh -drs"
 		fi
 	fi
- 	if [[ "$desktop" == "celestia" ]]; then
-		#sddm conf, hypridle, monitors, userprefs, windowrules  		
-  		# sudo systemctl enable sddm 
-		Banner "celestia"
-		runcmds 0 "Downloading" "Fish, sddm and Hyprland..." "sudo pacman --noconfirm -S --needed fish sddm hyprland"
-		runcmds 0 "Downloading" "Celestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia"
-  		#test
-		bash -c "sudo systemctl enable sddm.service"
-		bash -c "echo exec-once=~/.local/share/caelestia/install.fish >> $HOME/.config/hypr/userprefs.conf"
-		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} >> $HOME/.config/hypr/userprefs.conf"
-  		bash -c "sudo systemctl start sddm.service"
-  		#bash -c "./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults}"
-		# bash -c "~/.local/share/caelestia/install.fish"
+ 	if [[ "$desktop" == "caelestia" ]]; then
+		Banner "caelestia"
+		bash -c "sudo sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf"
+		bash -c "sudo pacman -Syy ${debugstring}"
+  
+		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
+  			#runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
+	  		runcmds 0 "Installing" "Kitty, Fish, sddm, firefox and Hyprland..." "sudo pacman --noconfirm -S --needed kitty fish sddm firefox hyprland ${debugstring}"
+			runcmds 0 "Downloading" "Caelestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia ${debugstring}"
+   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.local/share/caelestia/hypr/schnubby ${debugstring}"
+   		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
+	
+		bash -c "sudo systemctl enable sddm.service ${debugstring}"
+  		printCountDown 3 "Starting installation in"
+		bash -c "~/.local/share/caelestia/install.fish"
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug} >> $HOME/.config/hypr/schnubby/userprefs.conf"
+  		printCountDown 3 "Reboot in"
+		bash -c "reboot"
   	fi
+   	if [[ "$desktop" == "end4" ]]; then
+		Banner "caelestia"
+		#bash -c "sudo sed -i '/\[multilib\]/,/Include/''s/^#//' /etc/pacman.conf"
+		bash -c "sudo pacman -Syy ${debugstring}"
+		
+  		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "Caelestia..."; fi	
+			#runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
+			runcmds 0 "Downloading" "end4..." "git clone --depth 1 https://github.com/SchnuBby2205/end4.git ~/end4 ${debugstring}"
+   			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.config/hypr/schnubby ${debugstring}"
+		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
+		
+  		cd $HOME/end4
+		printCountDown 3 "Starting installation in"
+		bash -c "./install.sh"
+		bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug} >> $HOME/.config/hypr/schnubby/userprefs.conf"
+  		printCountDown 3 "Reboot in"
+		bash -c "reboot"
+   fi
 }
 function installConfigs() {
-	Banner "config"
+	checkDebugFlag
+ 	Banner "config"
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
 	if [[ -z "$gpu" ]]; then getInput "Enter your gpu (amd // nvidia)): " gpu "amd"; fi
-	bash -c "sudo pacman -Syy"
+	#bash -c "sudo pacman -Syy ${debugstring}"
 	Banner "config"
-	#printStep 1 "Running" "final steps..."
+	
+ 	if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Running" "final steps..."; fi
+  		runcmds 0 "Setting up" "pacman..." "sudo pacman -Syy ${debugstring}"
 	case $gpu in 
-		amd) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader";;
-		nvidia) runcmds 0 "Downloading" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader";;
+		amd) runcmds 0 "Installing" "graphics drivers..." "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}";;
+		nvidia) runcmds 0 "Installing" "graphics drivers..." "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}";;
 		*) exitWithError "No valid GPU specified!";;
 	esac
-  	#printStepOK 1
-	bash -c "yay -S --noconfirm arch-gaming-meta"
-	bash -c "yay -S --noconfirm dxvk-bin"
-	bash -c "steam"
+  		runcmds 0 "Installing" "arch-gaming-meta..." "yay -S --noconfirm arch-gaming-meta ${debugstring}"
+		runcmds 0 "Installing" "dxvk-bin..." "yay -S --noconfirm dxvk-bin ${debugstring}"
+  		runcmds 0 "Launching" "STEAM..." "steam ${debugstring}"
+   	if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
+   
+	#bash -c "yay -S --noconfirm arch-gaming-meta"
+	#bash -c "yay -S --noconfirm dxvk-bin"
+	#bash -c "steam"
+ 
  	bash -c "sudo rm -rf ~/${scriptname}"	
 	if [[ -n "$defaults" ]]; then
 		bash -c "sudo rm -rf /etc/sudoers.d/install-script"
 	fi
-  	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/userprefs.conf"
-    if [[ "$desktop" == "celestia" ]]; then bash -c "sed -i '/install.fish/d' $HOME/.config/hypr/userprefs.conf"; fi
-	#bash -c "firefox -new-tab -url https://github.com/HyDE-Project/hyde-gallery?tab=readme-ov-file \
- 	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
+  	if [[ "$desktop" == "hypr" ]]; then	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
+ 	if [[ "$desktop" == "caelestia" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
+	if [[ "$desktop" == "end4" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
+	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
 	if [[ -z "$defaults" ]]; then
  		getInput "\nLoad SchnuBby specific configs (y/n)? (git/lutris/fstab)\n" schnubby "Y"
@@ -479,15 +557,7 @@ function installSchnuBbyOption() {
 }
 setDefaults
 readArgs "$@"
-if [[ -n "$defaults" && "$option" -eq 1 ]]; then
-	boot="/dev/nvme0n1p1"
-	swap="/dev/nvme0n1p2"
-	root="/dev/nvme0n1p3"
-	hostname="ArchLinux"
-	user="schnubby"
- 	desktop="celestia"
-	installBaseSystem
-fi
+checkDefaultRun
 if [[ -z "$option" ]]; then
 	listOptions
 	getInput "Wich step to run?" option 1
@@ -495,7 +565,7 @@ fi
 case $option in
 	1) installBaseSystem;;
 	2) installArchCHRoot;;
-	3) installHyDE;;
+	3) installDE;;
 	4) installConfigs;;
 	5) installSchnuBbyOption;;
 	*) exitWithError "No valid option!";;
