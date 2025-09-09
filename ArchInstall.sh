@@ -287,15 +287,8 @@ function installSchnuBby() {
 			#fstab) runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
 			#Angepasst für W10 dual boot
 			fstab) runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p6      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
-			autologin)
-   				if [[ "$desktop" == "caelestia" ]]; 
-	   				#runcmds 1 "Setting" "autologin..." "sudo mkdir /etc/sddm.conf.d" "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/the_hyde_project.conf"
-					runcmds 1 "Setting" "autologin..." "sudo mkdir /etc/sddm.conf.d" "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/autologin.conf"
-				else
-					#runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/the_hyde_project.conf"
-	 				runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/autologin.conf"
-				fi
-	   		;;
+			#runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/the_hyde_project.conf"
+			autologin) runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/autologin.conf";;
 			lutris)
 			if [[ -d "$HOME/.local/share/lutris" ]]; then
 				runcmds 0 "Backing up" "lutris..." "mv $HOME/.local/share/lutris $HOME/.local/share/lutris_bak"
@@ -507,8 +500,17 @@ function installDE() {
 	  		# Wir installieren hier den thunar File Explorer -> Sollte der uncool sein nehmen wir wieder dolphin
 	 		runcmds 0 "Installing" "Additional Programs..." "sudo pacman --noconfirm -S --needed lazygit lutris steam thunar ${debugstring}"
 	 		runcmds 0 "Installing" "Audio Programs..." "sudo pacman --noconfirm -S --needed pipewire pipewire-alsa pipewire-audio pipewire-jack pipewire-pulse gst-plugin-pipewire wireplumber pavucontrol pamixer ${debugstring}"
+			runcmds 1 "Creating" "Sddm config directory..." "sudo mkdir /etc/sddm.conf.d"
 			runcmds 0 "Downloading" "Caelestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia ${debugstring}"
    			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.local/share/caelestia/hypr/schnubby ${debugstring}"
+	  		# sed steps ?
+	 		# Hier kann auch sein ich muss die hypridle löschen
+			$kbWindowFullscreen = Super, F
+   			sed 's/# autologin=dgod/autologin=ubuntu/' /path/to/file
+	  		bash -c "sed -i 's/bind = \$kbWindowFullscreen, fullscreen, 0/#bind = \$kbWindowFullscreen, fullscreen, 0/' ~/.local/share/caelestia/hypr/hyprland/keybinds.conf"
+			bash -c "sed -i 's/bindl = , XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle/bindl = , f10, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle/' ~/.local/share/caelestia/hypr/hyprland/keybinds.conf"
+	  		bash -c "sed -i 's/bindle = , XF86AudioLowerVolume, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume @DEFAULT_AUDIO_SINK@ \$volumeStep%-/bindle = , f11, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume @DEFAULT_AUDIO_SINK@ \$volumeStep%-/' ~/.local/share/caelestia/hypr/hyprland/keybinds.conf"
+   			bash -c "sed -i 's/bindle = , XF86AudioRaiseVolume, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ \$volumeStep%+/bindle = , f12, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ \$volumeStep%+/' ~/.local/share/caelestia/hypr/hyprland/keybinds.conf"
    		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 	
 		bash -c "sudo systemctl enable sddm.service ${debugstring}"
