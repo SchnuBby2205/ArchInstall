@@ -1,8 +1,9 @@
 #!/bin/bash
 
-#### EDIT THESE SETTINGS FOR A DEFAULT FLAG RUN
+#### EDIT THESE SETTINGS FOR A DEFAULT FLAG RUN (./ArchInstall.sh --defaults 1)
 function checkDefaultRun() {
-	if [[ -n "$defaults" && "$option" -eq 1 ]]; then
+	#if [[ -n "$defaults" && "$option" -eq 1 ]]; then
+ 	if [[ -n "$defaults" ]]; then
 		## General
    		debug="n"
 
@@ -28,7 +29,7 @@ function checkDefaultRun() {
   		kernel="linux-lts"
 	 	desktop="caelestia"
 
-  		installBaseSystem
+  		if [[ -z "$option" || "$option" -eq 1 ]]; then installBaseSystem; fi
 	fi
 }
 #### EDIT THESE SETTINGS FOR A DEFAULT FLAG RUN
@@ -247,17 +248,17 @@ function printHelp() {
  	myPrint "white" "\t--user:\t\t "
   	printf "username for the normal user.\n"
   	myPrint "white" "\t--kernel:\t "
-   	printf "which kernel to install (default: linux-lts).\n"
+   	printf "which kernel to install.\n"
    	myPrint "white" "\t--cpu:\t\t "
-    printf "which CPU to install (intel-ucode // amd-ucode) (default: intel-ucode).\n"
+    printf "which CPU to install (intel-ucode // amd-ucode).\n"
    	myPrint "white" "\t--gpu:\t\t "
-    printf "which GPU to install (amd // nvidia) (default: amd).\n"
+    printf "which GPU to install (amd // nvidia).\n"
    	myPrint "white" "\t--timezone:\t\t "
-    printf "which timezone to use (default: Europe/Berlin).\n"
+    printf "which timezone to use.\n"
    	myPrint "white" "\t--locale:\t\t "
-    printf "which locale to user (default: de_DE.UTF-8\n"
+    printf "which locale to use.\n"
    	myPrint "white" "\t--keymap:\t\t "
-    printf "which keymap to user (default: de-latin1).\n"
+    printf "which keymap to user.\n"
    	myPrint "white" "\t--desktop:\t\t "
     printf "which desktop environment to use (hypr, caelestia or end4).\n"	
    	myPrint "white" "\t--debug:\t\t "
@@ -402,7 +403,7 @@ function installBaseSystem() {
  	myPrint "green" "Root partition: "
 	printf "${WHITE}${root}${NC}\n"
 
- 	myPrint "red" "\nThese partitions will be !!WIPED AND FORMATTED!! Please check them TWICE before you continue!!\nPress ENTER to continue (STRG-C to exit now)..."
+ 	myPrint "red" "\nThese partitions will be\n!!WIPED AND FORMATTED without another Warning!!\nPlease check them TWICE before you continue!!\n\nPress ENTER to continue (STRG-C to exit now)..."
 	getInput "" check "y"
  
  	printCountDown 3 "Starting installation in"	
@@ -591,7 +592,7 @@ function installSchnuBbyOption() {
 #setDefaults
 readArgs "$@"
 checkDefaultRun
-if [[ -z "$option" ]]; then
+if [[ -z "$option" && -z "$defaults" ]]; then
 	listOptions
 	getInput "Wich step to run?" option 1
 fi
