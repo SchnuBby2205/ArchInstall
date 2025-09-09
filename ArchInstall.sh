@@ -345,15 +345,15 @@ function readArgs() {
 		shift
 	done
 }
-function setDefaults() {
-	cpu="${cpu:-intel-ucode}"
-	kernel="${kernel:-linux-lts}"
-	gpu="${gpu:-amd}"
-	timezone="${timezone:-Europe/Berlin}"
-	locale="${locale:-de_DE.UTF-8}"
-	keymap="${keymap:-de-latin1}"
- 	debug="${debug:-n}"
-}
+#function setDefaults() {
+#	cpu="${cpu:-intel-ucode}"
+#	kernel="${kernel:-linux-lts}"
+#	gpu="${gpu:-amd}"
+#	timezone="${timezone:-Europe/Berlin}"
+#	locale="${locale:-de_DE.UTF-8}"
+#	keymap="${keymap:-de-latin1}"
+# 	debug="${debug:-n}"
+#}
 function listOptions() {
 	Banner "install"
 	local i=1
@@ -588,7 +588,7 @@ function installSchnuBbyOption() {
 	if [[ -z "$user" ]]; then getInput "Enter your normal username: " user "schnubby"; fi
  	installSchnuBby
 }
-setDefaults
+#setDefaults
 readArgs "$@"
 checkDefaultRun
 if [[ -z "$option" ]]; then
