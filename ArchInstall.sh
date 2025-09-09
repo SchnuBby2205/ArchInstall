@@ -3,13 +3,32 @@
 #### EDIT THESE SETTINGS FOR A DEFAULT FLAG RUN
 function checkDefaultRun() {
 	if [[ -n "$defaults" && "$option" -eq 1 ]]; then
-		boot="/dev/nvme0n1p1"
+		## General
+   		debug="n"
+
+		## Hard Drives and Partitioning
+  		boot="/dev/nvme0n1p1"
 		swap="/dev/nvme0n1p2"
 		root="/dev/nvme0n1p3"
-		hostname="ArchLinux"
+
+		## Names
+  		hostname="ArchLinux"
 		user="schnubby"
+
+		## Hardware 
+		cpu="intel-ucode"
+		gpu="amd"
+
+		## CH-Root
+		timezone="Europe/Berlin"
+		locale="de_DE.UTF-8"
+		keymap="de-latin1"
+
+		## System
+  		kernel="linux-lts"
 	 	desktop="caelestia"
-		installBaseSystem
+
+  		installBaseSystem
 	fi
 }
 #### EDIT THESE SETTINGS FOR A DEFAULT FLAG RUN
@@ -268,7 +287,15 @@ function installSchnuBby() {
 			#fstab) runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p5      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
 			#Angepasst für W10 dual boot
 			fstab) runcmds 1 "Configuring" "fstab..." "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p6      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
-			autologin) runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/the_hyde_project.conf";;
+			autologin)
+   				if [[ "$desktop" == "caelestia" ]]; 
+	   				#runcmds 1 "Setting" "autologin..." "sudo mkdir /etc/sddm.conf.d" "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/the_hyde_project.conf"
+					runcmds 1 "Setting" "autologin..." "sudo mkdir /etc/sddm.conf.d" "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/autologin.conf"
+				else
+					#runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/the_hyde_project.conf"
+	 				runcmds 1 "Setting" "autologin..." "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/autologin.conf"
+				fi
+	   		;;
 			lutris)
 			if [[ -d "$HOME/.local/share/lutris" ]]; then
 				runcmds 0 "Backing up" "lutris..." "mv $HOME/.local/share/lutris $HOME/.local/share/lutris_bak"
@@ -476,7 +503,10 @@ function installDE() {
   
 		if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Setting up" "Caelestia..."; fi		
   			#runcmds 0 "Setting up" "pacman..." "pacman -Syy ${debugstring}"
-	  		runcmds 0 "Installing" "Kitty, Fish, sddm, firefox and Hyprland..." "sudo pacman --noconfirm -S --needed kitty fish sddm firefox hyprland ${debugstring}"
+	  		runcmds 0 "Installing" "Base Programs..." "sudo pacman --noconfirm -S --needed kitty fish sddm firefox hyprland ${debugstring}"
+	  		# Wir installieren hier den thunar File Explorer -> Sollte der uncool sein nehmen wir wieder dolphin
+	 		runcmds 0 "Installing" "Additional Programs..." "sudo pacman --noconfirm -S --needed lazygit lutris steam thunar ${debugstring}"
+	 		runcmds 0 "Installing" "Audio Programs..." "sudo pacman --noconfirm -S --needed pipewire pipewire-alsa pipewire-audio pipewire-jack pipewire-pulse gst-plugin-pipewire wireplumber pavucontrol pamixer ${debugstring}"
 			runcmds 0 "Downloading" "Caelestia Shell..." "git clone --depth 1 https://github.com/SchnuBby2205/caelestia.git ~/.local/share/caelestia ${debugstring}"
    			runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.local/share/caelestia/hypr/schnubby ${debugstring}"
    		if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
