@@ -316,7 +316,8 @@ function installSchnuBby() {
 			runcmds 0 "Configuring" ".ts3client..." "ln -sf /programmieren/backups/.ts3client $HOME/.ts3client";;
 			grub)
 			sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/g' /etc/default/grub
-			sudo grub-mkconfig -o /boot/grub/grub.cfg ${debugstring};;
+			runcmds 1 "Regenerating" "GRUB..." "sudo grub-mkconfig -o /boot/grub/grub.cfg ${debugstring}";;
+   			#sudo grub-mkconfig -o /boot/grub/grub.cfg ${debugstring};;
 			firefox)
 			ff_new_user=$HOME/.mozilla/firefox/$(ls $HOME/.mozilla/firefox | grep "Default User")
 			rm -rf "${ff_new_user}"
@@ -324,7 +325,7 @@ function installSchnuBby() {
 			steam)
 			cd $HOME/.steam/steam/compatibilitytools.d/
 			url=$(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep "browser_download_url.*tar.gz" | cut -d : -f 2,3 | tr -d \") 
-			runcmds 0 "Downloading" "latest ProtonGE..." "curl -L $url | tar zx ${debugstring}";;
+			runcmds 0 "Downloading" "latest ProtonGE..." "curl -sL $url | tar zxf ${debugstring}";;
 			*)
 			exitWithError "Error setting SchnuBby specifics!"
 		esac
