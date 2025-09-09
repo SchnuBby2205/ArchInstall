@@ -569,9 +569,10 @@ function installConfigs() {
 	if [[ -n "$defaults" ]]; then
 		bash -c "sudo rm -rf /etc/sudoers.d/install-script"
 	fi
-  	if [[ "$desktop" == "hypr" ]]; then	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
- 	if [[ "$desktop" == "caelestia" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
-	if [[ "$desktop" == "end4" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
+ 	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"
+  	#if [[ "$desktop" == "hypr" ]]; then	bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
+ 	#if [[ "$desktop" == "caelestia" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
+	#if [[ "$desktop" == "end4" ]]; then bash -c "sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf"; fi
 	#firefox-new-tab -url https://github.com/GloriousEggroll/proton-ge-custom"
  	bash -c "firefox --ProfileManager"
 	if [[ -z "$defaults" ]]; then
