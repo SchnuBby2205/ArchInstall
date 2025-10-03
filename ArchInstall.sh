@@ -574,11 +574,16 @@ function installDE() {
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
     if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Running" "Post install..."; fi
-    runcmds 0 "Installing" "yay..." "git clone https://aur.archlinux.org/yay.git ${debugstring}" "cd yay ${debugstring}" "makepkg -si ${debugstring}" "cd .. ${debugstring}" "rm -rf ./yay ${debugstring}"
+    runcmds 0 "Installing" "yay..." "git clone https://aur.archlinux.org/yay.git ${debugstring}" 
+    cd yay 
+    makepkg -si
+    cd ..
+    rm -rf ./yay
+    runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.config/hypr/schnubby ${debugstring}"
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
     if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Starting" "Services..."; fi
-    runcmds 0 "Starting" "Greeter (SDDM)..." "sudo systemctl enable --now sddm.service ${debugstring}"
+    runcmds 0 "Starting" "Greeter (SDDM)..." "sudo systemctl enable sddm.service ${debugstring}"
     runcmds 0 "Starting" "swww-daemon..." "echo -e 'exec-once=swww-daemon' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
