@@ -599,7 +599,7 @@ runcmds 0 "Downloading" "myShell..." "git clone --depth 1 https://github.com/Sch
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
     bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
-    bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug} >> $HOME/HyDE/Configs/.config/hypr/schnubby/userprefs.conf"
+    bash -c "echo exec-once=kitty ./${scriptname} --option 4 --user ${user} --gpu ${gpu} --defaults ${defaults} --desktop ${desktop} --debug ${debug} >> $HOME/.config/hypr/schnubby/userprefs.conf"
     printCountDown 3 "Reboot in"
     bash -c "reboot"
 
