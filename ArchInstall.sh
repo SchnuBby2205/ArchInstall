@@ -582,15 +582,19 @@ function installDE() {
     rm -rf ./yay
 	runcmds 0 "Installing" "Quickshell..." "yay -S quickshell --noconfirm ${debugstring}"
     runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.config/hypr/schnubby ${debugstring}"
+runcmds 0 "Downloading" "myShell..." "git clone --depth 1 https://github.com/SchnuBby2205/myShell.git ~/.config/quickshell/myShell ${debugstring}"
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
     if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Starting" "Services..."; fi
     runcmds 0 "Starting" "Greeter (SDDM)..." "sudo systemctl enable sddm.service ${debugstring}"
     runcmds 0 "Starting" "swww-daemon..." "echo -e 'exec-once=swww-daemon' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
-    runcmds 0 "Setting" "keybindings..." "echo -e 'source=./schnubby/keybindings.conf' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
-	runcmds 0 "Setting" "monitors..." "echo -e 'source=./schnubby/monitors.conf' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
-	runcmds 0 "Setting" "userprefs..." "echo -e 'source=./schnubby/userprefs.conf' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
-	runcmds 0 "Setting" "windowrules..." "echo -e 'source=./schnubby/windowrules.conf' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
+    runcmds 0 "Setting" "myShell..." "echo -e 'exec-once=quickshell --path $HOME/.config/quickshell/myShell/shell.qml' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
+#	runcmds 0 "Setting" "monitors..." "echo -e 'source=./schnubby/monitors.conf' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
+#	runcmds 0 "Setting" "userprefs..." "echo -e 'source=./schnubby/userprefs.conf' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
+#	runcmds 0 "Setting" "windowrules..." "echo -e 'source=./schnubby/windowrules.conf' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
+#
+rm -rf $HOME/.config/hypr/schnubby/hyprland.conf
+mv $HOME/.config/hypr/schnubby/hyprland.conf $HOME/.config/hypr/schnubby
 
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
