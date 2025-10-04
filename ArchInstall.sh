@@ -570,7 +570,7 @@ function installDE() {
 
     if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Downloading" "Dependencies..."; fi
     runcmds 0 "Installing" "System dependencies..." "sudo pacman --noconfirm -S --needed hyprland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk sddm swww polkit-gnome xdg-user-dirs networkmanager ttf-jetbrains-mono-nerd ${debugstring}"
-    runcmds 0 "Installing" "Audio dependencies..." "sudo pacman --noconfirm -S --needed wireplumber pipewire pavucontrol ${debugstring}"
+    runcmds 0 "Installing" "Audio dependencies..." ""sudo pacman --noconfirm -S --needed pipewire pipewire-alsa pipewire-audio pipewire-pulse gst-plugin-pipewire wireplumber pavucontrol pamixer ${debugstring}"
     runcmds 0 "Installing" "Programs..." "sudo pacman --noconfirm -S --needed firefox kitty dolphin ark unzip neovim fzf zsh lutris teamspeak3 lazygit git ${debugstring}"
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
@@ -580,12 +580,18 @@ function installDE() {
     makepkg -si
     cd ..
     rm -rf ./yay
+	runcmds 0 "Installing" "Quickshell..." "yay -S quickshell --noconfirm ${debugstring}"
     runcmds 0 "Downloading" "Custom configs..." "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.config/hypr/schnubby ${debugstring}"
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
     if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Starting" "Services..."; fi
     runcmds 0 "Starting" "Greeter (SDDM)..." "sudo systemctl enable sddm.service ${debugstring}"
     runcmds 0 "Starting" "swww-daemon..." "echo -e 'exec-once=swww-daemon' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
+    runcmds 0 "Setting" "keybindings..." "echo -e 'source=./schnubby/keybindings.conf' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
+	runcmds 0 "Setting" "monitors..." "echo -e 'source=./schnubby/monitors.conf' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
+	runcmds 0 "Setting" "userprefs..." "echo -e 'source=./schnubby/userprefs.conf' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
+	runcmds 0 "Setting" "windowrules..." "echo -e 'source=./schnubby/windowrules.conf' >> $HOME/.config/hypr/schnubby/userprefs.conf ${debugstring}"
+
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
     bash -c "sed -i '/${scriptname}/d' ~/.bashrc"
