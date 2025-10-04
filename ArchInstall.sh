@@ -571,7 +571,7 @@ function installDE() {
     if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Downloading" "Dependencies..."; fi
     runcmds 0 "Installing" "System dependencies..." "sudo pacman --noconfirm -S --needed hyprland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk sddm swww polkit-gnome xdg-user-dirs networkmanager ttf-jetbrains-mono-nerd ${debugstring}"
     runcmds 0 "Installing" "Audio dependencies..." "sudo pacman --noconfirm -S --needed pipewire pipewire-alsa pipewire-audio pipewire-pulse gst-plugin-pipewire wireplumber pavucontrol pamixer ${debugstring}"
-    runcmds 0 "Installing" "Programs..." "sudo pacman --noconfirm -S --needed firefox kitty dolphin ark unzip neovim fzf zsh lutris teamspeak3 lazygit git ${debugstring}"
+    runcmds 0 "Installing" "Programs..." "sudo pacman --noconfirm -S --needed firefox kitty dolphin ark unzip neovim fzf zsh lutris steam teamspeak3 lazygit git ${debugstring}"
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
     if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Running" "Post install..."; fi
