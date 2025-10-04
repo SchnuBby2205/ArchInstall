@@ -623,7 +623,7 @@ function installConfigs() {
   esac
   runcmds 0 "Installing" "arch-gaming-meta..." "yay -S --noconfirm arch-gaming-meta ${debugstring}"
   runcmds 0 "Installing" "dxvk-bin..." "yay -S --noconfirm dxvk-bin ${debugstring}"
-  runcmds 0 "Launching" "STEAM..." "steam ${debugstring}"
+  runcmds 0 "Installing" "STEAM..." "steam ${debugstring}"
   if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
   #bash -c "yay -S --noconfirm arch-gaming-meta"
