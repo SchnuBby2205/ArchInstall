@@ -656,14 +656,16 @@ function installConfigs() {
   #bash -c "sudo pacman -Syy ${debugstring}"
   Banner "config"
 
+  bash -c "sudo pacman -Syy ${debugstring}"
+
   if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Running" "final steps..."; fi
-  runcmds 0 "Setting up" "pacman..." 0 5 20 "sudo pacman -Syy ${debugstring}"
+  #runcmds 0 "Setting up" "pacman..." 0 5 20 "sudo pacman -Syy ${debugstring}"
   case $gpu in
-  amd) runcmds 0 "Installing" "graphics drivers..." 5 7 20 "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}" ;;
-  nvidia) runcmds 0 "Installing" "graphics drivers..." 7 10 20 "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}" ;;
+  amd) runcmds 0 "Installing" "graphics drivers..." 0 7 20 "sudo pacman  --noconfirm -S --needed mesa mesa-utils lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}" ;;
+  nvidia) runcmds 0 "Installing" "graphics drivers..." 0 7 20 "sudo pacman  --noconfirm -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader ${debugstring}" ;;
   *) exitWithError "No valid GPU specified!" ;;
   esac
-  runcmds 0 "Installing" "arch-gaming-meta..." 10 13 20 "yay -S --noconfirm arch-gaming-meta ${debugstring}"
+  runcmds 0 "Installing" "arch-gaming-meta..." 7 13 20 "yay -S --noconfirm arch-gaming-meta ${debugstring}"
   runcmds 0 "Installing" "dxvk-bin..." 13 15 20 "yay -S --noconfirm dxvk-bin ${debugstring}"
   runcmds 0 "Installing" "STEAM..." 15 20 20 "steam ${debugstring}"
   if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
