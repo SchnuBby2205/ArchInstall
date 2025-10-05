@@ -485,7 +485,7 @@ function installArchCHRoot() {
 
   if [[ -z "$hostname" ]]; then getInput "\nEnter your Hostname: " hostname "ArchLinux"; fi
   bash -c "echo ${hostname} >> /etc/hostname"
-  myPrint "yellow" "\nEnter your NEW root password\n\n"
+  myPrint "yellow" "\n\nEnter your NEW root password\n\n"
   myPasswd
   if [[ -z "$user" ]]; then getInput "\nEnter your normal username: " user "schnubby"; fi
   bash -c "useradd -mG wheel ${user}"
