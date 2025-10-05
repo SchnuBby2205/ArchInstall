@@ -611,15 +611,18 @@ function installDE() {
     if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Installing" "AUR helper..."; fi
     runcmds 1 "Creating" "SDDM config directory..." 0 10 20 "sudo mkdir /etc/sddm.conf.d"
 
-    runcmds 0 "Installing" "yay..." 10 20 20 "git clone https://aur.archlinux.org/yay.git ${debugstring}"
+    runcmds 0 "Installing" "yay..."5 20 20 "git clone https://aur.archlinux.org/yay.git ${debugstring}"
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
     cd yay
     makepkg -si
     cd ..
     rm -rf ./yay
+    printf "\n"
     if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Running" "Post install..."; fi
-    runcmds 0 "Installing" "Quickshell..." 0 15 20 "yay -S quickshell --noconfirm ${debugstring}"
+
+    runcmds 1 "Creating" "SDDM config directory..." 0 5 20 "sudo mkdir /etc/sddm.conf.d"
+    runcmds 0 "Installing" "Quickshell..." 5 15 20 "yay -S quickshell --noconfirm ${debugstring}"
     runcmds 0 "Downloading" "Custom configs..." 15 17 20 "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.config/hypr/schnubby ${debugstring}"
     runcmds 0 "Downloading" "myShell..." 17 20 20 "git clone --depth 1 https://github.com/SchnuBby2205/myShell.git ~/.config/quickshell/myShell ${debugstring}"
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
