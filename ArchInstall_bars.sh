@@ -50,6 +50,7 @@ UP='\033[A'
 DOWN='\033[B'
 MOVE=""
 MOVEBACK=""
+CLEAR="\r                                        \r"
 scriptname=$(basename "$0")
 # Hilfsfunktionen
 function clearScreen() {
