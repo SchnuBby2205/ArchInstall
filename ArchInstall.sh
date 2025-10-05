@@ -575,6 +575,8 @@ function installDE() {
     if [[ "$debug" =~ ^[nN]$ ]]; then printStepOK 1; fi
 
     if [[ "$debug" =~ ^[nN]$ ]]; then printStep 1 "Running" "Post install..."; fi
+	runcmds 1 "Creating" "SDDM config directory..." "sudo mkdir /etc/sddm.conf.d"
+
     runcmds 0 "Installing" "yay..." "git clone https://aur.archlinux.org/yay.git ${debugstring}" 
     cd yay 
     makepkg -si
