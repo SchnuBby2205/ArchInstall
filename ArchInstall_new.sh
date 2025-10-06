@@ -72,13 +72,13 @@ installArchCHRoot() { checkDebugFlag
   myPrint print yellow "\nEnter your NEW root password\n\n"; myPasswd
   [[ -z "$user" ]] && getInput "\nEnter your normal username: " user "schnubby"; useradd -mG wheel ${user}
   myPrint print yellow "\Enter your normal user password\n\n"; myPasswd "${user}"
-  sed -e '/%wheel ALL=(ALL:ALL) ALL/s/^#*//' -i /etc/sudoers
+  sed -e "/%wheel ALL=(ALL:ALL) ALL/s/^#*//" -i /etc/sudoers
   mv ./${scriptname} /home/${user}/; echo ./${scriptname} installDE >> /home/${user}/.bashrc
 }
 installDE() { checkDebugFlag
   [[ -z "$user" ]] && getInput "Enter your normal username: " user "schnubby"
   Banner
-  sudo sed -i '/\[multilib\]/,/Include/s/^#//' /etc/pacman.conf
+  sudo sed -i "/\[multilib\]/,/Include/s/^#//" /etc/pacman.conf
   sudo pacman -Syy $debugstring
   myPrint countdown 3 "Starting installation in"
   [[ "$debug" =~ ^[nN]$ ]] && myPrint step Installing Dependencies...
@@ -98,7 +98,7 @@ installDE() { checkDebugFlag
     runCMDS 0 Starting "swww-daemon..." 7 15 20 "echo -e 'exec-once=swww-daemon' >> $HOME/.config/hypr/schnubby/userprefs.conf"
     runCMDS 0 Starting myShell... 15 20 20 "echo -e 'exec-once=quickshell --path $HOME/.config/quickshell/myShell/shell.qml' >> $HOME/.config/hypr/schnubby/userprefs.conf" 
   [[ "$debug" =~ ^[nN]$ ]] && myPrint step ok
-  sed -i '/${scriptname}/d' $HOME/.bashrc; echo exec-once=kitty ./${scriptname} installConfigs >> $HOME/.config/hypr/schnubby/userprefs.conf
+  sed -i "/${scriptname}/d" $HOME/.bashrc; echo exec-once=kitty ./${scriptname} installConfigs >> $HOME/.config/hypr/schnubby/userprefs.conf
   myPrint countdown 3 "Reboot in"; reboot
 }
 installConfigs() { checkDebugFlag; Banner
@@ -116,7 +116,7 @@ installConfigs() { checkDebugFlag; Banner
       runCMDS 0 Configuring Hyprland... 19 20 20 "mv $HOME/.config/hypr/hyprland.conf $HOME/.config/hypr/hyprland.bak" "mv $HOME/.config/hypr/schnubby/hyprland.conf $HOME/.config/hypr/" "rm -rf $HOME/.config/hypr/hyprland.bak" # HIER CONFIGS VERTEILEN LAZYVIM, KITTY, WINDOWRULES ETC...!!
     [[ "$debug" =~ ^[nN]$ ]] && myPrint step ok
     sudo rm -rf $HOME/${scriptname}
-    sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf
+    sed -i "/${scriptname}/d" $HOME/.config/hypr/schnubby/userprefs.conf
     firefox --ProfileManager
     [[ -z "$defaults" ]] && getInput "\nLoad SchnuBby specific configs (git, lutris, fstab) (y/n)?\n" schnubby "Y"
     [[ "$schnubby" =~ ^[yY]$ || -n "$defaults" ]] && installSchnuBby
@@ -131,7 +131,7 @@ installSchnuBby() { checkDebugFlag; [[ "$debug" =~ ^[nN]$ ]] && myPrint step Ins
   gitconf) [[ ! -f "$HOME/.gitconfig" ]] && runCMDS 0 Configuring git... 9 11 20 "ln -sf /programmieren/backups/.gitconfig $HOME/.gitconfig";;
   gitcred) [[ ! -f "$HOME/.git-credentials" ]] && runCMDS 0 Configuring git credentials... 11 13 20 "ln -sf /programmieren/backups/.git-credentials $HOME/.git-credentials";;
   teamspeak3) [[ -f "$HOME/.ts3client" ]] && runCMDS 0 Removing .ts3client... 13 14 20 "rm -rf $HOME/.ts3client"; runCMDS 0 Configuring .ts3client... 14 15 20 "ln -sf /programmieren/backups/.ts3client $HOME/.ts3client";;
-  grub) sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/g' /etc/default/grub; runCMDS 1 Regenerating GRUB... 15 20 20 "sudo grub-mkconfig -o /boot/grub/grub.cfg $debugstring";;
+  grub) sudo sed -i "s/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/g" /etc/default/grub; runCMDS 1 Regenerating GRUB... 15 20 20 "sudo grub-mkconfig -o /boot/grub/grub.cfg $debugstring";;
   firefox) ff=$HOME/.mozilla/firefox/$(ls $HOME/.mozilla/firefox | grep "Default User"); rm -rf "$ff"; ln -sf /programmieren/backups/FireFox/3665cjzf.default-release "$ff";;
   *) exitWithError "Error setting SchnuBby secifics!";;
   esac; done; [[ "$debug" =~ ^[nN]$ ]] && myPrint step ok;
