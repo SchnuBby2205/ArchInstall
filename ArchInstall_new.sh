@@ -25,7 +25,7 @@ myPrint(){ case "$1" in
 esac; }
 exitWithError() { printf "\n${ERROR} %s\n" "$1"; exit 1; }
 getInput(){ local p=$1 v=$2 d=$3 i; printf "${YELLOW}${p} ${NC}"; read -r i; printf -v "$v" "%s" "${i:-$d}"; [[ -z "${!v}" ]] && exitWithError "Input value can not be empty!"; }
-myPasswd() {
+myPasswd() { a = 0
   while [ $a -lt 3 ]; do
     read -s -p "Password: " p1; echo
     read -s -p "Retype: " p2; echo
@@ -91,14 +91,14 @@ installDE() { checkDebugFlag
   [[ "$debug" =~ ^[nN]$ ]] && myPrint step Running "Post install..."
     runCMDS 1 Creating "SDDM config directory..." 0 2 20 "sudo mkdir /etc/sddm.conf.d"
     runCMDS 0 Installing Quickshell... 2 15 20 "yay -S quickshell --noconfirm $debugstring"
-    runCMDS 0 Installing "Custom configs..." 15 17 20 "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git ~/.config/hypr/schnubby $debugstring"
-    runCMDS 0 Installing myShell... 17 20 20 "git clone --depth 1 https://github.com/SchnuBby2205/myShell.git ~/.config/quickshell/myShell $debugstring"
+    runCMDS 0 Installing "Custom configs..." 15 17 20 "git clone --depth 1 https://github.com/SchnuBby2205/HyprlandConfigs.git $HOME/.config/hypr/schnubby $debugstring"
+    runCMDS 0 Installing myShell... 17 20 20 "git clone --depth 1 https://github.com/SchnuBby2205/myShell.git $HOME/.config/quickshell/myShell $debugstring"
   [[ "$debug" =~ ^[nN]$ ]] && myPrint step ok && myPrint step Starting Services...
     runCMDS 0 Starting "Greeter (SDDM)..." 0 7 20 "sudo systemctl enable sddm.service $debugstring"
-    runCMDS 0 Starting "swww-daemon..." 7 15 20 "echo -e 'exec-once=swww-daemon' >> ~/.config/hypr/schnubby/userprefs.conf"
-    runCMDS 0 Starting myShell... 15 20 20 "echo -e 'exec-once=quickshell --path ~/.config/quickshell/myShell/shell.qml' >> ~/.config/hypr/schnubby/userprefs.conf" 
+    runCMDS 0 Starting "swww-daemon..." 7 15 20 "echo -e 'exec-once=swww-daemon' >> $HOME/.config/hypr/schnubby/userprefs.conf"
+    runCMDS 0 Starting myShell... 15 20 20 "echo -e 'exec-once=quickshell --path $HOME/.config/quickshell/myShell/shell.qml' >> $HOME/.config/hypr/schnubby/userprefs.conf" 
   [[ "$debug" =~ ^[nN]$ ]] && myPrint step ok
-  sed -i '/${scriptname}/d' ~/.bashrc; echo exec-once=kitty ./${scriptname} installConfigs >> ~/.config/hypr/schnubby/userprefs.conf
+  sed -i '/${scriptname}/d' $HOME/.bashrc; echo exec-once=kitty ./${scriptname} installConfigs >> $HOME/.config/hypr/schnubby/userprefs.conf
   printCountDown 3 "Reboot in"; reboot
 }
 installConfigs() { checkDebugFlag; Banner
@@ -113,10 +113,10 @@ installConfigs() { checkDebugFlag; Banner
     esac
       runCMDS 0 Installing "dxvk-bin..." 5 10 20 "yay -S --noconfirm dxvk-bin $debugstring"
       runCMDS 0 Installing STEAM... 10 19 20 "steam $debugstring"
-      runCMDS 0 Configuring Hyprland... 19 20 20 "mv ~/.config/hypr/hyprland.conf ~/.config/hypr/hyprland.bak" "mv ~/.config/hypr/schnubby/hyprland.conf ~/.config/hypr/" "rm -rf ~/.config/hypr/hyprland.bak" # HIER CONFIGS VERTEILEN LAZYVIM, KITTY, WINDOWRULES ETC...!!
+      runCMDS 0 Configuring Hyprland... 19 20 20 "mv $HOME/.config/hypr/hyprland.conf $HOME/.config/hypr/hyprland.bak" "mv $HOME/.config/hypr/schnubby/hyprland.conf $HOME/.config/hypr/" "rm -rf $HOME/.config/hypr/hyprland.bak" # HIER CONFIGS VERTEILEN LAZYVIM, KITTY, WINDOWRULES ETC...!!
     [[ "$debug" =~ ^[nN]$ ]] && myPrint step ok
-    sudo rm -rf ~/${scriptname}
-    sed -i '/${scriptname}/d' ~/.config/hypr/schnubby/userprefs.conf
+    sudo rm -rf $HOME/${scriptname}
+    sed -i '/${scriptname}/d' $HOME/.config/hypr/schnubby/userprefs.conf
     firefox --ProfileManager
     [[ -z "$defaults" ]] && getInput "\nLoad SchnuBby specific configs (git, lutris, fstab) (y/n)?\n" schnubby "Y"
     [[ "$schnubby" =~ ^[yY]$ || -n "$defaults" ]] && installSchnuBby
@@ -124,15 +124,15 @@ installConfigs() { checkDebugFlag; Banner
     myPrint countdown 3 "Reboot in"; reboot
 }
 installSchnuBby() { checkDebugFlag; [[ "$debug" =~ ^[nN]$ ]] && myPrint step Installing "SchnuBby specifics..."; sudo mount --mkdir /dev/nvme0n1p4 /programmieren $debugstring; for s in fstab autologin lutris zshhist gitconfig gitcred teamspeak3 grub firefox; do case $s in
-  fstab) runCMDS 1 Configuring fstab... 0 2 20 "sudo echo -e '/dev/nvme0n1p4\t/programmieren\t...0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p6\t/spiele\t...0 1' >> /etc/fstab";;
+  fstab) runCMDS 1 Configuring fstab... 0 2 20 "sudo echo -e '/dev/nvme0n1p4      	/programmieren     	ext4      	rw,relatime	0 1' >> /etc/fstab" "sudo echo -e '/dev/nvme0n1p6      	/spiele     	ext4      	rw,relatime	0 1' >> /etc/fstab";;
   autologin) runCMDS 1 Setting autologin... 2 5 20 "sudo echo -e '\n[Autologin]\nRelogin=false\nSession=hyprland\nUser=${user}' >> /etc/sddm.conf.d/autologin.conf";;
-  lutris) [[ -d "~/.local/share/lutris" ]] && runcmds 0 Backing lutris... 5 6 20 "mv ~/.local/share/lutris ~/.local/share/lutris_bak"; [[ ! -d "~/.local/share/lutris" ]] && runcmds 0 Configuring lutris... 6 7 20 "ln -s /programmieren/backups/.local/share/lutris ~/.local/share/lutris";;
-  zshhist) [[ -f "~/.zsh_history" ]] && runcmds 0 Removing .zsh_history... 7 8 20 "rm -rf ~/.zsh_history"; runcmds 0 Configuring .zsh_history... 7 9 20 "ln -sf /programmieren/backups/.zsh_history ~/.zsh_history";;
-  gitconf) [[ ! -f "~/.gitconfig" ]] && runcmds 0 Configuring git... 9 11 20 "ln -sf /programmieren/backups/.gitconfig ~/.gitconfig";;
-  gitcred) [[ ! -f "~/.git-credentials" ]] && runcmds 0 Configuring git credentials... 11 13 20 "ln -sf /programmieren/backups/.git-credentials ~/.git-credentials";;
-  teamspeak3) [[ -f "~/.ts3client" ]] && runcmds 0 Removing .ts3client... 13 14 20 "rm -rf ~/.ts3client"; runcmds 0 Configuring .ts3client... 14 15 20 "ln -sf /programmieren/backups/.ts3client ~/.ts3client";;
-  grub) sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/g' /etc/default/grub; runcmds 1 Regenerating GRUB... 15 20 20 "sudo grub-mkconfig -o /boot/grub/grub.cfg $debugstring";;
-  firefox) ff=~/.mozilla/firefox/$(ls ~/.mozilla/firefox | grep "Default User"); rm -rf "$ff"; ln -sf /programmieren/backups/FireFox/3665cjzf.default-release "$ff";;
+  lutris) [[ -d "$HOME/.local/share/lutris" ]] && runCMDS 0 Backing lutris... 5 6 20 "mv $HOME/.local/share/lutris $HOME/.local/share/lutris_bak"; [[ ! -d "$HOME/.local/share/lutris" ]] && runCMDS 0 Configuring lutris... 6 7 20 "ln -s /programmieren/backups/.local/share/lutris $HOME/.local/share/lutris";;
+  zshhist) [[ -f "$HOME/.zsh_history" ]] && runCMDS 0 Removing .zsh_history... 7 8 20 "rm -rf $HOME/.zsh_history"; runCMDS 0 Configuring .zsh_history... 7 9 20 "ln -sf /programmieren/backups/.zsh_history $HOME/.zsh_history";;
+  gitconf) [[ ! -f "$HOME/.gitconfig" ]] && runCMDS 0 Configuring git... 9 11 20 "ln -sf /programmieren/backups/.gitconfig $HOME/.gitconfig";;
+  gitcred) [[ ! -f "$HOME/.git-credentials" ]] && runCMDS 0 Configuring git credentials... 11 13 20 "ln -sf /programmieren/backups/.git-credentials $HOME/.git-credentials";;
+  teamspeak3) [[ -f "$HOME/.ts3client" ]] && runCMDS 0 Removing .ts3client... 13 14 20 "rm -rf $HOME/.ts3client"; runCMDS 0 Configuring .ts3client... 14 15 20 "ln -sf /programmieren/backups/.ts3client $HOME/.ts3client";;
+  grub) sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/g' /etc/default/grub; runCMDS 1 Regenerating GRUB... 15 20 20 "sudo grub-mkconfig -o /boot/grub/grub.cfg $debugstring";;
+  firefox) ff=$HOME/.mozilla/firefox/$(ls $HOME/.mozilla/firefox | grep "Default User"); rm -rf "$ff"; ln -sf /programmieren/backups/FireFox/3665cjzf.default-release "$ff";;
   *) exitWithError "Error setting SchnuBby secifics!";;
   esac; done; [[ "$debug" =~ ^[nN]$ ]] && myPrint step ok;
 }
