@@ -1,6 +1,6 @@
 #!/bin/bash
 scriptname=$(basename "$0")
-RED="\e[31m" GREEN="\e[32m" YELLOW="\e[33m" WHITE="\e[1;37m" NC="\e[0m"
+RED="\e[31m" GREEN="\e[32m" YELLOW="\e[1;33m" WHITE="\e[1;37m" NC="\e[0m"
 CROSS="\u2717" CHECK="\u2713"
 RUNNING="${YELLOW}•${NC}" ERROR="${RED}${CROSS}${NC}" MYOK="${GREEN}${CHECK}${NC}"
 UP="\e[A" CLEAR="\r                                        \r"
@@ -137,7 +137,7 @@ installSchnuBby() { checkDebugFlag; [[ "$debug" =~ ^[nN]$ ]] && myPrint step Ins
   esac; done; [[ "$debug" =~ ^[nN]$ ]] && myPrint step ok;
 }
 debug="n"
-boot="/dev/nvme0n1p1" swap="/dev/nvme0n1p2" root="/dev/nvme0n1p3"
+boot="/dev/vda1" swap="/dev/vda2" root="/dev/vda3"
 hostname="SchnuBbyLinux" user="schnubby"
 cpu="intel-ucode" gpu="amd"  
 timezone="Europe/Berlin" locale="de_DE.UTF-8" keymap="de-latin1"
