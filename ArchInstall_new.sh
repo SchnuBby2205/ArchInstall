@@ -1,6 +1,6 @@
 #!/bin/bash
 scriptname=$(basename "$0")
-RED="\e[31m" GREEN="\e[32m" YELLOW="\e[33m" WHITE="\033[1;37m" NC="\e[0m"
+RED="\e[31m" GREEN="\e[32m" YELLOW="\e[33m" WHITE="\e[1;37m" NC="\e[0m"
 CROSS="\u2717" CHECK="\u2713"
 RUNNING="${YELLOW}•${NC}" ERROR="${RED}${CROSS}${NC}" MYOK="${GREEN}${CHECK}${NC}"
 UP="\e[A" CLEAR="\r                                        \r"
