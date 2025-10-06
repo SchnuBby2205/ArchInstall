@@ -51,7 +51,7 @@ runCMDS() { local s=$1 m=$2 msg=$3 cur=$4 fin=$5 max=$6; shift 6
 }
 installBaseSystem() { Banner; checkDebugFlag; runCFDiskIfNeeded; checkPartitions
   for p in boot swap root; do myPrint print green "\n${p^} partition: "; printf "${WHITE}${!p}${NC}"; done
-  myPrint print red "\n\n!!ATTENTION!!\nThese partitions will be WIPED AND FORMATTED without another Warning!! Please check them TWICE before you continue!!\n!!ATTENTION!!\n\n"; getInput "Type YES to continue (STRG+C to exit now)..." check "N"; printf "\n"; [[ "$check" != "YES" ]] && exitWithError "\nFormatting was not confirmed!\n"
+  myPrint print red "\n\n!!ATTENTION!!\nThese partitions will be WIPED AND FORMATTED without another Warning!! Please check them TWICE before you continue!!\n!!ATTENTION!!\n\n"; getInput "Type YES to continue (STRG+C to exit now)..." check "N"; [[ "$check" != "YES" ]] && exitWithError "\nFormatting was not confirmed!\n" || printf "\n"
   myPrint countdown 3 "Starting installation in"; printf "\n"
   [[ "$debug" =~ ^[nN]$ ]] && myPrint step Installing "Base system..."
     runCMDS 0 Formatting drives... 0 7 20 "mkfs.fat -F ${boot} $debugstring" "mkswap ${swap} $debugstring" "swapon ${swap} $debugstring" "mkfs.ext4 -F ${root} $debugstring"
