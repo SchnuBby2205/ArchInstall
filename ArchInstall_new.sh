@@ -25,7 +25,7 @@ myPrint(){ case "$1" in
 esac; }
 exitWithError() { printf "\n${ERROR} %s\n" "$1"; exit 1; }
 getInput(){ local p=$1 v=$2 d=$3 i; printf "${YELLOW}${p} ${NC}"; read -r i; printf -v "$v" "%s" "${i:-$d}"; [[ -z "${!v}" ]] && exitWithError "Input value can not be empty!"; }
-myPasswd() { a = 0
+myPasswd() { a=0
   while [ $a -lt 3 ]; do
     read -s -p "Password: " p1; echo
     read -s -p "Retype: " p2; echo
@@ -99,7 +99,7 @@ installDE() { checkDebugFlag
     runCMDS 0 Starting myShell... 15 20 20 "echo -e 'exec-once=quickshell --path $HOME/.config/quickshell/myShell/shell.qml' >> $HOME/.config/hypr/schnubby/userprefs.conf" 
   [[ "$debug" =~ ^[nN]$ ]] && myPrint step ok
   sed -i '/${scriptname}/d' $HOME/.bashrc; echo exec-once=kitty ./${scriptname} installConfigs >> $HOME/.config/hypr/schnubby/userprefs.conf
-  printCountDown 3 "Reboot in"; reboot
+  myPrint countdown 3 "Reboot in"; reboot
 }
 installConfigs() { checkDebugFlag; Banner
   [[ -z "$user" ]] && getInput "Enter your normal username: " user "schnubby"
