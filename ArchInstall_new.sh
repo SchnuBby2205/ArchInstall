@@ -54,7 +54,7 @@ runCMDS() { local s=$1 m=$2 msg=$3 cur=$4 fin=$5 max=$6; shift 6
 }
 safeCMD() { [[ $1 =~ ^(rm|mv)$ ]]&&{ [[ -e $2 ]]&&"$@"||{ myPrint print yellow "Warning: $2 doesnt exist, skipping $1."; log "Warning: $2 doesnt exist, skipping $1."; }; }||{ "$@"||{ myPrint print red "Error: $* failed."; log "Error: $* failed."; exitWithError "$1 fehlgeschlagen für ${*:2}"; }; }; }
 dryRun() { $dryRun&&{ echo "[DRY RUN]: $*"; log "[DRY RUN]: $*"; }||eval "$@"; }
-log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $*" >> "$logfile"; }
+log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $*" >> "$logFile"; }
 addToBashrc() { grep -qxF "$1" ~/.bashrc || echo "$1" >> ~/.bashrc; }
 installBaseSystem() { Banner; checkDebugFlag; runCFDiskIfNeeded; checkPartitions
   for p in boot swap root; do validatePartition ${!p}; myPrint print green "\n${p^} partition: "; printf "${WHITE}${!p}${NC}"; done
