@@ -30,7 +30,7 @@ myPasswd() { a=0
     read -s -p "Password: " p1; echo
     read -s -p "Retype: " p2; echo
     [ "$p1" != "$p2" ] && printf "\nPasswords didn't match.\n" ||
-    (echo -e "$p1\n$p2" | [[ $(sudo passwd "$1" &>/dev/null) -eq 0 ]] && myPrint print yellow "\nPassword updated succesfully.\n" && break || exitWithError "Error setting the password.")
+    (echo -e "$p1\n$p2" | [[ $(sudo passwd "$1" &>/dev/null) -eq 0 ]] && myPrint print yellow "\nPassword updated succesfully.\n" && return || exitWithError "Error setting the password.")
     ((a++))
   done
   printf "\nMaximum tries reached script will end now.\n"; exit 1
