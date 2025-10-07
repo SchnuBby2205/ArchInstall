@@ -25,15 +25,15 @@ myPrint(){ case "$1" in
 esac; }
 exitWithError() { printf "\n${ERROR} %s\n" "$1"; exit 1; }
 getInput(){ local p=$1 v=$2 d=$3 i; printf "${YELLOW}${p} ${NC}"; read -r i; printf -v "$v" "%s" "${i:-$d}"; [[ -z "${!v}" ]] && exitWithError "Input value can not be empty!"; }
-myPasswd() { a=0
-  while [ $a -lt 3 ]; do
+myPasswd() {
+  for ((a=0; a<3; a++)); do
     read -s -p "Password: " p1; echo
     read -s -p "Retype: " p2; echo
-    [ "$p1" != "$p2" ] && printf "\nPasswords didn't match.\n" ||
-    (echo -e "$p1\n$p2" | [[ $(sudo passwd "$1" &>/dev/null) -eq 0 ]] && myPrint print yellow "\nPassword updated succesfully.\n" && return || exitWithError "Error setting the password.")
-    ((a++))
+    [[ "$p1" != "$p2" || -z "$p1" ]] && echo "Passwords didn't match." && continue
+    echo "$1:$p1" | sudo chpasswd && { myPrint print yellow "\nPassword updated successfully.\n"; return; }
+    exitWithError "Error setting the password."
   done
-  printf "\nMaximum tries reached script will end now.\n"; exit 1
+  myPrint print red "Maximum tries reached. Script will end now."; exit 1
 }
 runCFDiskIfNeeded(){ 
   [[ -z "$cfdisk" && -n "$disk" ]] && getInput "\nStart cfdisk (y/N) ?\n" cfdisk "N"
