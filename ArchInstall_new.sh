@@ -139,6 +139,7 @@ installSchnuBby() { checkDebugFlag; [[ "$debug" =~ ^[nN]$ ]] && myPrint step Ins
   *) exitWithError "Error setting SchnuBby secifics!";;
   esac; done; [[ "$debug" =~ ^[nN]$ ]] && myPrint step ok;
 }
+sudo -v || exitWithError "You need sudo rights for this script."
 debug="n"
 boot="/dev/vda1" swap="/dev/vda2" root="/dev/vda3"
 hostname="SchnuBbyLinux" user="schnubby"
