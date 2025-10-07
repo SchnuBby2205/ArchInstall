@@ -42,7 +42,9 @@ runCFDiskIfNeeded(){
     cfdisk "$disk"
   }
 }
+validatePartition() { lsblk|grep -q "${1#/dev/}"||{ exitWithError "$1: Partition does not exist!"; }; }
 checkPartitions() { [[ -z "$boot" ]] && getInput "Enter boot partition: " boot; [[ -z "$swap" ]] && getInput "Enter swap partition: " swap; [[ -z "$root" ]] && getInput "Enter root partition: " root; }
+validateUser() { [[ "$1" =~ ^[a-z_][a-z0-9_-]*$ ]] || exitWithError "Invalid username!"; }
 checkDebugFlag() { debugstring=$([[ "$debug" =~ ^[yY]$ ]] && echo "" || echo " &>/dev/null"); }
 runCMDS() { local s=$1 m=$2 msg=$3 cur=$4 fin=$5 max=$6; shift 6
   [[ "$debug" =~ ^[nN]$ ]] && { ((cur>0)) && printf "${CLEAR}${UP}"; printf "["; for((i=0;i<cur;i++));do printf "#";done; for((i=cur;i<max;i++));do printf " ";done; printf "]\n$m ${WHITE}$msg${NC}"; }
@@ -50,7 +52,7 @@ runCMDS() { local s=$1 m=$2 msg=$3 cur=$4 fin=$5 max=$6; shift 6
   [[ "$debug" =~ ^[nN]$ ]] && { printf "${UP}\r["; for((i=0;i<fin;i++));do printf "#";done; for((i=fin;i<max;i++));do printf " ";done; printf "]\n"; }
 }
 installBaseSystem() { Banner; checkDebugFlag; runCFDiskIfNeeded; checkPartitions
-  for p in boot swap root; do myPrint print green "\n${p^} partition: "; printf "${WHITE}${!p}${NC}"; done
+  for p in boot swap root; do validatePartition ${!p}; myPrint print green "\n${p^} partition: "; printf "${WHITE}${!p}${NC}"; done
   myPrint print red "\n\n!!ATTENTION!!\nThese partitions will be WIPED AND FORMATTED without another Warning!! Please check them TWICE before you continue!!\n!!ATTENTION!!\n\n"
   getInput "Type YES to continue (STRG+C to exit now)..." check "N"; [[ "$check" != "YES" ]] && exitWithError "Formatting was not confirmed!" || printf "\n"
   myPrint countdown 3 "Starting installation in"; printf "\n"
