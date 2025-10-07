@@ -72,7 +72,7 @@ installArchCHRoot() { checkDebugFlag
   [[ -z "$hostname" ]] && getInput "\nEnter your Hostname: " hostname "SchnuBbyLinux"; echo ${hostname} >> /etc/hostname
   myPrint print yellow "\nEnter your NEW root password\n\n"; myPasswd root
   [[ -z "$user" ]] && getInput "\nEnter your normal username: " user "schnubby"; useradd -mG wheel ${user}
-  myPrint print yellow "\Enter your normal user password\n\n"; myPasswd "${user}"
+  myPrint print yellow "\nEnter your normal user password\n\n"; myPasswd "${user}"
   sed -e "/%wheel ALL=(ALL:ALL) ALL/s/^#*//" -i /etc/sudoers
   mv ./${scriptname} /home/${user}/; echo ./${scriptname} installDE >> /home/${user}/.bashrc
 }
